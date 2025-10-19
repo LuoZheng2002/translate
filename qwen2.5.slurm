@@ -2,11 +2,11 @@
 #SBATCH --job-name=qwen2.5       # Job name
 #SBATCH --output=qwen2.5_%j.out        # Standard output log (%j = job ID)
 #SBATCH --error=qwen2.5_%j.err         # Error log
-#SBATCH --time=00:30:00                 # Max runtime (HH:MM:SS)
+#SBATCH --time=00:05:00                 # Max runtime (HH:MM:SS)
 # #SBATCH --partition=gpu                  # Partition/queue with GPU
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=luozheng@usc.edu
-#SBATCH --gres=gpu:1                     # Request 1 GPU
+#SBATCH --gres=gpu:4                     # Request 4 GPUs
 #SBATCH --cpus-per-task=4                # CPU cores
 #SBATCH --mem=16G                        # RAM
 #SBATCH --account=bfdz-delta-gpu    # Your Slurm account/project
