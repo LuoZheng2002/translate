@@ -6,7 +6,7 @@
 # #SBATCH --partition=gpu                  # Partition/queue with GPU
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=luozheng@usc.edu
-#SBATCH --gres=gpu:2                     # Request 2 GPU
+#SBATCH --gres=gpu:4                     # Request 4 GPU
 #SBATCH --cpus-per-task=4                # CPU cores
 #SBATCH --mem=32G                        # RAM
 #SBATCH --account=bfdz-delta-gpu    # Your Slurm account/project
