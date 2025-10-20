@@ -1,10 +1,16 @@
 from openai import OpenAI
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv(dotenv_path=".env.private")  # reads .env into environment
+api_key = os.getenv("OPENAI_API_KEY")
+
 with open("bfcl/bfcl_eval/data/BFCL_v4_multiple.json", "r") as f:
     lines = [line for line in f if line.strip()]
 
 # Initialize client (API key can be set as env variable or directly)
-client = OpenAI(api_key="")  # or omit api_key if you set it in the environment
+client = OpenAI(api_key=api_key)  # or omit api_key if you set it in the environment
 
 system_message = {"role": "system", "content": 
          "You are a helpful assistant. Please translate some parts of the user specified json string into Chinese and keep the rest unchanged. "
