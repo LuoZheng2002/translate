@@ -2054,7 +2054,7 @@
 │ │                    result_dir=PosixPath('/projects/bfdz/zluo8/translate… │ │
 │ │                    allow_overwrite=False, run_ids=False)                 │ │
 │ │          handler = <bfcl_eval.model_handler.local_inference.granite_3.G… │ │
-│ │                    object at 0x7efcfc749880>                             │ │
+│ │                    object at 0x7f993587eba0>                             │ │
 │ │     is_oss_model = True                                                  │ │
 │ │       model_name = 'ibm-granite/granite-3.1-8b-instruct'                 │ │
 │ │      num_threads = 100                                                   │ │
@@ -2946,9 +2946,9 @@
 │ │                    │   },                                                │ │
 │ │                    │   ... +190                                          │ │
 │ │                    ]                                                     │ │
-│ │      write_queue = <queue.Queue object at 0x7efcfc7ba900>                │ │
+│ │      write_queue = <queue.Queue object at 0x7f9933a5f8f0>                │ │
 │ │    writer_thread = <Thread(Thread-1 (_writer), stopped daemon            │ │
-│ │                    139625019311872)>                                     │ │
+│ │                    140295965734656)>                                     │ │
 │ ╰──────────────────────────────────────────────────────────────────────────╯ │
 │                                                                              │
 │ /projects/bfdz/zluo8/translate/bfcl/bfcl_eval/model_handler/local_inference/ │
@@ -3007,15 +3007,15 @@
 │ │                process = <Popen: returncode: 1 args: ['vllm', 'serve',   │ │
 │ │                          'ibm-granite/granite-3.1-8b-in...>              │ │
 │ │                   self = <bfcl_eval.model_handler.local_inference.grani… │ │
-│ │                          object at 0x7efcfc749880>                       │ │
+│ │                          object at 0x7f993587eba0>                       │ │
 │ │           server_ready = False                                           │ │
 │ │      skip_server_setup = False                                           │ │
 │ │                 stderr = ''                                              │ │
-│ │          stderr_thread = <Thread(Thread-4 (log_subprocess_output),       │ │
-│ │                          stopped daemon 139621367973632)>                │ │
+│ │          stderr_thread = <Thread(Thread-3 (log_subprocess_output),       │ │
+│ │                          stopped daemon 140292322805504)>                │ │
 │ │                 stdout = ''                                              │ │
-│ │          stdout_thread = <Thread(Thread-3 (log_subprocess_output),       │ │
-│ │                          stopped daemon 139621376366336)>                │ │
+│ │          stdout_thread = <Thread(Thread-2 (log_subprocess_output),       │ │
+│ │                          stopped daemon 140292331198208)>                │ │
 │ ╰──────────────────────────────────────────────────────────────────────────╯ │
 │                                                                              │
 │ /projects/bfdz/zluo8/translate/bfcl/bfcl_eval/model_handler/local_inference/ │
@@ -3074,15 +3074,15 @@
 │ │                process = <Popen: returncode: 1 args: ['vllm', 'serve',   │ │
 │ │                          'ibm-granite/granite-3.1-8b-in...>              │ │
 │ │                   self = <bfcl_eval.model_handler.local_inference.grani… │ │
-│ │                          object at 0x7efcfc749880>                       │ │
+│ │                          object at 0x7f993587eba0>                       │ │
 │ │           server_ready = False                                           │ │
 │ │      skip_server_setup = False                                           │ │
 │ │                 stderr = ''                                              │ │
-│ │          stderr_thread = <Thread(Thread-4 (log_subprocess_output),       │ │
-│ │                          stopped daemon 139621367973632)>                │ │
+│ │          stderr_thread = <Thread(Thread-3 (log_subprocess_output),       │ │
+│ │                          stopped daemon 140292322805504)>                │ │
 │ │                 stdout = ''                                              │ │
-│ │          stdout_thread = <Thread(Thread-3 (log_subprocess_output),       │ │
-│ │                          stopped daemon 139621376366336)>                │ │
+│ │          stdout_thread = <Thread(Thread-2 (log_subprocess_output),       │ │
+│ │                          stopped daemon 140292331198208)>                │ │
 │ ╰──────────────────────────────────────────────────────────────────────────╯ │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 Exception: Subprocess terminated unexpectedly with code 1
