@@ -92,6 +92,8 @@ def models():
     )
     print(table)
 
+import os
+
 
 @cli.command()
 def generate(
@@ -152,6 +154,9 @@ def generate(
     """
     Generate the LLM response for one or more models on a test-category (same as openfunctions_evaluation.py).
     """
+    # Zheng Luo added
+    # to do
+    os.environ["HF_HOME"] = "/work/nvme/bfdz/zluo8/huggingface"
 
     args = SimpleNamespace(
         model=model,

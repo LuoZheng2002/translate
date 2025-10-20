@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=bfcl       # Job name
-#SBATCH --output=bfcl_%j.out        # Standard output log (%j = job ID)
-#SBATCH --error=bfcl_%j.err         # Error log
+#SBATCH --job-name=bfcl_generate       # Job name
+#SBATCH --output=bfcl_generate_%j.out        # Standard output log (%j = job ID)
+#SBATCH --error=bfcl_generate_%j.err         # Error log
 #SBATCH --time=00:15:00                 # Max runtime (HH:MM:SS)
 # #SBATCH --partition=gpu                  # Partition/queue with GPU
 #SBATCH --mail-type=BEGIN,END,FAIL
@@ -23,4 +23,4 @@ source activate_environment.sh
 # jupyter nbconvert --to script test_toolrl.ipynb
 
 # Run the training script
-bfcl generate --model Qwen/Qwen3-0.6B --test-category multiple --backend vllm
+bfcl generate --model Qwen/Qwen3-0.6B --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result
