@@ -458,7 +458,7 @@ def load_ground_truth_entry(test_category: str) -> list[dict]:
         return load_file(POSSIBLE_ANSWER_PATH / f"{VERSION_PREFIX}_web_search.json")
 
     else:
-        return load_file(POSSIBLE_ANSWER_PATH / f"{VERSION_PREFIX}_{test_category}.json")
+        return load_file(POSSIBLE_ANSWER_PATH / f"{VERSION_PREFIX}_{test_category}_zh.json") # Zheng Luo: hack here for chinese dataset
 
 
 def write_list_of_dicts_to_file(filename, data, subdir=None) -> None:

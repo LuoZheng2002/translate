@@ -6,7 +6,7 @@
 # #SBATCH --partition=gpu                  # Partition/queue with GPU
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=luozheng@usc.edu
-#SBATCH --gres=gpu:4                     # Request 4 GPU
+#SBATCH --gres=gpu:2                     # Request 2 GPU
 #SBATCH --cpus-per-task=4                # CPU cores
 #SBATCH --mem=32G                        # RAM
 #SBATCH --account=bfdz-delta-gpu    # Your Slurm account/project
@@ -29,3 +29,5 @@ export HF_HOME=/work/nvme/bfdz/zluo8/huggingface
 # ibm-granite/granite-3.1-8b-instruct
 
 bfcl generate --model ibm-granite/granite-3.1-8b-instruct --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num-gpus 4 --gpu-memory-utilization 0.95
+
+# bfcl generate --model gpt-4o-mini-2024-07-18 --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num-gpus 4 --gpu-memory-utilization 0.95
