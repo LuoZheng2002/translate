@@ -28,4 +28,4 @@ export HF_HOME=/work/nvme/bfdz/zluo8/huggingface
 
 # ibm-granite/granite-3.1-8b-instruct
 
-bfcl generate --model ibm-granite/granite-3.1-8b-instruct --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num_gpus 4 --gpu_memory_utilization 0.95
+bfcl generate --model ibm-granite/granite-3.1-8b-instruct --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num-gpus 4 --gpu-memory-utilization 0.95
