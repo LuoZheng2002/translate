@@ -25,4 +25,7 @@ export HF_HOME=/work/nvme/bfdz/zluo8/huggingface
 # jupyter nbconvert --to script test_toolrl.ipynb
 
 # Run the training script
-bfcl generate --model Qwen/Qwen3-0.6B --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result
+
+# ibm-granite/granite-3.1-8b-instruct
+
+bfcl generate --model ibm-granite/granite-3.1-8b-instruct --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result

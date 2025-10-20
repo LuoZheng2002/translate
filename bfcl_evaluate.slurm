@@ -23,4 +23,7 @@ source activate_environment.sh
 # jupyter nbconvert --to script test_toolrl.ipynb
 
 # Run the training script
-bfcl evaluate --model Qwen/Qwen3-0.6B --test-category multiple --result-dir /projects/bfdz/zluo8/translate/result  --score-dir /projects/bfdz/zluo8/translate/score
+
+# ibm-granite/granite-3.1-8b-instruct
+
+bfcl evaluate --model ibm-granite/granite-3.1-8b-instruct --test-category multiple --result-dir /projects/bfdz/zluo8/translate/result  --score-dir /projects/bfdz/zluo8/translate/score
