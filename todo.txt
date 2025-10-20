@@ -1,0 +1,36 @@
+
+inspect multiple_function_checker
+which is inside ast_checker
+
+multiple function checker checks:
+1. if the number of functions matches
+2. passes simple_function_checker
+
+inspect simple function checker
+=> Some complicated black box
+
+
+inspect ast_checker's context
+which is inside _evaluate_single_ast_entry
+which is inside format_sensitivity_runner and ast_file_runner
+
+format_sensitivity_runner is inside evaluate_task
+ast_file_runner is inside evaluate_task
+
+Don't know if is_format_sensitivity(test_category)
+
+Most probably it is none of the specified categories (ast_file_runner)
+
+inspect evaluate_task
+which is inside runner
+so the eval_runner's runner does not call the model but processes its output
+
+todo: extract logics from evaluate_task, do not use a leaderboard
+
+generate_results might be the function that calls the LLMs
+
+OpenAI API 
+
+
+
+bfcl generate --model Qwen/Qwen3-0.6B --test-category multiple
