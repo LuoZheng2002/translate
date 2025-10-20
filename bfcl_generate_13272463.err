@@ -1,5 +1,0 @@
-Usage: bfcl generate [OPTIONS]
-Try 'bfcl generate -h' for help.
-╭─ Error ──────────────────────────────────────────────────────────────────────╮
-│ No such option: --num_gpus Did you mean --num-gpus?                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
