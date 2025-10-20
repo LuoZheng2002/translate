@@ -431,7 +431,7 @@ def load_dataset_entry(
 
     else:
         # All other categories, we don't need any special handling
-        file_name = f"{VERSION_PREFIX}_{test_category}.json"
+        file_name = f"{VERSION_PREFIX}_{test_category}.json" # Zheng Luo: hack here for chinese dataset
         all_entries = load_file(PROMPT_PATH / file_name)
 
     all_entries = process_agentic_test_case(all_entries)
