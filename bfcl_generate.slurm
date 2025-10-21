@@ -33,6 +33,10 @@ export HF_HOME=/work/nvme/bfdz/zluo8/huggingface
 # bfcl generate --model gpt-4o-mini-2024-07-18 --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num-gpus 4 --gpu-memory-utilization 0.95
 # bfcl generate --model DeepSeek-V3-0324-FC --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num-gpus 4 --gpu-memory-utilization 0.95
 
+# bfcl generate --model DeepSeek-R1-0528 --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num-gpus 4 --gpu-memory-utilization 0.95
+
+
+
 # bfcl generate --model claude-sonnet-4-20250514 --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num-gpus 4 --gpu-memory-utilization 0.95
 
 # bfcl generate --model claude-3-5-haiku-20241022 --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num-gpus 4 --gpu-memory-utilization 0.95
