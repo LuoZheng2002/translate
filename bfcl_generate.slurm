@@ -39,4 +39,4 @@ export HF_HOME=/work/nvme/bfdz/zluo8/huggingface
 
 
 
-bfcl generate --model Qwen/Qwen3-32B --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num-gpus 4 --gpu-memory-utilization 0.95
+# bfcl generate --model Qwen/Qwen3-32B --test-category multiple --backend vllm --result-dir /projects/bfdz/zluo8/translate/result --num-gpus 4 --gpu-memory-utilization 0.95

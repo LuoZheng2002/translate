@@ -431,7 +431,7 @@ def load_dataset_entry(
 
     else:
         # All other categories, we don't need any special handling
-        file_name = f"{VERSION_PREFIX}_{test_category}.json" # Zheng Luo: hack here for chinese dataset
+        file_name = f"{VERSION_PREFIX}_{test_category}_zh.json" # Zheng Luo: hack here for chinese dataset
         all_entries = load_file(PROMPT_PATH / file_name)
 
     all_entries = process_agentic_test_case(all_entries)
@@ -458,7 +458,7 @@ def load_ground_truth_entry(test_category: str) -> list[dict]:
         return load_file(POSSIBLE_ANSWER_PATH / f"{VERSION_PREFIX}_web_search.json")
 
     else:
-        return load_file(POSSIBLE_ANSWER_PATH / f"{VERSION_PREFIX}_{test_category}.json") # Zheng Luo: hack here for chinese dataset
+        return load_file(POSSIBLE_ANSWER_PATH / f"{VERSION_PREFIX}_{test_category}_zh.json") # Zheng Luo: hack here for chinese dataset
 
 
 def write_list_of_dicts_to_file(filename, data, subdir=None) -> None:
