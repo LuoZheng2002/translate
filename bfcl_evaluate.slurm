@@ -27,3 +27,9 @@ source activate_environment.sh
 # ibm-granite/granite-3.1-8b-instruct
 
 bfcl evaluate --model ibm-granite/granite-3.1-8b-instruct --test-category multiple --result-dir /projects/bfdz/zluo8/translate/result  --score-dir /projects/bfdz/zluo8/translate/score
+
+# bfcl evaluate --model DeepSeek-V3-0324-FC --test-category multiple --result-dir /projects/bfdz/zluo8/translate/result  --score-dir /projects/bfdz/zluo8/translate/score
+
+# bfcl evaluate --model claude-sonnet-4-20250514 --test-category multiple --result-dir /projects/bfdz/zluo8/translate/result  --score-dir /projects/bfdz/zluo8/translate/score
+
+# bfcl evaluate --model gpt-4o-mini-2024-07-18 --test-category multiple --result-dir /projects/bfdz/zluo8/translate/result  --score-dir /projects/bfdz/zluo8/translate/score
