@@ -1,0 +1,200 @@
+{"id": "multiple_0", "ground_truth": [{"三角形属性.获取": {"边1": [5], "边2": [4], "边3": [3], "获取面积": ["", true], "获取周长": ["", true], "获取角度": ["", true]}}]}
+{"id": "multiple_1", "ground_truth": [{"数学.三角形面积_海伦": {"边1": [3], "边2": [4], "边3": [5]}}]}
+{"id": "multiple_2", "ground_truth": [{"国家信息.首都": {"国家": ["巴西"]}}]}
+{"id": "multiple_3", "ground_truth": [{"欧几里得距离.计算": {"点A": [[3, 4]], "点B": [[1, 2]], "四舍五入": ["", 0]}}]}
+{"id": "multiple_4", "ground_truth": [{"运动学.计算位移": {"初始速度": [20], "加速度": [10], "时间": [5], "舍入": ["", 2]}}]}
+{"id": "multiple_5", "ground_truth": [{"天气.按坐标日期获取": {"坐标": [[46.603354, 1.888334]], "日期": ["2019-12-13"]}}]}
+{"id": "multiple_6", "ground_truth": [{"电容计算器.计算": {"面积": [10], "距离": [0.01], "介电常数": [1.0, ""]}}]}
+{"id": "multiple_7", "ground_truth": [{"野生动物种群.评估增长": {"物种": ["deer", "Deer", "鹿", "鹿群"], "地点": ["Washington state", "WA", "Washington", "华盛顿", "华盛顿州"], "持续时间": [10]}}]}
+{"id": "multiple_8", "ground_truth": [{"房地产.查找房产": {"位置": ["SD", "San Diego", "San Diego, CA", "CA", "圣地亚哥"], "房产类型": ["villa", "别墅"], "卧室数量": [3], "预算": [{"最小值": [300000], "最大值": [400000]}]}}]}
+{"id": "multiple_9", "ground_truth": [{"计算平均值": {"成绩字典": [{"math": [90], "science": [75], "history": [82], "music": [89]}]}}]}
+{"id": "multiple_10", "ground_truth": [{"数据库.修改列": {"数据库名称": ["employees", "员工", "员工数据库"], "表": ["personal_data", "个人数据"], "操作": ["delete", "删除"], "列": [["email", "ssn"], ["ssn", "email"], ["email", "social_security_number"], ["social_security_number", "email"], ["email", "social security number"], ["social security number", "email"], ["email", "电子邮件地址"], ["电子邮件地址", "email"], ["ssn", "社会安全号码"], ["社会安全号码", "ssn"], ["电子邮件地址", "社会安全号码"], ["社会安全号码", "电子邮件地址"]]}}]}
+{"id": "multiple_11", "ground_truth": [{"数学根.二次方程": {"a": [5], "b": [20], "c": [-25]}}]}
+{"id": "multiple_12", "ground_truth": [{"公司财务.计算_同比增长率": {"公司名称": ["Tech Inc"], "年份1": [2019], "年份1收入": [1000000], "年份2": [2020], "年份2收入": [1200000]}}]}
+{"id": "multiple_13", "ground_truth": [{"公司财务.收入预测": {"公司": ["XYZ"], "产品": ["A", "Product A"], "销售单位增加百分比": [10]}}]}
+{"id": "multiple_14", "ground_truth": [{"财务.财产折旧": {"初始成本": [200000], "折旧率": [3], "年数": [5], "每月": [false, true, ""]}}]}
+{"id": "multiple_15", "ground_truth": [{"太阳能农场.潜力": {"坐标": [[43.653225, -79.383186]], "太阳能板面积": [80000], "月份": ["December", "Dec", "12月", "十二月"]}}]}
+{"id": "multiple_16", "ground_truth": [{"种群遗传学.计算有效种群大小": {"物种": ["wild tiger", "tiger", "野生老虎", "老虎"], "代数": [100], "概率": [0.95]}}]}
+{"id": "multiple_17", "ground_truth": [{"货币转换.获取汇率": {"来源货币": ["EUR", "Euro", "欧元"], "目标货币": ["Dollar", "USD", "美元"], "日期": ["2022-01-01", "01/01/2022", "1/1/2022", "Jan.1,2022", "January 1, 2022", "2022-1-1"]}}]}
+{"id": "multiple_18", "ground_truth": [{"欧洲历史.战役详情": {"战役": ["Battle of Stalingrad", "Stalingrad", "斯大林格勒战役"]}}]}
+{"id": "multiple_19", "ground_truth": [{"宗教历史.获取分裂事件": {"宗教": ["Christianity", "基督教"], "数量": [3]}}]}
+{"id": "multiple_20", "ground_truth": [{"雕塑价格.计算": {"材料": ["marble", "大理石"], "尺寸": [3], "复杂度": ["中", ""]}}]}
+{"id": "multiple_21", "ground_truth": [{"生成声音波形": {"频率": [440], "持续时间": [5], "波形类型": ["sine", ""]}}]}
+{"id": "multiple_22", "ground_truth": [{"体育数据.篮球.单场比赛最多得分": {"联赛": ["NBA"]}}]}
+{"id": "multiple_23", "ground_truth": [{"篮球.球员统计.获取": {"球员姓名": ["LeBron James", "勒布朗·詹姆斯"], "统计字段": [["points per game", "assists", "minutes per game"], ["points per game", "minutes per game", "assists"], ["assists", "points per game", "minutes per game"], ["assists", "minutes per game", "points per game"], ["minutes per game", "points per game", "assists"], ["minutes per game", "assists", "points per game"], ["points", "assists", "minutes"], ["points", "minutes", "assists"], ["assists", "points", "minutes"], ["assists", "minutes", "points"], ["minutes", "points", "assists"], ["minutes", "assists", "points"], ["points_per_game", "assists", "minutes_per_game"], ["points_per_game", "minutes_per_game", "assists"], ["assists", "points_per_game", "minutes_per_game"], ["assists", "minutes_per_game", "points_per_game"], ["minutes_per_game", "points_per_game", "assists"], ["minutes_per_game", "assists", "points_per_game"], ["场均得分", "助攻", "场均分钟数"], ["场均得分", "场均分钟数", "助攻"], ["助攻", "场均得分", "场均分钟数"], ["助攻", "场均分钟数", "场均得分"], ["场均分钟数", "场均得分", "助攻"], ["场均分钟数", "助攻", "场均得分"], ["得分", "助攻", "分钟"], ["得分", "分钟", "助攻"], ["助攻", "得分", "分钟"], ["助攻", "分钟", "得分"], ["分钟", "得分", "助攻"], ["分钟", "助攻", "得分"]]}}]}
+{"id": "multiple_24", "ground_truth": [{"路线规划器.计算路线": {"起点": ["London", "伦敦"], "目的地": ["Edinburgh", "爱丁堡"], "方法": ["最快", ""]}}]}
+{"id": "multiple_25", "ground_truth": [{"视频游戏.商店价格": {"游戏标题": ["Assassins Creed Valhalla", "刺客信条：英灵殿"], "平台": ["PlayStation", "PS"], "区域": ["United States", "US", "美国", ""]}}]}
+{"id": "multiple_26", "ground_truth": [{"游戏奖励.获取": {"游戏": ["Fortnite"], "平台": ["Playstation", "PS"], "任务": [""], "奖杯": [""]}}]}
+{"id": "multiple_27", "ground_truth": [{"地图.最短路径": {"起点位置": ["法国巴黎", "巴黎"], "终点位置": ["意大利罗马", "罗马"], "模式": ["公交"]}}]}
+{"id": "multiple_28", "ground_truth": [{"求解.二次方程": {"a": [2], "b": [3], "c": [-4]}}]}
+{"id": "multiple_29", "ground_truth": [{"函数.交点": {"函数1": ["3x+2", "3x + 2", "lambda x: 3x + 2"], "函数2": ["2x+3", "2x + 3", "lambda x: 2x + 3"]}}]}
+{"id": "multiple_30", "ground_truth": [{"矩形.面积": {"长度": [12], "宽度": [5]}}]}
+{"id": "multiple_31", "ground_truth": [{"几何_矩形.计算": {"宽度": [7], "长度": [10]}}]}
+{"id": "multiple_32", "ground_truth": [{"几何.计算圆锥体积": {"半径": [4], "高度": [7], "四舍五入": ["", 0]}}]}
+{"id": "multiple_33", "ground_truth": [{"计算积分": {"函数": ["3x**2", "lambda x: 3x**2", "3x^2"], "下限": [1], "上限": [2]}}]}
+{"id": "multiple_34", "ground_truth": [{"数学.最小公倍数": {"数字1": [18], "数字2": [12]}}]}
+{"id": "multiple_35", "ground_truth": [{"计算_最大公约数": {"数字1": [128], "数字2": [256], "算法": ["euclidean", ""]}}]}
+{"id": "multiple_36", "ground_truth": [{"运动学.从静止计算速度": {"距离": [20], "时间": [4], "初始速度": [0, ""]}}]}
+{"id": "multiple_37", "ground_truth": [{"运动学.最终速度": {"初始速度": [40], "时间": [6], "加速度": [-9.81, ""]}}]}
+{"id": "multiple_38", "ground_truth": [{"图书馆.搜索书籍": {"书籍名称": ["The Alchemist", "炼金术士"], "城市": ["New York", "New York, NY", "New York City", "NYC", "NY", "纽约市"], "可用性": ["", false], "类型": [""]}}]}
+{"id": "multiple_39", "ground_truth": [{"叫车服务.获取乘车": {"起点": ["New York", "New York, NY", "New York City", "NYC", "NY", "纽约"], "终点": ["Philadelphia", "费城"], "最大成本": [50]}}]}
+{"id": "multiple_40", "ground_truth": [{"电磁学.毕奥萨伐尔定律": {"电流": [12], "距离": [8], "真空磁导率": [1.256e-06, 0.000001256, ""]}}]}
+{"id": "multiple_41", "ground_truth": [{"磁场.计算": {"I": [10], "r": [0.01]}}]}
+{"id": "multiple_42", "ground_truth": [{"计算最终温度": {"数量1": [2], "温度1": [300], "数量2": [3], "温度2": [400]}}]}
+{"id": "multiple_43", "ground_truth": [{"生物.计算能量": {"摩尔数": [5], "物质": ["C6H12O6"], "每摩尔焦耳": [2800, ""]}}]}
+{"id": "multiple_44", "ground_truth": [{"计算.太空中的体重": {"地球体重_公斤": [70], "行星": ["火星"]}}]}
+{"id": "multiple_45", "ground_truth": [{"地质学.获取时代": {"时代名称": ["Ice age", "冰河时代"], "计算多少年前": [true]}}]}
+{"id": "multiple_46", "ground_truth": [{"排序列表": {"元素": [["Sam", "Alice", "Jack"]], "顺序": ["asc", ""]}}]}
+{"id": "multiple_47", "ground_truth": [{"余弦相似度.计算": {"向量1": [[3, 2, 1]], "向量2": [[1, 2, 3]], "舍入": ["", 0]}}]}
+{"id": "multiple_48", "ground_truth": [{"图书馆.查找附近": {"位置": ["New York City", "NYC", "New York City, NY", "纽约市"], "偏好": [["允许宠物进入", "残疾人通道"], ["残疾人通道", "允许宠物进入"]]}}]}
+{"id": "multiple_49", "ground_truth": [{"计算_复利": {"本金金额": [1500], "期限": [2], "年利率": [2.5], "复利频率": ["", 1]}}]}
+{"id": "multiple_50", "ground_truth": [{"房价预测": {"地点": ["New York", "New York, NY", "NYC", "New York City", "纽约"], "月份数": [1], "特征": [[], ""]}}]}
+{"id": "multiple_51", "ground_truth": [{"骰子_滚动_概率": {"期望总和": [7], "每面骰子面数": [6], "滚动次数": [2]}}]}
+{"id": "multiple_52", "ground_truth": [{"货币转换": {"金额": [100], "从货币": ["Euro", "EUR", "欧元"], "到货币": ["USD", "US Dollar", "美元"]}}]}
+{"id": "multiple_53", "ground_truth": [{"线性回归": {"自变量": [["interest rates", "unemployment rates"], ["interest_rate", "unemployment_rate"], ["interest rate", "unemployment rate"], ["利率", "失业率"]], "因变量": ["house_price", "house price", "房价"], "预测周期": [5]}}]}
+{"id": "multiple_54", "ground_truth": [{"公司财务.股息数据": {"公司": ["Apple Inc", "Apple", "Apple Inc.", "苹果公司"], "年份": [5], "频率": ["", "annually"]}}]}
+{"id": "multiple_55", "ground_truth": [{"股票预测": {"公司": ["Google", "GOOG", "谷歌"], "天数": [3], "模型": ["", "regression"]}}]}
+{"id": "multiple_56", "ground_truth": [{"平均收盘价": {"公司": ["Apple", "苹果"], "天数": [60], "数据源": ["yahoo finance", "雅虎财经", ""]}}]}
+{"id": "multiple_57", "ground_truth": [{"金融.复利": {"本金": [1000], "利率": [0.05], "时间": [10], "复利次数": [4]}}]}
+{"id": "multiple_58", "ground_truth": [{"律师.搜索": {"位置": ["Los Angeles", "Los Angeles, CA", "LA", "洛杉矶"], "专业领域": ["Divorce", "离婚"]}}]}
+{"id": "multiple_59", "ground_truth": [{"律师查找器": {"位置": ["New York", "New York, NY", "NY", "New York City", "NYC", "纽约"], "专业领域": [["Criminal Law"], ["criminal law"], ["刑法"]], "经验": ["", 1]}}]}
+{"id": "multiple_60", "ground_truth": [{"湿度温度预报": {"位置": ["New York City", "NYC", "纽约市"], "天数": [7]}}]}
+{"id": "multiple_61", "ground_truth": [{"景观建筑师.查找专业": {"location": ["Portland", "Portland, OR", "波特兰"], "specialization": ["small space garden design", "小空间花园设计"], "years_experience": [5]}}]}
+{"id": "multiple_62", "ground_truth": [{"自然公园.查找附近": {"位置": ["Boston, MA", "Boston", "波士顿, 马萨诸塞州"], "特性": [["露营", "风景景色"], ["风景景色", "露营"]]}}]}
+{"id": "multiple_63", "ground_truth": [{"空气质量预报": {"地点": ["New York", "New York, NY", "New York City", "NYC", "纽约"], "天数": [7]}}]}
+{"id": "multiple_64", "ground_truth": [{"紫外线指数.获取未来": {"位置": ["Tokyo", "东京"], "日期": ["06-01-2023"]}}]}
+{"id": "multiple_65", "ground_truth": [{"地理距离.查找": {"起点": ["New York City", "NYC", "纽约市"], "目的地": ["Los Angeles", "LA", "洛杉矶"], "单位": ["miles", ""]}}]}
+{"id": "multiple_66", "ground_truth": [{"交通估计": {"起始地点": ["Las Vegas", "拉斯维加斯"], "结束地点": ["Los Angeles", "洛杉矶"], "时间段": ["weekend", "周末"]}}]}
+{"id": "multiple_67", "ground_truth": [{"翻译": {"文本": ["Hello, how are you?"], "源语言": ["English", "英语"], "目标语言": ["French", "法语"]}}]}
+{"id": "multiple_68", "ground_truth": [{"图书馆.搜索书籍": {"位置": ["New York", "New York, NY", "New York City", "New York City, NY", "NYC", "New York public library", "纽约", "纽约公共图书馆"], "类型": ["Historical Fiction", "historical fiction", "历史小说"], "标题": [""]}}]}
+{"id": "multiple_69", "ground_truth": [{"五因素模型.分析": {"健谈": [true], "紧张": [true], "艺术兴趣": [false], "懒惰": [true], "宽容": [true]}}]}
+{"id": "multiple_70", "ground_truth": [{"欧洲历史.获取君主": {"国家": ["法国"], "世纪": [18]}}]}
+{"id": "multiple_71", "ground_truth": [{"获取人口数据": {"年份": [1954], "类别": ["退伍军人"]}}]}
+{"id": "multiple_72", "ground_truth": [{"美国历史.按州年份人口": {"州": ["California", "CA", "加利福尼亚州"], "年份": [1970]}}]}
+{"id": "multiple_73", "ground_truth": [{"宗教.获取起源": {"宗教": ["Buddhism", "佛教"]}}]}
+{"id": "multiple_74", "ground_truth": [{"艺术拍卖.获取艺术品价格": {"艺术品名称": ["Starry Night", "星夜"], "艺术家": ["Van Gogh", "梵高"], "平台": ["all", ""]}}]}
+{"id": "multiple_75", "ground_truth": [{"油漆颜色.趋势": {"房间": ["living room", "Living room", "客厅"], "周期": ["", "Daily"]}}]}
+{"id": "multiple_76", "ground_truth": [{"雕塑.创建定制": {"物品": ["horse", "Horse", "马"], "材料": ["Bronze", "bronze"], "尺寸": ["", 12]}}]}
+{"id": "multiple_77", "ground_truth": [{"艺术品搜索.查找": {"类型": ["雕塑"], "位置": ["纽约", "纽约, NY", "纽约市", "NYC"], "时代": ["当代", ""]}}]}
+{"id": "multiple_78", "ground_truth": [{"博物馆信息": {"博物馆": ["Natural History Museum", "自然历史博物馆"], "城市": ["London", "伦敦"], "特性": [["timings", "exhibitions", "accessibility"], ["exhibitions", "timings", "accessibility"], ["exhibitions", "accessibility", "timings"], ["accessibility", "timings", "exhibitions"], ["accessibility", "exhibitions", "timings"], ["timings", "accessibility", "exhibitions"]]}}]}
+{"id": "multiple_79", "ground_truth": [{"展览信息": {"博物馆名称": ["Museum of Modern Art", "MOMA", "Museum of Modern Art, New York", "纽约现代艺术博物馆"], "月份": ["", 1]}}]}
+{"id": "multiple_80", "ground_truth": [{"音乐商店.查找附近": {"位置": ["Nashville, TN", "Nashville", "纳什维尔，田纳西州", "纳什维尔"], "服务": [["小提琴课程"]], "乐器": [["吉他"]]}}]}
+{"id": "multiple_81", "ground_truth": [{"演唱会.预订门票": {"艺术家": ["埃米纳姆"], "地点": ["纽约市", "NYC"], "附加选项": [["后台通行证"]]}}]}
+{"id": "multiple_82", "ground_truth": [{"音乐.生成": {"调号": ["C Major", "C大调"], "速度": [120], "拍号": ["", "4/4"]}}]}
+{"id": "multiple_83", "ground_truth": [{"球员统计.获取生涯进球": {"球员名称": ["Lionel Messi", "莱昂内尔·梅西"], "球队名称": ["Barcelona", "巴塞罗那"], "比赛": [""]}}]}
+{"id": "multiple_84", "ground_truth": [{"获取顶级射手": {"比赛": ["UEFA Champions League", "欧冠联赛"], "球队": ["Barcelona", "巴塞罗那"], "数量": [10]}}]}
+{"id": "multiple_85", "ground_truth": [{"足球比分.获取比分": {"球队": ["Real Madrid", "皇家马德里"], "联赛": ["La Liga", "西甲联赛"], "轮次": [5]}}]}
+{"id": "multiple_86", "ground_truth": [{"BoardGameGeek.推荐": {"玩家数量": [2], "类别": ["策略"], "难度": ["", "初学者"]}}]}
+{"id": "multiple_87", "ground_truth": [{"游戏.更新.查找": {"游戏": ["Cyberpunk 2077"], "平台": ["Xbox"], "区域": ["", "global"]}}]}
+{"id": "multiple_88", "ground_truth": [{"视频游戏.获取玩家数量": {"游戏标题": ["World of Warcraft"], "年份": [2020], "平台": ["", "PC"]}}]}
+{"id": "multiple_89", "ground_truth": [{"食谱搜索": {"食材": [["chicken", "mushrooms"], ["mushrooms", "chicken"], ["鸡肉", "蘑菇"], ["蘑菇", "鸡肉"]], "卡路里": [500], "餐点类型": ["lunch", "午餐", ""]}}]}
+{"id": "multiple_90", "ground_truth": [{"餐厅.查找团体": {"位置": ["Seattle", "Seattle, WA", "西雅图"], "菜系": [["Seafood", "海鲜"]], "团体规模": [5]}}]}
+{"id": "multiple_91", "ground_truth": [{"食谱.查找": {"主要食材": ["apple pie", "apple", "苹果派", "苹果"], "食材限制": [4]}}]}
+{"id": "multiple_92", "ground_truth": [{"沃尔玛.素食产品": {"位置": ["Denver, CO", "Denver", "丹佛,科罗拉多州", "丹佛"], "类别": [["素食", "无麸质"], ["无麸质", "素食"]]}}]}
+{"id": "multiple_93", "ground_truth": [{"酒店.预订": {"地点": ["New York", "New York, NY", "NYC", "纽约"], "房间类型": ["deluxe", "Deluxe", "豪华房"], "晚数": [2], "额外服务": [["breakfast"]]}}]}
+{"id": "multiple_94", "ground_truth": [{"酒店房间定价.获取": {"酒店名称": ["Hilton New York", "纽约希尔顿酒店"], "房间类型": ["suite with queen size bed", "带大号床的套房"], "夜数": [3]}}]}
+{"id": "multiple_95", "ground_truth": [{"货币兑换.转换": {"金额": [200], "源货币": ["EUR", "欧元"], "目标货币": ["USD", "美元"], "实时转换": [true]}}]}
+{"id": "multiple_96", "ground_truth": [{"解二次方程": {"a": [2], "b": [6], "c": [5]}}]}
+{"id": "multiple_97", "ground_truth": [{"几何.圆面积": {"半径": [10], "单位": ["", "meters"]}}]}
+{"id": "multiple_98", "ground_truth": [{"几何.周长": {"半径": [3], "单位": ["cm", ""]}}]}
+{"id": "multiple_99", "ground_truth": [{"微积分.导数": {"函数": ["2x^2", "2x**2", "lambda x: 2x**2"], "值": [1], "函数变量": ["x", ""]}}]}
+{"id": "multiple_100", "ground_truth": [{"数学.最大公约数": {"数字1": [36], "数字2": [24]}}]}
+{"id": "multiple_101", "ground_truth": [{"数学.最大公约数": {"数字1": [12], "数字2": [18]}}]}
+{"id": "multiple_102", "ground_truth": [{"计算位移": {"初速度": [10], "时间": [5], "加速度": [9.8]}}]}
+{"id": "multiple_103", "ground_truth": [{"计算最终速度": {"初始速度": [0], "高度": [100], "重力": [9.8, ""]}}]}
+{"id": "multiple_104", "ground_truth": [{"获取最短驾驶距离": {"起点": ["New York City", "NYC", "纽约市"], "终点": ["Washington D.C.", "D.C.", "DC", "华盛顿特区"], "单位": ["", "kilometers", "公里"]}}]}
+{"id": "multiple_105", "ground_truth": [{"计算磁场": {"电流": [5], "半径": [4], "磁导率": ["", 0.01]}}]}
+{"id": "multiple_106", "ground_truth": [{"计算电场强度": {"电荷": [0.01], "距离": [4], "介质": ["", "真空"]}}]}
+{"id": "multiple_107", "ground_truth": [{"计算密度": {"质量": [45], "体积": [15], "单位": ["kg/m³", ""]}}]}
+{"id": "multiple_108", "ground_truth": [{"计算热容量": {"温度": [298], "体积": [10], "气体": ["air", "空气", ""]}}]}
+{"id": "multiple_109", "ground_truth": [{"细胞生物学.获取蛋白质": {"细胞区室": ["质膜"], "包含描述": [false, ""]}}]}
+{"id": "multiple_110", "ground_truth": [{"突变类型.查找": {"snp_id": ["rs6034464"], "物种": ["Homo sapiens", "智人", ""]}}]}
+{"id": "multiple_111", "ground_truth": [{"计算基因型频率": {"等位基因频率": [0.3], "基因型": ["AA"]}}]}
+{"id": "multiple_112", "ground_truth": [{"森林增长预测": {"位置": ["Yellowstone National Park", "黄石国家公园"], "年份": [5], "包含人类影响": [true]}}]}
+{"id": "multiple_113", "ground_truth": [{"计算适应度": {"特征值": [[0.8, 0.7]], "特征贡献": [[0.4, 0.6]]}}]}
+{"id": "multiple_114", "ground_truth": [{"预测.进化": {"物种": ["Homo Sapiens", "Homo sapiens", "智人"], "年数": [50], "模型": ["Darwin", "达尔文", ""]}}]}
+{"id": "multiple_115", "ground_truth": [{"查找餐厅": {"位置": ["曼哈顿"], "食物类型": ["泰国菜"], "数量": [5], "饮食要求": [["素食"]]}}]}
+{"id": "multiple_116", "ground_truth": [{"计算体重指数": {"体重": [85], "身高": [180], "单位": ["", "公制"]}}]}
+{"id": "multiple_117", "ground_truth": [{"计算_BMI": {"体重_公斤": [70], "身高_米": [1.75]}}]}
+{"id": "multiple_118", "ground_truth": [{"imdb.按演员查找电影": {"演员姓名": ["Leonardo DiCaprio", "莱昂纳多·迪卡普里奥"], "年份": [2010], "类别": ["", "所有"]}}]}
+{"id": "multiple_119", "ground_truth": [{"数据库.查询": {"表名": ["user", "用户表"], "条件": [[{"字段": ["age", "年龄"], "操作": [">"], "值": ["25"]}, {"字段": ["job", "职业"], "操作": ["="], "值": ["engineer", "工程师"]}]]}}]}
+{"id": "multiple_120", "ground_truth": [{"光传播时间": {"距离_光年": [4], "光速": [299792458, ""]}}]}
+{"id": "multiple_121", "ground_truth": [{"几何.三角形面积": {"底边": [6], "高度": [10], "单位": ["", "平方米"]}}]}
+{"id": "multiple_122", "ground_truth": [{"运行线性回归": {"预测变量": [["Age", "Income", "Education"], ["Age", "Education", "Income"], ["Income", "Age", "Education"], ["Income", "Education", "Age"], ["Education", "Age", "Income"], ["Education", "Income", "Age"]], "目标": ["Purchase_Amount"], "标准化": [true]}}]}
+{"id": "multiple_123", "ground_truth": [{"计算概率": {"总结果数": [52], "有利结果数": [4], "四舍五入到": ["", 2]}}]}
+{"id": "multiple_124", "ground_truth": [{"概率.计算单个": {"总结果数": [52], "事件结果数": [4], "舍入": ["", 2]}}]}
+{"id": "multiple_125", "ground_truth": [{"运行双样本T检验": {"组1": [[3, 4, 5, 6, 4]], "组2": [[7, 8, 9, 8, 7]], "等方差": [true, ""]}}]}
+{"id": "multiple_126", "ground_truth": [{"t检验": {"数据集A": [[12, 24, 36]], "数据集B": [[15, 30, 45]], "显著性水平": ["", 0.05]}}]}
+{"id": "multiple_127", "ground_truth": [{"金融.计算季度每股股息": {"总支付": [50000000], "流通股": [100000000]}}]}
+{"id": "multiple_128", "ground_truth": [{"计算股本回报率": {"净收入": [2000000], "股东权益": [10000000], "支付的股息": [200000]}}]}
+{"id": "multiple_129", "ground_truth": [{"复利计算": {"本金": [10000], "年利率": [5.0], "复利频率": ["每月"], "投资年限": [5]}}]}
+{"id": "multiple_130", "ground_truth": [{"计算复合年增长率": {"初始价值": [2000], "最终价值": [3000], "年数": [4]}}]}
+{"id": "multiple_131", "ground_truth": [{"市场表现.获取数据": {"指数": [["标准普尔500指数", "道琼斯指数"]], "天数": [5], "详细": ["", false]}}]}
+{"id": "multiple_132", "ground_truth": [{"金融.计算未来价值": {"初始投资": [20000], "回报率": [0.08], "年数": [5], "贡献": ["", 0]}}]}
+{"id": "multiple_133", "ground_truth": [{"计算共同基金余额": {"投资金额": [50000], "年收益率": [0.05], "年数": [3]}}]}
+{"id": "multiple_134", "ground_truth": [{"犯罪记录.获取记录": {"案件编号": ["CA123456"], "县": ["圣地亚哥", "圣地亚哥县"], "详情": [true]}}]}
+{"id": "multiple_135", "ground_truth": [{"获取案件信息": {"案件编号": ["2022/AL2562"], "法院": ["加利福尼亚", "CA", "加利福尼亚州"], "信息类型": ["受害者"]}}]}
+{"id": "multiple_136", "ground_truth": [{"获取犯罪率": {"城市": ["San Francisco", "San Francisco, CA", "SF", "旧金山"], "州": ["California", "CA", "加利福尼亚"], "类型": ["violent", "Violent", "暴力犯罪"], "年份": [2020]}}]}
+{"id": "multiple_137", "ground_truth": [{"诉讼搜索": {"公司": ["Google"], "开始日期": ["2021-01-01", "01/01/2021", "Jan.1,2021", "January 1, 2021"], "地点": ["California", "CA", "加利福尼亚州"], "状态": ["ongoing", ""]}}]}
+{"id": "multiple_138", "ground_truth": [{"法律案件.获取": {"案件id": ["R vs Adams", "R_vs_Adams", "R诉Adams"], "详细信息": [true]}}]}
+{"id": "multiple_139", "ground_truth": [{"诉讼详情.查找": {"公司名称": ["Apple Inc."], "年份": [2010], "案件类型": ["专利"]}}]}
+{"id": "multiple_140", "ground_truth": [{"诉讼搜索": {"公司名称": ["Google", "谷歌"], "地点": ["California", "CA", "加利福尼亚州"], "年份": [2020], "案件类型": ["", "all", "全部"]}}]}
+{"id": "multiple_141", "ground_truth": [{"诉讼.检查案件": {"案件id": [1234], "结案状态": [true]}}]}
+{"id": "multiple_142", "ground_truth": [{"天气.湿度预报": {"地点": ["Miami", "Miami, Florida", "FL", "迈阿密", "佛罗里达州迈阿密"], "天数": [7], "最小湿度": ["", 0]}}]}
+{"id": "multiple_143", "ground_truth": [{"计算坡度梯度": {"点1": [[40.7128, -74.0060]], "点2": [[34.0522, -118.2437]], "单位": ["degree", ""]}}]}
+{"id": "multiple_144", "ground_truth": [{"空气质量": {"位置": ["London", "伦敦"], "日期": ["2022-08-16", "16/08/2022", "Aug.16,2022", "2022/08/16", "16\\08\\2022"]}}]}
+{"id": "multiple_145", "ground_truth": [{"计算排放量": {"距离": [12000], "燃料类型": ["gas", "gasoline", "汽油"], "燃油效率": [20], "效率降低": ["", 0.0]}}]}
+{"id": "multiple_146", "ground_truth": [{"餐厅.查找附近": {"位置": ["西雅图", "西雅图,华盛顿州"], "菜系": ["中餐"], "最大距离": [10]}}]}
+{"id": "multiple_147", "ground_truth": [{"地图服务.获取路线": {"起点": ["New York", "New York, NY", "NYC", "纽约"], "终点": ["Los Angeles", "LA", "洛杉矶"], "避开": [["高速公路", "收费公路"], ["收费公路", "高速公路"]]}}]}
+{"id": "multiple_148", "ground_truth": [{"获取股票信息": {"公司名称": ["Apple Inc.", "Apple", "苹果公司"], "详细程度": ["detailed", "详细"], "市场": ["NASDAQ", "纳斯达克", ""]}}]}
+{"id": "multiple_149", "ground_truth": [{"情感分析": {"文本": ["I love the food here! It's always fresh and delicious.", "我喜欢这里的食物!它总是新鲜美味。"], "语言": ["english", "English", "中文"]}}]}
+{"id": "multiple_150", "ground_truth": [{"计算神经元活动": {"输入突触速率": [200], "权重": [0.5], "衰减率": [0.1]}}]}
+{"id": "multiple_151", "ground_truth": [{"社交媒体分析.最受关注": {"主题": ["psychology", "Psychology", "心理学"], "子主题": [["behaviour", "group dynamics"], ["group dynamics", "behaviour"], ["行为", "群体动力学"], ["群体动力学", "行为"]], "区域": ["", "global", "全球"]}}]}
+{"id": "multiple_152", "ground_truth": [{"历史.获取关键事件": {"国家": ["Germany", "德国"], "起始年份": [1871], "结束年份": [1945], "事件类型": [["战争"]]}}]}
+{"id": "multiple_153", "ground_truth": [{"获取事件日期": {"事件": ["Treaty of Lisbon", "Signing of the Treaty of Lisbon", "里斯本条约", "《里斯本条约》的签署"], "地点": ["", "global", "Lisbon", "Lisbon, Portugal"]}}]}
+{"id": "multiple_154", "ground_truth": [{"美国总统.在年份": {"年份": [1861], "全名": [true, ""]}}]}
+{"id": "multiple_155", "ground_truth": [{"获取发现者": {"发现": ["neutron", "中子"], "详情": [true]}}]}
+{"id": "multiple_156", "ground_truth": [{"历史贡献.获取贡献": {"科学家": ["阿尔伯特·爱因斯坦"], "日期": ["1915-03-17"], "类别": [""]}}]}
+{"id": "multiple_157", "ground_truth": [{"获取最早记载": {"姓名": ["Jesus Christ", "耶稣基督"], "来源": ["historical records"]}}]}
+{"id": "multiple_158", "ground_truth": [{"宗教历史.获取教皇传记": {"教皇名": ["Innocent III", "Pope Innocent III", "英诺森三世"], "包含贡献": [true]}}]}
+{"id": "multiple_159", "ground_truth": [{"计算所需涂料": {"覆盖率": [400], "长度": [30], "高度": [12]}}]}
+{"id": "multiple_160", "ground_truth": [{"获取雕塑信息": {"艺术家姓名": ["James Plensa", "詹姆斯·普伦萨"], "细节": [true]}}]}
+{"id": "multiple_161", "ground_truth": [{"查找展览": {"位置": ["New York", "New York, NY", "New York City", "NYC", "NY", "纽约"], "艺术形式": ["sculpture", "modern sculpture", "雕塑", "现代雕塑"], "月份": ["upcoming", "next month", "upcoming month", "next", "下个月", ""], "用户评分": ["high", "高", ""]}}]}
+{"id": "multiple_162", "ground_truth": [{"分析结构": {"建筑id": ["B1004"], "楼层": [[2, 3, 4]], "模式": ["动态"]}}]}
+{"id": "multiple_163", "ground_truth": [{"大都会博物馆.获取热门艺术品": {"数量": [5], "排序方式": ["受欢迎程度"]}}]}
+{"id": "multiple_164", "ground_truth": [{"乐器价格.获取": {"品牌": ["Fender"], "型号": ["American Professional II Stratocaster"], "饰面": ["Rosewood", "玫瑰木"]}}]}
+{"id": "multiple_165", "ground_truth": [{"吉他价格.查找": {"型号": ["Gibson Les Paul"], "状况": ["Excellent"], "位置": ["Chicago", "Chicago area", "芝加哥地区"]}}]}
+{"id": "multiple_166", "ground_truth": [{"音乐会.搜索": {"流派": ["classical", "古典"], "地点": ["Los Angeles", "LA", "洛杉矶"], "日期": ["this weekend", "weekend", "本周末"], "价格范围": ["cheap", "廉价"]}}]}
+{"id": "multiple_167", "ground_truth": [{"音乐生成器.生成旋律": {"调": ["C"], "起始音符": ["C4"], "长度": [16], "速度": [120, ""]}}]}
+{"id": "multiple_168", "ground_truth": [{"获取歌曲歌词": {"歌曲标题": ["Bohemian Rhapsody", "波西米亚狂想曲"], "艺术家名称": ["Queen", "皇后乐队"], "语言": ["English", ""]}}]}
+{"id": "multiple_169", "ground_truth": [{"音阶": {"调": ["C#", "C sharp", "C大调升调"], "音阶类型": ["major", ""]}}]}
+{"id": "multiple_170", "ground_truth": [{"足球统计.获取球员统计数据": {"球员姓名": ["Cristiano Ronaldo", "克里斯蒂亚诺·罗纳尔多"], "赛季": ["2019-2020"], "联赛": ["all", ""]}}]}
+{"id": "multiple_171", "ground_truth": [{"比赛结果.获取获胜者": {"队伍": [["Lakers", "Clippers"], ["Clippers", "Lakers"], ["湖人队", "快船队"], ["快船队", "湖人队"]], "日期": ["2021-01-28"], "场地": [""]}}]}
+{"id": "multiple_172", "ground_truth": [{"运动数据库.查找运动员": {"姓名": ["Lebron James", "勒布朗·詹姆斯"], "运动项目": ["Basketball"], "队伍": [""]}}]}
+{"id": "multiple_173", "ground_truth": [{"获取防守排名": {"赛季": [2021], "前几名": [1, ""]}}]}
+{"id": "multiple_174", "ground_truth": [{"体育排名": {"队伍": ["Manchester United", "Man United", "Man U", "MUFC", "曼联"], "联赛": ["Premier League", "英超联赛"], "赛季": ["", 2024]}}]}
+{"id": "multiple_175", "ground_truth": [{"体育排名.获取顶级选手": {"运动": ["网球"], "性别": ["女子"]}}]}
+{"id": "multiple_176", "ground_truth": [{"运动队.获取赛程": {"队伍名称": ["Manchester United", "Man United", "Man U", "MUFC", "曼联"], "比赛数量": [6], "联赛": ["Premier League", "PL", "英超联赛"], "位置": [""]}}]}
+{"id": "multiple_177", "ground_truth": [{"棋盘游戏.国际象棋.获取顶级棋手": {"地点": ["New York", "New York, NY", "NYC", "纽约"], "最低评分": [2300], "棋手数量": ["", 10]}}]}
+{"id": "multiple_178", "ground_truth": [{"在牌组中查找牌": {"等级": ["Queen", "皇后"], "花色": ["Hearts", "红心"], "牌组": [""]}}]}
+{"id": "multiple_179", "ground_truth": [{"扑克概率.满堂红": {"牌组大小": [52], "手牌大小": [5]}}]}
+{"id": "multiple_180", "ground_truth": [{"游戏统计.获取玩家统计数据": {"游戏": ["Zelda"], "用户名": ["Sam"], "平台": ["Switch", "Nintendo Switch"]}}]}
+{"id": "multiple_181", "ground_truth": [{"足球.获取最后一场比赛": {"球队名称": ["Liverpool F.C.", "Liverpool", "利物浦足球俱乐部", "利物浦"], "包含统计": [true]}}]}
+{"id": "multiple_182", "ground_truth": [{"多人游戏查找器": {"平台": ["Windows 10"], "评分": [4.5], "类型": [""]}}]}
+{"id": "multiple_183", "ground_truth": [{"食谱信息.获取卡路里": {"网站": ["Foodnetwork.com"], "食谱": ["牛肉千层面", "牛肉千层面食谱"], "可选用餐时间": [""]}}]}
+{"id": "multiple_184", "ground_truth": [{"食谱搜索": {"饮食限制": ["素食"], "食材": [["pasta", "cheese"], ["cheese", "pasta"], ["意面", "奶酪"]], "份数": [2]}}]}
+{"id": "multiple_185", "ground_truth": [{"餐厅搜索.查找最近": {"地点": ["Boston", "Boston, MA", "波士顿"], "菜系": ["Sushi", "寿司"], "便利设施": [["Patio"]]}}]}
+{"id": "multiple_186", "ground_truth": [{"查找食谱": {"饮食限制": ["vegan", "素食"], "食谱类型": ["dessert", "甜点"], "时间": [30]}}]}
+{"id": "multiple_187", "ground_truth": [{"全食.检查价格": {"地点": ["Los Angeles", "LA", "洛杉矶"], "商品": [["tomatoes", "lettuce"], ["lettuce", "tomatoes"], ["西红柿", "生菜"], ["生菜", "西红柿"]]}}]}
+{"id": "multiple_188", "ground_truth": [{"杂货店.查找最佳": {"我的位置": ["Berkeley", "Berkeley,California", "Berkeley,CA", "Berkeley, CA", "伯克利"], "评分": [4.5], "产品": [["tomatoes", "pet food"], ["pet food", "tomatoes"], ["Tomatoes", "Pet food"], ["Pet food", "Tomatoes"], ["西红柿", "宠物食品"], ["宠物食品", "西红柿"]]}}]}
+{"id": "multiple_189", "ground_truth": [{"时区.转换": {"时间": ["3pm", "下午3点"], "来源时区": ["America/New_York", "New York", "New York, NY", "NY", "NYC", "Eastern Standard Time", "EST", "纽约"], "目标时区": ["Europe/London", "London", "British Summer Time", "BST", "Greenwich Mean Time", "GMT", "伦敦"]}}]}
+{"id": "multiple_190", "ground_truth": [{"预订酒店": {"酒店名称": ["Hilton Hotel", "Hilton", "希尔顿酒店", "希尔顿"], "位置": ["Chicago", "芝加哥"], "房间类型": ["single", "Single", "单人房"], "开始日期": ["2022-12-10", "10/12/2022", "Dec.10,2022", "10th December 2022", "10 December 2022"], "夜晚数": [2]}}]}
+{"id": "multiple_191", "ground_truth": [{"预订酒店": {"酒店名称": ["Hotel Paradise"], "位置": ["Las Vegas", "Las Vegas, NV", "LV", "拉斯维加斯"], "房间类型": ["luxury", "Luxury", "豪华"], "开始日期": ["05-12-2022", "2022-05-12", "12/05/2022", "May.12,2022", "May 12, 2022"], "住宿时长": [3], "景观": ["city", "city view", "城市景观"]}}]}
+{"id": "multiple_192", "ground_truth": [{"货币转换.转换": {"金额": [150], "源货币": ["EUR", "欧元"], "目标货币": ["CAD", "加拿大元"]}}]}
+{"id": "multiple_193", "ground_truth": [{"地图.获取距离时长": {"起点位置": ["埃菲尔铁塔"], "终点位置": ["卢浮宫博物馆"], "交通状况": ["", false]}}]}
+{"id": "multiple_194", "ground_truth": [{"获取博物馆开放时间": {"博物馆名称": ["Metropolitan Museum of Art", "The Met", "Met Museum", "大都会艺术博物馆"], "日期": ["Saturday"]}}]}
+{"id": "multiple_195", "ground_truth": [{"计算_热容量": {"温度": [298], "体积": [10], "气体": ["air", "空气", ""]}}]}
+{"id": "multiple_196", "ground_truth": [{"细胞生物学.获取蛋白质": {"细胞区室": ["质膜"], "包含描述": ["", false]}}]}
+{"id": "multiple_197", "ground_truth": [{"突变类型.查找": {"snp_id": ["rs6034464"], "物种": ["", "智人"]}}]}
+{"id": "multiple_198", "ground_truth": [{"计算基因型频率": {"等位基因频率": [0.3], "基因型": ["AA"]}}]}
+{"id": "multiple_199", "ground_truth": [{"森林增长预测": {"位置": ["Yellowstone", "yellowstone", "黄石公园"], "年份": [5], "包含人类影响": [true]}}]}
