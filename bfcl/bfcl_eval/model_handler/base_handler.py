@@ -722,10 +722,16 @@ class BaseHandler:
     def inference_single_turn_prompting(
         self, test_entry: dict, include_input_log: bool
     ) -> tuple[any, dict]:
+        # Zheng Luo
+        # print("Hit inference_single_turn_prompting")
+        # print(test_entry)
+        
         inference_data: dict = self._pre_query_processing_prompting(test_entry)
         inference_data = self.add_first_turn_message_prompting(
             inference_data, test_entry["question"][0]
         )
+        # print(inference_data)
+        # exit(1)
 
         api_response, query_latency = self._query_prompting(inference_data)
 
