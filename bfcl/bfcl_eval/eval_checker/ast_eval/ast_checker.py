@@ -337,6 +337,10 @@ def simple_function_checker(
     language: Language,
     model_name: str,
 ):
+    print("func_description:", func_description)
+    print("model_output:", model_output)
+    print("possible_answer:", possible_answer)
+    exit(1)  # Zheng
     possible_answer = list(possible_answer.values())[0]
     # Extract function name and parameters details
     func_name = func_description["name"]

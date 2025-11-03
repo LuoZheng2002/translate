@@ -141,7 +141,8 @@ def parse_test_category_argument(test_category_args: list[str]) -> list[str]:
             # Invalid test category name
             raise Exception(f"Invalid test category name provided: {test_category}")
 
-    return sorted(list(test_name_total))
+    result = sorted(list(test_name_total))
+    return result
 
 
 def load_test_entries_from_id_file(id_file_path: Path) -> tuple[list[str], list[dict]]:
