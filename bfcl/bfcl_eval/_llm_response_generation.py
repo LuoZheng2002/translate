@@ -198,6 +198,7 @@ def multi_threaded_inference(handler, test_case, include_input_log, exclude_stat
         **metadata,
     }
 
+
     return result_to_write
 
 

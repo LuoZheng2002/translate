@@ -34,3 +34,12 @@ OpenAI API
 
 
 bfcl generate --model Qwen/Qwen3-0.6B --test-category multiple
+
+
+Variables:
+models (local hosted and api)
+original/fully translated dataset/translated but keep keywords not translated
+if translated, 3 way of dealing with it: 1. do nothing 2. ask to translate to English 3. use original keywords
+
+whether add noises or not to the dataset
+
