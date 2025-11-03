@@ -125,23 +125,31 @@ for config in configs:
     if requires_evaluation:
         with open(inference_result_path, 'r', encoding='utf-8') as f_inference_in, \
                 open(score_result_path, 'w', encoding='utf-8') as f_score_out, \
+                open(dataset_path, 'r', encoding='utf-8') as f_dataset_in, \
                 open(ground_truth_path, 'r', encoding='utf-8') as f_ground_truth_in:
             if not f_inference_in.readable():
                 print(f"Error: inference result file {inference_result_path} is not readable.")
                 continue
             inference_results = []
             ground_truths = []
+            dataset = []
             scores = []
+            for line in f_dataset_in:
+                test_entry = json.loads(line)
+                dataset.append(test_entry)
             for line in f_inference_in:
                 inference_results.append(json.loads(line))
             for line in f_ground_truth_in:
                 ground_truths.append(json.loads(line))
-            for (inference_line, ground_truth_line) in zip(inference_results, ground_truths):
+            for (inference_line, ground_truth_line, dataset_line) in zip(inference_results, ground_truths, dataset):
                 id = inference_line["id"]
                 assert id == ground_truth_line["id"], f"Mismatch in IDs: {id} vs {ground_truth_line['id']}"
+                assert id == dataset_line["id"], f"Mismatch in IDs: {id} vs {dataset_line['id']}"
                 inference_result = inference_line["result"]
                 ground_truth = ground_truth_line["ground_truth"]
-                score_result = evaluate(inference_result, ground_truth)
+                func_description = dataset_line['function']
+                # print("func_description: ", func_description)
+                score_result = evaluate(inference_result, ground_truth, func_description)
                 score_result["id"] = id
                 scores.append(score_result)
             scores = sorted(scores, key=lambda x: x["id"])

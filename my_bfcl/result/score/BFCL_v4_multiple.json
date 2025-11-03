@@ -1,1 +1,1 @@
-{"valid": false, "error": ["Missing required parameter: 'get_area'."], "error_type": "simple_function_checker:missing_required", "id": "multiple_0"}
+{"valid": true, "model_result_raw": "[triangle_properties.get(side1=5, side2=4, side3=3)]", "model_result_decoded": {"triangle_properties.get": {"side1": 5, "side2": 4, "side3": 3}}, "id": "multiple_0"}

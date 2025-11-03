@@ -70,6 +70,7 @@ def resolve_ast_call(elem):
 def evaluate(
     model_result,
     possible_answer,
+    func_description,
 ):
     """Helper method to process a single AST entry."""
     model_result_item_raw = model_result    
@@ -108,52 +109,79 @@ def evaluate(
             "model_result_decoded": model_result,
         }
     model_result = model_result[0]
-    print("model_result:", model_result)
     possible_answer = possible_answer[0]
-    print("possible_answer:", possible_answer)
-    print("possible_answer keys:", possible_answer.keys()   )
+
+    # print("model_result:", model_result)
+    # print("possible_answer:", possible_answer)
+    assert(len(possible_answer) == 1)
+    assert(len(model_result) == 1)
+    # print("model_result:", model_result)
+    
+    # print("possible_answer:", possible_answer)
+    # print("possible_answer keys:", possible_answer.keys()   )
     # Extract function name and parameters details
-    func_name = next(iter(possible_answer))
-    print("func_name:", func_name)
+    possible_answer_func_name = next(iter(possible_answer))
+    model_result_func_name = next(iter(model_result))
+    # print("func_name:", possible_answer_func_name)
+    if possible_answer_func_name != model_result_func_name:
+        return {
+            "valid": False,
+            "error": [f"Function name mismatch. Expected {repr(possible_answer_func_name)}, but got {repr(model_result_func_name)}."],
+            "error_type": "simple_function_checker:wrong_func_name",
+            "model_result_raw": model_result_item_raw,
+            "model_result_decoded": model_result,
+        }
+
+
+
+
+
+    # first see if function name matches
+
     # param_details = func_description["parameters"]["properties"]
-    # required_params = func_description["parameters"]["required"]
-
-    # Initialize a result dictionary
-    result = {
-        "valid": True,
-        "error": [],
-        "error_type": "simple_function_checker:unclear",
-    }
-
-    # Check if function name matches
-    if func_name not in model_result:
-        result["valid"] = False
-        result["error"].append(
-            f"Function name {repr(func_name)} not found in model output."
-        )
-        result["error_type"] = "simple_function_checker:wrong_func_name"
-        return result
+    for func in func_description:
+        if func['name'] == possible_answer_func_name:
+            # print("func parameters:", func['parameters'].keys())
+            required_params = func['parameters']['required']
+            break
 
     # Check for required parameters in model output
-    for param in possible_answer[func_name].keys():
-        if param not in model_result[func_name].keys():
-            result["valid"] = False
-            result["error"].append(f"Missing required parameter: {repr(param)}.")
-            result["error_type"] = "simple_function_checker:missing_required"
-            return result
+    model_params = model_result[possible_answer_func_name]
+    for param in required_params:
+        if param not in model_params:
+            return {
+                "valid": False,
+                "error": [f"Missing required parameter: {repr(param)}."],
+                "error_type": "simple_function_checker:missing_required",
+                "model_result_raw": model_result_item_raw,
+                "model_result_decoded": model_result,
+            }
+        
+    possible_answer_params = possible_answer[possible_answer_func_name]
 
     # Validate types and values for each parameter in model output
-    for param, value in model_result[func_name].items():
-        if param not in possible_answer:
-            result["valid"] = False
-            result["error"].append(f"Unexpected parameter: {repr(param)}.")
-            result["error_type"] = "simple_function_checker:unexpected_param"
-            return result
+    for param, value in model_params.items():
+        if param not in possible_answer_params:
+            print("possible_answer keys:", possible_answer.keys())
+            print("param: ", param)
+            return {
+                "valid": False,
+                "error": [f"Unexpected parameter: {repr(param)}."],
+                "error_type": "simple_function_checker:unexpected_param",
+                "model_result_raw": model_result_item_raw,
+                "model_result_decoded": model_result,
+            }
         # Check if the value is within the possible answers
-        if value not in possible_answer[func_name][param]:
-            result["valid"] = False
-            result["error"].append(
-                f"Invalid value for parameter {repr(param)}: {repr(value)}. Expected one of {possible_answer[param]}."
-            )
-            result["error_type"] = "value_error:others"
-            return result
+        if value not in possible_answer_params[param]:
+            return {
+                "valid": False,
+                "error": [f"Invalid value for parameter {repr(param)}: {repr(value)}. Expected one of {possible_answer[param]}."],
+                "error_type": "value_error:others",
+                "model_result_raw": model_result_item_raw,
+                "model_result_decoded": model_result,
+            }
+    return {
+        "valid": True,
+        "model_result_raw": model_result_item_raw,
+        "model_result_decoded": model_result,
+    }
