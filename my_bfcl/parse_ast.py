@@ -85,6 +85,16 @@ def evaluate(
     cleaned_input = model_result.strip().strip("'")
     try:
         parsed = ast.parse(cleaned_input, mode="eval")
+        extracted = []
+        if isinstance(parsed.body, ast.Call):
+            extracted.append(resolve_ast_call(parsed.body))
+        else:
+            for elem in parsed.body.elts:
+                if not isinstance(elem, ast.Call):
+                    raise Exception(f"Expected AST Call node, but got {type(elem)}")
+                extracted.append(resolve_ast_call(elem))
+        decoded_output = extracted
+        
     except Exception as e:
         return {
             "id": case_id,
@@ -94,14 +104,7 @@ def evaluate(
             "model_result_raw": model_result_item_raw,
             "possible_answer": possible_answer,
         }
-    extracted = []
-    if isinstance(parsed.body, ast.Call):
-        extracted.append(resolve_ast_call(parsed.body))
-    else:
-        for elem in parsed.body.elts:
-            assert isinstance(elem, ast.Call)
-            extracted.append(resolve_ast_call(elem))
-    decoded_output = extracted
+    
     model_result = decoded_output
     if len(model_result) != 1:
         return {

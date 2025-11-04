@@ -2,7 +2,7 @@
 import json
 
 import re
-from call_llm import gpt_4o_mini_inference
+from call_llm import api_inference
 from parse_dataset import load_json_lines
 
 
@@ -21,7 +21,7 @@ def generate_noisy_case(question: str) -> str:
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": question}
     ]
-    noisy_question = gpt_4o_mini_inference(input_messages)
+    noisy_question = api_inference(input_messages)
     return noisy_question
 
 postfix_to_generate = [

@@ -7,7 +7,7 @@ from config import Language
 import re
 from parse_dataset import load_json_lines
 # Load API keys from .env file
-load_dotenv(dotenv_path=".env.private")
+load_dotenv(dotenv_path=".env")
 
 
 class TranslateOption(Enum):
@@ -24,7 +24,11 @@ class TranslateConfig:
 translate_configs: list[TranslateConfig] = [
     TranslateConfig(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED),
     TranslateConfig(language=Language.CHINESE, option=TranslateOption.PARTIALLY_TRANSLATED),
+    TranslateConfig(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED),
+    TranslateConfig(language=Language.HINDI, option=TranslateOption.PARTIALLY_TRANSLATED),
 ]
+
+input_postfix = "_noisy"
 
 for config in translate_configs:
     print(f"Translating dataset for language: {config.language}, option: {config.option}")
@@ -55,12 +59,12 @@ for config in translate_configs:
             translate_mode_postfix += "_full"
         case TranslateOption.PARTIALLY_TRANSLATED:
             translate_mode_postfix += "_partial"
-    output_path = f"dataset/BFCL_v4_multiple{translate_mode_postfix}.json"
+    output_path = f"dataset/BFCL_v4_multiple{input_postfix}{translate_mode_postfix}.json"
     # Initialize the client
     client = OpenAI(api_key=api_key, base_url=base_url)
 
     # === Load input file ===
-    with open("dataset/BFCL_v4_multiple.json", "r", encoding="utf-8") as f:
+    with open(f"dataset/BFCL_v4_multiple{input_postfix}.json", "r", encoding="utf-8") as f:
         dataset = load_json_lines(f)
     with open("dataset/possible_answer/BFCL_v4_multiple.json", "r", encoding="utf-8") as f:
         possible_answers = load_json_lines(f)
@@ -83,40 +87,87 @@ for config in translate_configs:
                     warning_printed = True
                 continue
             # === Translation system message ===
+            dataset_question = dataset_line["question"][0][0]["content"]
             match (config.language, config.option):
                 case (Language.CHINESE, TranslateOption.FULLY_TRANSLATED):
                     system_message = {
                         "role": "system",
                         "content": "你是一个翻译助手，请将用户提的问题翻译成中文，不要回答问题，不要换行。"
                     }
+                    user_message = {"role": "user", "content": dataset_question}
                 case (Language.CHINESE, TranslateOption.PARTIALLY_TRANSLATED):
                     possible_answer = next((ans for ans in possible_answers if ans["id"] == id), None)
+                    # retrieve the first value of the possible answer dict
+
                     assert possible_answer is not None, f"Possible answer not found for id {id}"
-                    possible_answer = possible_answer['ground_truth']
+                    possible_answer = possible_answer['ground_truth'][0]
+                    possible_answer = next(iter(possible_answer.values()))
                     possible_answer = json.dumps(possible_answer, ensure_ascii=False)
                     system_message = {
                         "role": "system",
-                        "content": "你是一个翻译助手，请将用户提的问题翻译成中文，不要回答问题，不要换行。\n如果原文中的词语在以下json字符串的内容中出现，请保留这些词语不翻译。\n" + possible_answer
+                        "content": '''
+你是一个翻译助手，用户将输入两行内容，第一行是需要翻译的句子，第二行是一个JSON字符串，包含了一些词语。如果这些词语出现在需要翻译的句子中，请保持这些词语不变，只翻译其他部分。请将第一行用户提的问题翻译成中文，不要回答问题，不要换行。
+
+以下是一个例子：
+用户输入：
+Can you calculate the displacement of a car moving at an initial speed of 20 m/s and then accelerates at 10 m/s^2 for 5 seconds? (assuming a straight line motion)
+{"initial_speed": [20], "acceleration": [10], "time": [5], "rounding": ["", 2]}
+输出：
+你能计算一辆汽车以initial speed 20米/秒行驶，然后以10米/秒²的acceleration加速5秒钟后的位移吗？（假设是直线运动）
+
+注意到initial speed和acceleration不翻译，因为它们出现在了JSON字符串中。
+'''     
                     }
+                    user_message = {"role": "user", "content": f'''
+{dataset_question}
+{possible_answer}
+                                    '''}
+                    # print("user message:")
+                    # print(user_message["content"])
+                    # exit(1)
                 case (Language.HINDI, TranslateOption.FULLY_TRANSLATED):
                     system_message = {
                         "role": "system",
                         "content": "You are a translation assistant. Please translate the user's question into Hindi. Do not answer the question. Do not add line breaks."
                     }
+                    user_message = {"role": "user", "content": dataset_question}
                 case (Language.HINDI, TranslateOption.PARTIALLY_TRANSLATED):
                     possible_answer = next((ans for ans in possible_answers if ans["id"] == id), None)
+                    # retrieve the first value of the possible answer dict
+
                     assert possible_answer is not None, f"Possible answer not found for id {id}"
-                    possible_answer = possible_answer['ground_truth']
+                    possible_answer = possible_answer['ground_truth'][0]
+                    possible_answer = next(iter(possible_answer.values()))
                     possible_answer = json.dumps(possible_answer, ensure_ascii=False)
                     system_message = {
                         "role": "system",
-                        "content": "You are a translation assistant. Please translate the user's question into Hindi. Do not answer the question. Do not add line breaks.\nIf any words from the following JSON string appear in the original text, please keep those words untranslated.\n" + possible_answer
+                        "content": '''
+You are a translation assistant. The user will input two lines:
+the first line is a sentence to be translated,
+and the second line is a JSON string containing some words.
+
+If any of those words appear in the sentence, keep them unchanged (do not translate them), and translate all other parts.
+
+Translate the first line (the user’s sentence) into Hindi, without answering the question and without adding a line break.
+
+Below is an example:
+
+User input:
+Can you calculate the displacement of a car moving at an initial speed of 20 m/s and then accelerates at 10 m/s^2 for 5 seconds? (assuming a straight line motion)
+{"initial_speed": [20], "acceleration": [10], "time": [5], "rounding": ["", 2]}
+
+Output:
+क्या आप गणना कर सकते हैं कि एक कार जो initial speed 20 मी/सेकंड की गति से चल रही है और फिर 10 मी/सेकंड² की acceleration से 5 सेकंड तक तेज़ होती है, उसका विस्थापन कितना होगा? (मान लीजिए यह सीधी रेखा में चल रही है)
+
+Note that initial speed and acceleration are kept untranslated because they appear in the JSON string.
+'''     
                     }
+                    user_message = {"role": "user", "content": f'''
+{dataset_question}
+{possible_answer}
+                                    '''}
+
             # === Prepare user message and call API ===
-
-            line_content = dataset_line["question"][0][0]["content"]
-            user_message = {"role": "user", "content": line_content}
-
             response = client.chat.completions.create(
                 model=model_name,
                 messages=[system_message, user_message],

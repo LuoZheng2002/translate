@@ -3,7 +3,7 @@ import json
 from config import *
 from parse_ast import *
 import re
-from call_llm import gpt_4o_mini_inference
+from call_llm import api_inference
 def gen_developer_prompt(function_calls: list, prompt_passing_in_english: bool):
     function_calls_json = json.dumps(function_calls, ensure_ascii=False, indent=2)
     passing_in_english_prompt = " Pass in all parameters in function calls in English." if prompt_passing_in_english else ""
@@ -25,7 +25,7 @@ def gen_input_messages(developer_prompt: str, user_question: str) -> dict:
     user_message = {"role": "user", "content": user_question}
     return [developer_message, user_message]
 
-def inference(test_entry: dict):
+def inference(model: Model, test_entry: dict):
     # print(test_entry)
     functions = test_entry['function']
     developer_prompt = gen_developer_prompt(
@@ -42,7 +42,7 @@ def inference(test_entry: dict):
     # print(input_messages[1]['content'])
     # to do: call the LLM API with prompt_dict
 
-    result = gpt_4o_mini_inference(input_messages)
+    result = api_inference(model, input_messages)
 
     result_to_write = {
         "id": test_entry["id"],
@@ -82,11 +82,18 @@ for config in configs:
             noise_postfix = ""
         case AddNoiseMode.ADD_NOISE:
             noise_postfix = "_noisy"
-    dataset_path = f"dataset/BFCL_v4_multiple{language_postfix}{translate_dataset_prefix}{noise_postfix}.json"
+    match config.model:
+        case Model.GPT_4O_MINI:
+            model_postfix = "_gpt4o_mini"
+        case Model.CLAUDE_SONNET:
+            model_postfix = "_claude_sonnet"
+        case Model.CLAUDE_HAIKU:
+            model_postfix = "_claude_haiku"
+    dataset_path = f"dataset/BFCL_v4_multiple{noise_postfix}{language_postfix}{translate_dataset_prefix}.json"
     ground_truth_path = f"dataset/possible_answer/BFCL_v4_multiple.json"
-    inference_result_path = f"result/inference/BFCL_v4_multiple{language_postfix}{translate_mode_prefix}{noise_postfix}.json"
-    evaluation_result_path = f"result/evaluation/BFCL_v4_multiple{language_postfix}{translate_mode_prefix}{noise_postfix}.json"
-    score_path = f"result/score/BFCL_v4_multiple{language_postfix}{translate_mode_prefix}{noise_postfix}.json"
+    inference_result_path = f"result/inference/BFCL_v4_multiple{model_postfix}{noise_postfix}{language_postfix}{translate_mode_prefix}.json"
+    evaluation_result_path = f"result/evaluation/BFCL_v4_multiple{model_postfix}{noise_postfix}{language_postfix}{translate_mode_prefix}.json"
+    score_path = f"result/score/BFCL_v4_multiple{model_postfix}{noise_postfix}{language_postfix}{translate_mode_prefix}.json"
     with open(dataset_path, 'r', encoding='utf-8') as f_dataset:
         test_cases = load_json_lines(f_dataset)
     # test_cases = test_cases[:1]
@@ -112,7 +119,7 @@ for config in configs:
                     continue
                 # the actual inference
                 print(f"Inferencing case id {case['id']}, question: {case['question'][0][0]['content']}")
-                result = inference(case)
+                result = inference(config.model, case)
                 print("Answer: ", result["result"])
                 inference_results.append(result)
                 f_inference_out.seek(0)
