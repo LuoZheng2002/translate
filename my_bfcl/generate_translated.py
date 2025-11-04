@@ -28,7 +28,8 @@ translate_configs: list[TranslateConfig] = [
     TranslateConfig(language=Language.HINDI, option=TranslateOption.PARTIALLY_TRANSLATED),
 ]
 
-input_postfix = "_noisy"
+# input_postfix = "_noisy"
+input_postfix = ""
 
 for config in translate_configs:
     print(f"Translating dataset for language: {config.language}, option: {config.option}")

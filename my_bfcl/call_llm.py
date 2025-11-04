@@ -44,33 +44,66 @@ def api_inference(model: Model, input_messages: list) -> str:
         case _:
             raise ValueError(f"Unsupported model: {model}")
         
-def local_inference(generator, input_messages: list) -> str:
+import os
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+
+def make_chat_pipeline(model_id: str):
+    """
+    Returns a generator function that takes (system, user) input pairs and yields model responses.
+    """
+    print(f"Loading local model: {model_id}")
+    # --- Environment setup ---
     os.environ["HF_HOME"] = "/work/nvme/bfdz/zluo8/huggingface"
-    
-    # Model name
-    model_id = "ibm-granite/granite-3.1-8b-instruct"
 
-    # Optional: specify where to download the model (important on HPCs)
-    # model_dir = "/path/to/your/llm_storage"
+    # --- Load tokenizer ---
+    tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
 
-    # Load tokenizer and model
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    # --- (Optional) quantization configuration ---
+    # bnb_config = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16)
 
+    # --- Load model ---
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
-        device_map="auto",         # automatically shard across GPUs
-        torch_dtype="auto",        # bfloat16 if supported
-        offload_folder="/work/nvme/bfdz/zluo8/hf_offload",  # optional CPU offload
+        device_map="auto",
+        torch_dtype=torch.bfloat16,
+        trust_remote_code=True,
+        offload_folder="/work/nvme/bfdz/zluo8/hf_offload",
+        # quantization_config=bnb_config,
     )
 
-    # Create a text generation pipeline
-    generator = pipeline(
-        "text-generation",
-        model=model,
-        tokenizer=tokenizer,
-    )
+    # --- Define the generator pipeline ---
+    def chat_generator():
+        while True:
+            # Wait for a pair of system and user messages
+            pair = yield  # Receive input
+            if pair is None:
+                continue
+            system_prompt, user_prompt = pair
 
-    # Run inference
-    prompt = "Write a short poem about the moon and the sea."
-    output = generator(prompt, max_new_tokens=100, temperature=0.7)
-    print(output[0]["generated_text"])
+            # Construct message list
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ]
+
+            # Apply chat template
+            text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+
+            # Tokenize
+            inputs = tokenizer(text, return_tensors="pt").to(model.device)
+
+            # Generate
+            outputs = model.generate(**inputs, max_new_tokens=100, temperature=0.7)
+
+            # Decode
+            response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+            # Yield response
+            yield response
+
+    # Initialize and prime the generator
+    gen = chat_generator()
+    next(gen)
+    print("Local model loaded and generator is ready.")
+    return gen
