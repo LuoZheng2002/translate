@@ -68,6 +68,7 @@ def resolve_ast_call(elem):
 
 
 def evaluate(
+    case_id,
     model_result,
     possible_answer,
     func_description,
@@ -85,6 +86,7 @@ def evaluate(
         parsed = ast.parse(cleaned_input, mode="eval")
     except Exception as e:
         return {
+            "id": case_id,
             "valid": False,
             "error": [f"Invalid syntax. Failed to decode AST. {str(e)}"],
             "error_type": "ast_decoder:decoder_failed",
@@ -102,6 +104,7 @@ def evaluate(
     model_result = decoded_output
     if len(model_result) != 1:
         return {
+            "id": case_id,
             "valid": False,
             "error": [f"Expected exactly one AST entry, but got {len(model_result)}."],
             "error_type": "ast_checker:invalid_entry_count",
@@ -125,17 +128,13 @@ def evaluate(
     # print("func_name:", possible_answer_func_name)
     if possible_answer_func_name != model_result_func_name:
         return {
+            "id": case_id,
             "valid": False,
             "error": [f"Function name mismatch. Expected {repr(possible_answer_func_name)}, but got {repr(model_result_func_name)}."],
             "error_type": "simple_function_checker:wrong_func_name",
             "model_result_raw": model_result_item_raw,
             "model_result_decoded": model_result,
         }
-
-
-
-
-
     # first see if function name matches
 
     # param_details = func_description["parameters"]["properties"]
@@ -150,6 +149,7 @@ def evaluate(
     for param in required_params:
         if param not in model_params:
             return {
+                "id": case_id,
                 "valid": False,
                 "error": [f"Missing required parameter: {repr(param)}."],
                 "error_type": "simple_function_checker:missing_required",
@@ -165,6 +165,7 @@ def evaluate(
             print("possible_answer keys:", possible_answer.keys())
             print("param: ", param)
             return {
+                "id": case_id,
                 "valid": False,
                 "error": [f"Unexpected parameter: {repr(param)}."],
                 "error_type": "simple_function_checker:unexpected_param",
@@ -174,13 +175,15 @@ def evaluate(
         # Check if the value is within the possible answers
         if value not in possible_answer_params[param]:
             return {
+                "id": case_id,
                 "valid": False,
-                "error": [f"Invalid value for parameter {repr(param)}: {repr(value)}. Expected one of {possible_answer[param]}."],
+                "error": [f"Invalid value for parameter {repr(param)}: {repr(value)}. Expected one of {possible_answer_params[param]}."],
                 "error_type": "value_error:others",
                 "model_result_raw": model_result_item_raw,
                 "model_result_decoded": model_result,
             }
     return {
+        "id": case_id,
         "valid": True,
         "model_result_raw": model_result_item_raw,
         "model_result_decoded": model_result,

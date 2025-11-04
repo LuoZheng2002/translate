@@ -39,3 +39,4 @@ configs: list[Config] = [
 
 requires_inference = True
 requires_evaluation = True
+requires_score = True
