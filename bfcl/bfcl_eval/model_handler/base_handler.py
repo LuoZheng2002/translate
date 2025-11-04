@@ -690,9 +690,6 @@ class BaseHandler:
         inference_data = self.add_first_turn_message_FC(
             inference_data, test_entry["question"][0]
         )
-        print("inference_data:")
-        print(inference_data)  # Zheng Luo
-        exit(1)
         api_response, query_latency = self._query_FC(inference_data)
 
         # Try parsing the model response
@@ -727,8 +724,6 @@ class BaseHandler:
         inference_data = self.add_first_turn_message_prompting(
             inference_data, test_entry["question"][0]
         )
-        print(inference_data) # Zheng Luo
-        exit(1)
 
         api_response, query_latency = self._query_prompting(inference_data)
 

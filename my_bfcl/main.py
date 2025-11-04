@@ -3,6 +3,7 @@ import json
 from config import *
 from parse_ast import *
 import re
+from call_llm import gpt_4o_mini_inference
 def gen_developer_prompt(function_calls: list, prompt_passing_in_english: bool):
     function_calls_json = json.dumps(function_calls, ensure_ascii=False, indent=2)
     passing_in_english_prompt = " Pass in all parameters in function calls in English." if prompt_passing_in_english else ""
@@ -49,23 +50,6 @@ def inference(test_entry: dict):
     }
     return result_to_write
 
-def gpt_4o_mini_inference(input_messages: list) -> str:
-    from openai import OpenAI
-    from dotenv import load_dotenv
-    import os
-
-    load_dotenv(dotenv_path=".env")  # reads .env into environment
-    api_key = os.getenv("OPENAI_API_KEY")
-
-    # Initialize client (API key can be set as env variable or directly)
-    client = OpenAI(api_key=api_key)  # or omit api_key if you set it in the environment
-
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=input_messages
-    )
-    processed_line = response.choices[0].message.content
-    return processed_line
 
 
 # Run inference
@@ -81,34 +65,42 @@ for config in configs:
                     language_postfix = "_hi"
             match mode:
                 case TranslateMode.DATASET_FULLY_TRANSLATED_PROMPT_DEFAULT:
-                    translate_postfix = "_full"
+                    translate_dataset_prefix = "_full"
+                    translate_mode_prefix = "_d" # default
                 case TranslateMode.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE:
-                    translate_postfix = "_full"
+                    translate_dataset_prefix = "_full"
+                    translate_mode_prefix = "_pt"  # prompt translate
                 case TranslateMode.DATASET_PARTIALLY_TRANSLATED:
-                    translate_postfix = "_partial"
+                    translate_dataset_prefix = "_partial"
+                    translate_mode_prefix = "_par" # partial
         case NotTranslated():
             language_postfix = ""
-            translate_postfix = ""
+            translate_dataset_prefix = ""
+            translate_mode_prefix = ""
     match config.add_noise_mode:
         case AddNoiseMode.NO_NOISE:
             noise_postfix = ""
         case AddNoiseMode.ADD_NOISE:
             noise_postfix = "_noisy"
-    dataset_path = f"dataset/BFCL_v4_multiple{language_postfix}{translate_postfix}{noise_postfix}.json"
+    dataset_path = f"dataset/BFCL_v4_multiple{language_postfix}{translate_dataset_prefix}{noise_postfix}.json"
     ground_truth_path = f"dataset/possible_answer/BFCL_v4_multiple.json"
-    inference_result_path = f"result/inference/BFCL_v4_multiple{language_postfix}{translate_postfix}{noise_postfix}.json"
-    evaluation_result_path = f"result/evaluation/BFCL_v4_multiple{language_postfix}{translate_postfix}{noise_postfix}.json"
-    score_path = f"result/score/BFCL_v4_multiple{language_postfix}{translate_postfix}{noise_postfix}.json"
-    test_cases = load_json_lines(dataset_path)
+    inference_result_path = f"result/inference/BFCL_v4_multiple{language_postfix}{translate_mode_prefix}{noise_postfix}.json"
+    evaluation_result_path = f"result/evaluation/BFCL_v4_multiple{language_postfix}{translate_mode_prefix}{noise_postfix}.json"
+    score_path = f"result/score/BFCL_v4_multiple{language_postfix}{translate_mode_prefix}{noise_postfix}.json"
+    with open(dataset_path, 'r', encoding='utf-8') as f_dataset:
+        test_cases = load_json_lines(f_dataset)
     # test_cases = test_cases[:1]
     # open or create the inference result file
     if requires_inference:
         inference_results = []
-        with open(inference_result_path, 'r', encoding='utf-8') as f_inference_out:
-            if f_inference_out.readable():
-                # read all lines and parse as list of dict
-                for line in f_inference_out:
-                    inference_results.append(json.loads(line))
+        try:
+            with open(inference_result_path, 'r', encoding='utf-8') as f_inference_out:
+                if f_inference_out.readable():
+                    # read all lines and parse as list of dict
+                    for line in f_inference_out:
+                        inference_results.append(json.loads(line))
+        except FileNotFoundError:
+            print(f"Inference result file {inference_result_path} not found. It will be created.")
         existing_inference_ids = {entry['id'] for entry in inference_results}
         printed_warning = False
         with open(inference_result_path, 'w', encoding='utf-8') as f_inference_out:
@@ -137,11 +129,14 @@ for config in configs:
             f_inference_out.flush()
     if requires_evaluation:
         evaluation_results = []
-        with open(evaluation_result_path, 'r', encoding='utf-8') as f_evaluation_out:
-            if f_evaluation_out.readable():
-                # read all lines and parse as list of dict
-                for line in f_evaluation_out:
-                    evaluation_results.append(json.loads(line))
+        try:
+            with open(evaluation_result_path, 'r', encoding='utf-8') as f_evaluation_out:
+                if f_evaluation_out.readable():
+                    # read all lines and parse as list of dict
+                    for line in f_evaluation_out:
+                        evaluation_results.append(json.loads(line))
+        except FileNotFoundError:
+            print(f"Evaluation result file {evaluation_result_path} not found. It will be created.")
         existing_evaluation_ids = {entry['id'] for entry in evaluation_results}
         printed_warning = False
         with open(inference_result_path, 'r', encoding='utf-8') as f_inference_in, \

@@ -30,7 +30,8 @@ def resolve_ast_by_type(value):
         else:
             output = resolve_ast_call(value)
     elif isinstance(value, ast.Tuple):
-        output = tuple(resolve_ast_by_type(v) for v in value.elts)
+        # output = tuple(resolve_ast_by_type(v) for v in value.elts) 
+        output = [resolve_ast_by_type(v) for v in value.elts] # Zheng: Changed to list to match ground truth
     elif isinstance(value, ast.Lambda):
         output = eval(ast.unparse(value.body[0].value))
     elif isinstance(value, ast.Ellipsis):
@@ -110,6 +111,7 @@ def evaluate(
             "error_type": "ast_checker:invalid_entry_count",
             "model_result_raw": model_result_item_raw,
             "model_result_decoded": model_result,
+            "possible_answer": possible_answer,
         }
     model_result = model_result[0]
     possible_answer = possible_answer[0]
@@ -134,6 +136,7 @@ def evaluate(
             "error_type": "simple_function_checker:wrong_func_name",
             "model_result_raw": model_result_item_raw,
             "model_result_decoded": model_result,
+            "possible_answer": possible_answer,
         }
     # first see if function name matches
 
@@ -155,6 +158,7 @@ def evaluate(
                 "error_type": "simple_function_checker:missing_required",
                 "model_result_raw": model_result_item_raw,
                 "model_result_decoded": model_result,
+                "possible_answer": possible_answer,
             }
         
     possible_answer_params = possible_answer[possible_answer_func_name]
@@ -171,6 +175,7 @@ def evaluate(
                 "error_type": "simple_function_checker:unexpected_param",
                 "model_result_raw": model_result_item_raw,
                 "model_result_decoded": model_result,
+                "possible_answer": possible_answer,
             }
         # Check if the value is within the possible answers
         if value not in possible_answer_params[param]:
@@ -181,10 +186,12 @@ def evaluate(
                 "error_type": "value_error:others",
                 "model_result_raw": model_result_item_raw,
                 "model_result_decoded": model_result,
+                "possible_answer": possible_answer,
             }
     return {
         "id": case_id,
         "valid": True,
         "model_result_raw": model_result_item_raw,
         "model_result_decoded": model_result,
+        "possible_answer": possible_answer,
     }
