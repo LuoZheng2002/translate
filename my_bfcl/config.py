@@ -10,7 +10,7 @@ class ApiModel(Enum):
     CLAUDE_SONNET = "claude-sonnet-4-5"
     CLAUDE_HAIKU = "claude-haiku-4-5"
 
-class LocalModel(NamedTuple):
+class LocalModel(Enum):
     GRANITE_3_1_8B_INSTRUCT = "ibm-granite/granite-3.1-8b-instruct"
 
 class ApiModelStruct(NamedTuple):

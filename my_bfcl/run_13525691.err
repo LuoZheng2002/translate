@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/projects/bfdz/zluo8/translate/my_bfcl/main.py", line 118, in <module>
+    inference_result_path = f"result/inference/BFCL_v4_multiple{model_postfix}{noise_postfix}{language_postfix}{translate_mode_prefix}.json"
+                                                                ^^^^^^^^^^^^^
+NameError: name 'model_postfix' is not defined. Did you mean: 'noise_postfix'?

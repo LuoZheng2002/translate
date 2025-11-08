@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=bfcl_generate       # Job name
-#SBATCH --output=bfcl_generate_%j.out        # Standard output log (%j = job ID)
-#SBATCH --error=bfcl_generate_%j.err         # Error log
-#SBATCH --time=00:30:00                 # Max runtime (HH:MM:SS)
+#SBATCH --job-name=run       # Job name
+#SBATCH --output=run_%j.out        # Standard output log (%j = job ID)
+#SBATCH --error=run_%j.err         # Error log
+#SBATCH --time=00:10:00                 # Max runtime (HH:MM:SS)
 # #SBATCH --partition=gpu                  # Partition/queue with GPU
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=luozheng@usc.edu
-#SBATCH --gres=gpu:4                     # Request 4 GPU
+#SBATCH --gres=gpu:1                     # Request 4 GPU
 #SBATCH --cpus-per-task=4                # CPU cores
 #SBATCH --mem=32G                        # RAM
 #SBATCH --account=bfdz-delta-gpu    # Your Slurm account/project

@@ -1,4 +1,4 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+
 from config import Model
 from dotenv import load_dotenv
 import os
@@ -44,11 +44,10 @@ def api_inference(model: Model, input_messages: list) -> str:
         case _:
             raise ValueError(f"Unsupported model: {model}")
         
-import os
-import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
 def make_chat_pipeline(model_id: str):
+    from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+    import torch
     """
     Returns a generator function that takes (system, user) input pairs and yields model responses.
     """

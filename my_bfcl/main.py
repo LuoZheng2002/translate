@@ -42,14 +42,16 @@ def inference(model: Model, test_entry: dict):
     # print(input_messages[1]['content'])
     # to do: call the LLM API with prompt_dict
     match model:
-        case ApiModel(model=model):
+        case ApiModelStruct(model=model):
             result = api_inference(model, input_messages)
-        case LocalModel(model=model, generator=generator):
+        case LocalModelStruct(model=model, generator=generator):
             assert generator is not None, "Local model generator is not initialized."
             # prepare the input for the generator
             system_message = input_messages[0]['content']
             user_message = input_messages[1]['content']
             result = generator.send((system_message, user_message))
+        case _:
+            raise ValueError(f"Unsupported model struct: {model}")
     result_to_write = {
         "id": test_entry["id"],
         "result": result
@@ -89,7 +91,7 @@ for config in configs:
         case AddNoiseMode.ADD_NOISE:
             noise_postfix = "_noisy"
     match config.model:
-        case ApiModel(model=model):
+        case ApiModelStruct(model=model):
             match model:
                 case ApiModel.GPT_4O_MINI:
                     model_postfix = "_gpt4o_mini"
@@ -99,19 +101,24 @@ for config in configs:
                     model_postfix = "_claude_haiku"
                 case _:
                     raise ValueError(f"Unsupported API model: {model}")
-        case LocalModel(model=model):
+        case LocalModelStruct(model=model):
             match model:
-                case LocalModel.IBM_GRANITE_8B_INSTRUCT:
+                case LocalModel.GRANITE_3_1_8B_INSTRUCT:
                     model_postfix = "_granite"
                 case _:
                     raise ValueError(f"Unsupported local model: {model}")
+        case _:
+            raise ValueError(f"Unsupported model struct: {config.model}")
     match config.model:
-        case ApiModel(model=model):
+        case ApiModelStruct(model=model):
             pass
-        case LocalModel(model=model):
+        case LocalModelStruct(model=model):
             # prepare the generator
             model_pipeline = make_chat_pipeline(model.value)
-            model.generator = model_pipeline
+            config.model.generator = model_pipeline
+            assert config.model.generator is not None, "Local model generator is not initialized."
+        case _:
+            raise ValueError(f"Unsupported model struct: {config.model}")
             
     dataset_path = f"dataset/BFCL_v4_multiple{noise_postfix}{language_postfix}{translate_dataset_prefix}.json"
     ground_truth_path = f"dataset/possible_answer/BFCL_v4_multiple.json"
