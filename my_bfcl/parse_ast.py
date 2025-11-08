@@ -1,4 +1,60 @@
 import ast
+
+def recursive_match(value, expected_list):
+    """
+    Recursively match a value against a list of expected values.
+    Handles nested structures (dicts, lists) by comparing structure and values.
+
+    Args:
+        value: The value from the model output
+        expected_list: A list of possible expected values
+
+    Returns:
+        True if the value matches any of the expected values (structurally and by content)
+    """
+    for expected in expected_list:
+        if _matches(value, expected):
+            return True
+    return False
+
+def _matches(value, expected):
+    """
+    Helper function to check if value matches expected.
+    Handles nested dicts and lists recursively.
+
+    Special handling: if expected is a list but value is NOT a list,
+    check if value matches any element in the expected list (unwrap).
+    If both are lists, compare them directly (don't unwrap).
+    """
+    # If both are dicts, compare keys and values recursively
+    if isinstance(value, dict) and isinstance(expected, dict):
+        if set(value.keys()) != set(expected.keys()):
+            return False
+        for key in value.keys():
+            if not _matches(value[key], expected[key]):
+                return False
+        return True
+
+    # If both are lists, compare them directly without unwrapping
+    if isinstance(value, list) and isinstance(expected, list):
+        if len(value) != len(expected):
+            return False
+        for v, e in zip(value, expected):
+            if not _matches(v, e):
+                return False
+        return True
+
+    # If value is not a list but expected is a list,
+    # check if value matches any element in the expected list (unwrap)
+    if not isinstance(value, list) and isinstance(expected, list):
+        for item in expected:
+            if _matches(value, item):
+                return True
+        return False
+
+    # For other types, use direct equality
+    return value == expected
+
 def resolve_ast_by_type(value):
     if isinstance(value, ast.Constant):
         if value.value is Ellipsis:
@@ -23,7 +79,13 @@ def resolve_ast_by_type(value):
     ):  # Added this condition to handle function calls as arguments
         output = eval(ast.unparse(value))
     elif isinstance(value, ast.Name):
-        output = value.id
+        # Convert lowercase "true" and "false" to Python's True and False
+        if value.id == "true":
+            output = True
+        elif value.id == "false":
+            output = False
+        else:
+            output = value.id
     elif isinstance(value, ast.Call):
         if len(value.keywords) == 0:
             output = ast.unparse(value)
@@ -180,8 +242,8 @@ def evaluate(
                 "model_result_decoded": model_result,
                 "possible_answer": possible_answer,
             }
-        # Check if the value is within the possible answers
-        if value not in possible_answer_params[param]:
+        # Check if the value is within the possible answers using recursive matching
+        if not recursive_match(value, possible_answer_params[param]):
             return {
                 "id": case_id,
                 "valid": False,
