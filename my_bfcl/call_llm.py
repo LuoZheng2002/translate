@@ -4,44 +4,85 @@ from dotenv import load_dotenv
 import os
 
 
-def api_inference(model: Model, input_messages: list) -> str:
+def api_inference(model: ApiModel, input_messages: list[dict]) -> str:
+    """
+    Run inference with either OpenAI or Anthropic API.
+
+    Args:
+        model: ApiModel enum value.
+        input_messages: list of dicts like OpenAI's `messages` format.
+            Example:
+            [
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": "Hello!"}
+            ]
+    """
     load_dotenv(dotenv_path=".env")
-    assert type(model) is ApiModel, "model must be an ApiModel"
+
+    # --- Validate arguments ---
+    if not isinstance(model, ApiModel):
+        raise TypeError("`model` must be an ApiModel")
+
+    if not isinstance(input_messages, list) or not all(isinstance(m, dict) for m in input_messages):
+        raise TypeError("`input_messages` must be a list of dicts")
+
+    valid_roles = {"system", "user", "assistant"}
+    for i, m in enumerate(input_messages):
+        if "role" not in m or "content" not in m:
+            raise ValueError(f"Message at index {i} missing 'role' or 'content'")
+        if m["role"] not in valid_roles:
+            raise ValueError(f"Invalid role '{m['role']}' at index {i}")
+
+    # --- Dispatch based on model ---
     match model:
         case ApiModel.GPT_4O_MINI:
             # Use OpenAI client
             from openai import OpenAI
             api_key = os.getenv("OPENAI_API_KEY")
-            client = OpenAI(api_key=api_key)
+            if not api_key:
+                raise EnvironmentError("OPENAI_API_KEY not found in .env")
 
+            client = OpenAI(api_key=api_key)
             response = client.chat.completions.create(
                 model=model.value,
                 messages=input_messages
             )
+
             return response.choices[0].message.content
 
         case ApiModel.CLAUDE_SONNET | ApiModel.CLAUDE_HAIKU:
             # Use Anthropic client
             from anthropic import Anthropic
             api_key = os.getenv("ANTHROPIC_API_KEY")
+            if not api_key:
+                raise EnvironmentError("ANTHROPIC_API_KEY not found in .env")
+
             client = Anthropic(api_key=api_key)
 
-            # Convert OpenAI-style messages to a single prompt (Claude expects text)
-            # prompt = "\n".join(
-            #     f"{m['role'].capitalize()}: {m['content']}" for m in input_messages
-            # )
-            system_message = input_messages[0]['content']
-            user_message = input_messages[1]['content']
+            # Extract system message (first "system" if any)
+            system_message = None
+            messages_for_claude = []
+            for m in input_messages:
+                if m["role"] == "system" and system_message is None:
+                    system_message = m["content"]
+                elif m["role"] in {"user", "assistant"}:
+                    messages_for_claude.append(
+                        {"role": m["role"], "content": m["content"]}
+                    )
+
+            if not any(m["role"] == "user" for m in messages_for_claude):
+                raise ValueError("Claude API requires at least one 'user' message")
 
             response = client.messages.create(
                 model=model.value,
                 max_tokens=1024,
-                messages=[
-                    {"role": "user", "content": user_message}
-                ],
-                system=system_message
+                system=system_message,
+                messages=messages_for_claude
             )
-            return response.content[0].text
+
+            # Anthropic returns structured content (list of message blocks)
+            return response.content[0].text if response.content else ""
+
         case _:
             raise ValueError(f"Unsupported model: {model}")
         
@@ -65,12 +106,14 @@ def make_chat_pipeline(model_id: str):
     # --- Load model ---
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
-        device_map="auto",
+        device_map=None,
         torch_dtype=torch.bfloat16,
         trust_remote_code=True,
-        offload_folder="/work/nvme/bfdz/zluo8/hf_offload",
+        # offload_folder="/work/nvme/bfdz/zluo8/hf_offload",
         # quantization_config=bnb_config,
     )
+
+    model.eval()
 
     # --- Define the generator pipeline ---
     def chat_generator():
@@ -78,6 +121,7 @@ def make_chat_pipeline(model_id: str):
         while True:
             # Wait for a pair of system and user messages
             if pair is None:
+                pair = yield
                 continue
             system_prompt, user_prompt = pair
 
@@ -97,7 +141,8 @@ def make_chat_pipeline(model_id: str):
             inputs = tokenizer(text, return_tensors="pt").to(model.device)
 
             # Generate
-            outputs = model.generate(**inputs, max_new_tokens=100, temperature=0.7)
+            with torch.inference_mode():
+                outputs = model.generate(**inputs, max_new_tokens=100, temperature=0.7)
 
             # Decode
             generated_tokens = outputs[0][inputs["input_ids"].shape[-1]:]

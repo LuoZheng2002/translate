@@ -51,3 +51,5 @@ Fix the partially translated dataset (can be done later)
 Rearrange the order of operations (noise needs to be applied last)
 
 Implement the synonym replacement dataset
+
+deluxe room vs. deluxe 房间

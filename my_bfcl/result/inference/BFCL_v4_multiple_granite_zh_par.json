@@ -1,0 +1,8 @@
+{"id": "multiple_0", "result": "[triangle_properties.get(side1=5, side2=4, side3=3, get_area=true, get_perimeter=true, get_angles=true)]"}
+{"id": "multiple_1", "result": "[math.triangle_area_heron(side1=3, side2=4, side3=5)]"}
+{"id": "multiple_2", "result": "[country_info.capital, {\"country\": \"Brazil\"}]"}
+{"id": "multiple_3", "result": "[EuclideanDistance.calculate, pointA=[3,4], pointB=[1,2]]"}
+{"id": "multiple_4", "result": "[kinematics.calculate_displacement(initial_speed=20, acceleration=10, time=5)]"}
+{"id": "multiple_5", "result": "[weather.get_by_coordinates_date, {\"coordinates\": [46.603354, 1.888334], \"date\": \"2019-12-13\"}]"}
+{"id": "multiple_6", "result": "[\n  {\n    \"name\": \"capacitance_calculator.calculate\",\n    \"arguments\": {\n      \"A\": 10,\n      \"d\": 0.01,\n      \"K\": 1.0\n    }\n  }\n]"}
+{"id": "multiple_7", "result": "[wildlife_population.assess_growth(species=\"鹿\", location=\"华盛顿州\", duration=10), ecological_impact.analyze(species=\"鹿\", ecosystem=\"林地\", location=\"华盛顿州\", timeframe=10)]"}

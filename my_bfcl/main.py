@@ -21,9 +21,9 @@ Here is a list of functions in json format that you can invoke.
 '''
 
 def gen_input_messages(developer_prompt: str, user_question: str) -> dict:
-    developer_message = {"role": "developer", "content": developer_prompt}
+    system_message = {"role": "system", "content": developer_prompt}
     user_message = {"role": "user", "content": user_question}
-    return [developer_message, user_message]
+    return [system_message, user_message]
 
 def inference(model: Model, test_entry: dict):
     # print(test_entry)
@@ -99,7 +99,7 @@ for config in configs:
             raise ValueError(f"Unsupported model struct: {config.model}")
         
     # map translate_info to language_postfix, translate_dataset_prefix, translate_mode_prefix
-    match config.translate_info:
+    match config.translate_mode:
         case Translated(language, option):
             match language:
                 case Language.CHINESE:
