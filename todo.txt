@@ -43,3 +43,11 @@ if translated, 3 way of dealing with it: 1. do nothing 2. ask to translate to En
 
 whether add noises or not to the dataset
 
+
+
+
+Fix the partially translated dataset (can be done later)
+
+Rearrange the order of operations (noise needs to be applied last)
+
+Implement the synonym replacement dataset

@@ -42,10 +42,9 @@ def inference(model: Model, test_entry: dict):
     # print(input_messages[1]['content'])
     # to do: call the LLM API with prompt_dict
     match model:
-        case ApiModelStruct(model=model):
-            result = api_inference(model, input_messages)
-        case LocalModelStruct(model=model, generator=generator):
-            assert generator is not None, "Local model generator is not initialized."
+        case ApiModel() as api_model:
+            result = api_inference(api_model, input_messages)
+        case LocalModelStruct(model=local_model, generator=generator):            
             # prepare the input for the generator
             system_message = input_messages[0]['content']
             user_message = input_messages[1]['content']
@@ -64,35 +63,13 @@ def inference(model: Model, test_entry: dict):
 
 for config in configs:
     print(f"Processing config: {config}")
-    match config.translate_info:
-        case Translated(language=lang, translate_mode=mode):
-            match lang:
-                case Language.CHINESE:
-                    language_postfix = "_zh"
-                case Language.HINDI:
-                    language_postfix = "_hi"
-            match mode:
-                case TranslateMode.DATASET_FULLY_TRANSLATED_PROMPT_DEFAULT:
-                    translate_dataset_prefix = "_full"
-                    translate_mode_prefix = "_d" # default
-                case TranslateMode.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE:
-                    translate_dataset_prefix = "_full"
-                    translate_mode_prefix = "_pt"  # prompt translate
-                case TranslateMode.DATASET_PARTIALLY_TRANSLATED:
-                    translate_dataset_prefix = "_partial"
-                    translate_mode_prefix = "_par" # partial
-        case NotTranslated():
-            language_postfix = ""
-            translate_dataset_prefix = ""
-            translate_mode_prefix = ""
-    match config.add_noise_mode:
-        case AddNoiseMode.NO_NOISE:
-            noise_postfix = ""
-        case AddNoiseMode.ADD_NOISE:
-            noise_postfix = "_noisy"
+    # config is composed of (model, translate_mode, add_noise_mode)
+
+    # process model configuration
+    # map model to model_postfix
     match config.model:
-        case ApiModelStruct(model=model):
-            match model:
+        case ApiModel() as api_model:
+            match api_model:
                 case ApiModel.GPT_4O_MINI:
                     model_postfix = "_gpt4o_mini"
                 case ApiModel.CLAUDE_SONNET:
@@ -109,22 +86,52 @@ for config in configs:
                     raise ValueError(f"Unsupported local model: {model}")
         case _:
             raise ValueError(f"Unsupported model struct: {config.model}")
+    # create chat pipeline for local model if needed
     match config.model:
-        case ApiModelStruct(model=model):
+        case ApiModel() as api_model:
             pass
-        case LocalModelStruct(model=model):
+        case LocalModelStruct(model=local_model, generator=generator):
             # prepare the generator
-            model_pipeline = make_chat_pipeline(model.value)
+            model_pipeline = make_chat_pipeline(local_model.value)
             config.model.generator = model_pipeline
             assert config.model.generator is not None, "Local model generator is not initialized."
         case _:
             raise ValueError(f"Unsupported model struct: {config.model}")
-            
-    dataset_path = f"dataset/BFCL_v4_multiple{noise_postfix}{language_postfix}{translate_dataset_prefix}.json"
+        
+    # map translate_info to language_postfix, translate_dataset_prefix, translate_mode_prefix
+    match config.translate_info:
+        case Translated(language, option):
+            match language:
+                case Language.CHINESE:
+                    language_postfix = "_zh"
+                case Language.HINDI:
+                    language_postfix = "_hi"
+            match option:
+                case TranslateOption.DATASET_FULLY_TRANSLATED:
+                    translate_dataset_postfix = "_full"
+                    translate_mode_postfix = "_d" # default
+                case TranslateOption.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE:
+                    translate_dataset_postfix = "_full"
+                    translate_mode_postfix = "_pt"  # prompt translate
+                case TranslateOption.DATASET_PARTIALLY_TRANSLATED:
+                    translate_dataset_postfix = "_partial"
+                    translate_mode_postfix = "_par" # partial
+        case NotTranslated():
+            language_postfix = ""
+            translate_dataset_postfix = ""
+            translate_mode_postfix = ""
+    match config.add_noise_mode:
+        case AddNoiseMode.NO_NOISE:
+            noise_postfix = ""
+        case AddNoiseMode.ADD_NOISE:
+            noise_postfix = "_noisy"
+    
+    
+    dataset_path = f"dataset/BFCL_v4_multiple{language_postfix}{translate_dataset_postfix}{noise_postfix}.json"
     ground_truth_path = f"dataset/possible_answer/BFCL_v4_multiple.json"
-    inference_result_path = f"result/inference/BFCL_v4_multiple{model_postfix}{noise_postfix}{language_postfix}{translate_mode_prefix}.json"
-    evaluation_result_path = f"result/evaluation/BFCL_v4_multiple{model_postfix}{noise_postfix}{language_postfix}{translate_mode_prefix}.json"
-    score_path = f"result/score/BFCL_v4_multiple{model_postfix}{noise_postfix}{language_postfix}{translate_mode_prefix}.json"
+    inference_result_path = f"result/inference/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
+    evaluation_result_path = f"result/evaluation/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
+    score_path = f"result/score/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
     with open(dataset_path, 'r', encoding='utf-8') as f_dataset:
         test_cases = load_json_lines(f_dataset)
     # test_cases = test_cases[:1]
