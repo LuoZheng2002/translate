@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/projects/bfdz/zluo8/translate/my_bfcl/main.py", line 88, in <module>
-    raise ValueError(f"Unsupported model struct: {config.model}")
-ValueError: Unsupported model struct: LocalModel.GRANITE_3_1_8B_INSTRUCT

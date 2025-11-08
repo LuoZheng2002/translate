@@ -106,10 +106,10 @@ def make_chat_pipeline(model_id: str):
     # --- Load model ---
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
-        device_map=None,
+        device_map="auto",
         torch_dtype=torch.bfloat16,
         trust_remote_code=True,
-        # offload_folder="/work/nvme/bfdz/zluo8/hf_offload",
+        offload_folder="/work/nvme/bfdz/zluo8/hf_offload",
         # quantization_config=bnb_config,
     )
 
@@ -141,9 +141,10 @@ def make_chat_pipeline(model_id: str):
             inputs = tokenizer(text, return_tensors="pt").to(model.device)
 
             # Generate
+            print("Generating response...")
             with torch.inference_mode():
                 outputs = model.generate(**inputs, max_new_tokens=100, temperature=0.7)
-
+            print("Generation complete.")
             # Decode
             generated_tokens = outputs[0][inputs["input_ids"].shape[-1]:]
             response = tokenizer.decode(generated_tokens, skip_special_tokens=True)

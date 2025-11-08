@@ -182,3 +182,19 @@
 {"id": "multiple_181", "result": "[soccer.get_last_match(team_name=\"Liverpool\", include_stats=true)]"}
 {"id": "multiple_182", "result": "[multiplayer_game_finder(platform=\"Windows 10\", rating=4.5)]"}
 {"id": "multiple_183", "result": "[recipe_info.get_calories(website=\"Foodnetwork.com\", recipe=\"beef lasagna\")]"}
+{"id": "multiple_184", "result": "[recipe_search(dietary_restriction=\"Vegetarian\", ingredients=[\"pasta\", \"cheese\"], servings=2)]"}
+{"id": "multiple_185", "result": "[restaurant_search.find_closest(location=\"Boston, MA\", cuisine=\"Sushi\", amenities=[\"Patio\"])]"}
+{"id": "multiple_186", "result": "[find_recipe(dietary_restrictions=\"vegetarian\", recipe_type=\"dessert\", time=30)]"}
+{"id": "multiple_187", "result": "[whole_foods.check_price(location=\"Los Angeles\", items=[\"tomatoes\", \"lettuce\"])]"}
+{"id": "multiple_188", "result": "[grocery_store.find_best(my_location=\"Berkeley\", rating=4.5, products=[\"tomatoes\", \"pet food\"])]"}
+{"id": "multiple_189", "result": "[timezone.convert(time=\"3pm\", from_timezone=\"America/New_York\", to_timezone=\"Europe/London\")]"}
+{"id": "multiple_190", "result": "[book_hotel(hotel_name=\"Hilton Hotel\", location=\"Chicago\", room_type=\"single\", start_date=\"2022-12-10\", nights=2)]"}
+{"id": "multiple_191", "result": "[book_hotel(hotel_name=\"Hotel Paradise\", location=\"Las Vegas\", room_type=\"luxury\", start_date=\"05-12-2022\", stay_duration=3, view=\"city view\")]"}
+{"id": "multiple_192", "result": "[currency_conversion.convert(amount=150, from_currency=\"EUR\", to_currency=\"CAD\")]"}
+{"id": "multiple_193", "result": "[maps.get_distance_duration(start_location=\"Eiffel Tower\", end_location=\"Louvre Museum\")]"}
+{"id": "multiple_194", "result": "I need to retrieve the opening hours for the Metropolitan Museum of Art on Saturday.\n\n[get_museum_hours(museum_name=\"Metropolitan Museum of Art\", day=\"Saturday\")]"}
+{"id": "multiple_195", "result": "[calc_heat_capacity(temp=298, volume=10, gas=\"air\")]"}
+{"id": "multiple_196", "result": "[cellbio.get_proteins(cell_compartment=\"plasma membrane\")]"}
+{"id": "multiple_197", "result": "[mutation_type.find(snp_id=\"rs6034464\")]"}
+{"id": "multiple_198", "result": "[calculate_genotype_frequency(allele_frequency=0.3, genotype=\"AA\")]"}
+{"id": "multiple_199", "result": "[forest_growth_forecast(location=\"Yellowstone\", years=5, include_human_impact=true)]"}
