@@ -1,13 +1,14 @@
 
-from config import Model
+from config import ApiModel, Model
 from dotenv import load_dotenv
 import os
 
 
 def api_inference(model: Model, input_messages: list) -> str:
     load_dotenv(dotenv_path=".env")
+    assert type(model) is ApiModel, "model must be an ApiModel"
     match model:
-        case Model.GPT_4O_MINI:
+        case ApiModel.GPT_4O_MINI:
             # Use OpenAI client
             from openai import OpenAI
             api_key = os.getenv("OPENAI_API_KEY")
@@ -19,7 +20,7 @@ def api_inference(model: Model, input_messages: list) -> str:
             )
             return response.choices[0].message.content
 
-        case Model.CLAUDE_SONNET | Model.CLAUDE_HAIKU:
+        case ApiModel.CLAUDE_SONNET | ApiModel.CLAUDE_HAIKU:
             # Use Anthropic client
             from anthropic import Anthropic
             api_key = os.getenv("ANTHROPIC_API_KEY")
@@ -73,9 +74,9 @@ def make_chat_pipeline(model_id: str):
 
     # --- Define the generator pipeline ---
     def chat_generator():
+        pair = yield  # Initial yield to start the generator
         while True:
             # Wait for a pair of system and user messages
-            pair = yield  # Receive input
             if pair is None:
                 continue
             system_prompt, user_prompt = pair
@@ -85,6 +86,9 @@ def make_chat_pipeline(model_id: str):
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ]
+
+            # print("system prompt:\n", system_prompt)
+            # print("user prompt:\n", user_prompt)
 
             # Apply chat template
             text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
@@ -96,10 +100,13 @@ def make_chat_pipeline(model_id: str):
             outputs = model.generate(**inputs, max_new_tokens=100, temperature=0.7)
 
             # Decode
-            response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+            generated_tokens = outputs[0][inputs["input_ids"].shape[-1]:]
+            response = tokenizer.decode(generated_tokens, skip_special_tokens=True)
+
+            # print("response:\n", response)
 
             # Yield response
-            yield response
+            pair = yield response
 
     # Initialize and prime the generator
     gen = chat_generator()

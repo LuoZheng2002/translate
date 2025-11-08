@@ -1,0 +1,2 @@
+Processing config: Config(model=LocalModelStruct(model=<LocalModel.GRANITE_3_1_8B_INSTRUCT: 'ibm-granite/granite-3.1-8b-instruct'>, generator=None), translate_info=NotTranslated(), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Loading local model: ibm-granite/granite-3.1-8b-instruct

@@ -60,7 +60,7 @@ class Config:
 
 configs: list[Config] = [
     # Config(model=Model.GPT_4O_MINI, translate_info=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
-    # Config(model=Model.GPT_4O_MINI, translate_info=Translated(language=Language.CHINESE, translate_mode=TranslateMode.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
+    Config(model=ApiModel.GPT_4O_MINI, translate_info=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=Model.GPT_4O_MINI, translate_info=NotTranslated(), add_noise_mode=AddNoiseMode.ADD_NOISE),
     # Config(model=Model.GPT_4O_MINI, translate_info=Translated(language=Language.CHINESE, translate_mode=TranslateMode.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.ADD_NOISE),
     # Config(model=Model.CLAUDE_SONNET, translate_info=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
@@ -71,7 +71,7 @@ configs: list[Config] = [
     # Config(model=ApiModelStruct(model=Model.CLAUDE_HAIKU), translate_info=Translated(language=Language.CHINESE, translate_mode=TranslateMode.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=ApiModelStruct(model=Model.CLAUDE_HAIKU), translate_info=NotTranslated(), add_noise_mode=AddNoiseMode.ADD_NOISE),
     # Config(model=ApiModelStruct(model=Model.CLAUDE_HAIKU), translate_info=Translated(language=Language.CHINESE, translate_mode=TranslateMode.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.ADD_NOISE),
-    Config(model=LocalModelStruct(model=LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_info=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModelStruct(model=LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_info=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModel.GRANITE_3_1_8B_INSTRUCT, translate_info=Translated(language=Language.CHINESE, translate_mode=TranslateMode.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModel.GRANITE_3_1_8B_INSTRUCT, translate_info=NotTranslated(), add_noise_mode=AddNoiseMode.SYNONYM),
     # Config(model=LocalModel.GRANITE_3_1_8B_INSTRUCT, translate_info=Translated(language=Language.CHINESE, translate_mode=TranslateMode.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.ADD_NOISE),
