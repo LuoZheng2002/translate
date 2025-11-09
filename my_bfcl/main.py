@@ -4,18 +4,33 @@ from config import *
 from parse_ast import *
 import re
 from call_llm import api_inference, make_chat_pipeline, format_granite_chat_template
-def gen_developer_prompt(function_calls: list, prompt_passing_in_english: bool):
+def gen_developer_prompt(function_calls: list, prompt_passing_in_english: bool, model: LocalModel = None):
     function_calls_json = json.dumps(function_calls, ensure_ascii=False, indent=2)
     passing_in_english_prompt = " Pass in all parameters in function calls in English." if prompt_passing_in_english else ""
-    return f'''
+
+    # Check if this is a Granite model
+    if model == LocalModel.GRANITE_3_1_8B_INSTRUCT:
+        # Granite should output in JSON format (list of function call objects)
+        return f'''You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
+
+You should only return the function calls in your response, in JSON format as a list where each element has the format {{"name": "function_name", "arguments": {{param1: value1, param2: value2, ...}}}}.{passing_in_english_prompt}
+
+At each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user\'s request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.
+
+Here is a list of functions in json format that you can invoke.
+{function_calls_json}
+'''
+    else:
+        # For API models, use Python function call syntax
+        return f'''
 You are an expert in composing functions.You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
 
 You should only return the function calls in your response.
 
 If you decide to invoke any of the function(s), you MUST put it in the format of [func_name1(params_name1=params_value1, params_name2=params_value2...), func_name2(params)].  You SHOULD NOT include any other text in the response.{passing_in_english_prompt}
-            
+
 At each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user\"s request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.
-            
+
 Here is a list of functions in json format that you can invoke.
 {function_calls_json}
 '''
@@ -25,12 +40,68 @@ def gen_input_messages(developer_prompt: str, user_question: str) -> dict:
     user_message = {"role": "user", "content": user_question}
     return [system_message, user_message]
 
+def convert_json_tool_calls_to_ast_format(json_tool_calls: str) -> str:
+    """
+    Convert Granite's JSON tool call format to Python AST format that other models expect.
+
+    Input (Granite JSON format):
+        [{"name": "func_name", "arguments": {param1: val1, param2: val2}}]
+
+    Output (Python AST format):
+        [func_name(param1=val1, param2=val2)]
+    """
+    try:
+        # Parse the JSON output
+        tool_calls = json.loads(json_tool_calls)
+
+        if not isinstance(tool_calls, list):
+            return json_tool_calls  # Return as-is if not a list
+
+        python_calls = []
+        for tool_call in tool_calls:
+            if isinstance(tool_call, dict) and "name" in tool_call and "arguments" in tool_call:
+                func_name = tool_call["name"]
+                args = tool_call["arguments"]
+
+                # Build parameter string
+                params = []
+                if isinstance(args, dict):
+                    for key, value in args.items():
+                        # Convert value to Python representation
+                        if isinstance(value, str):
+                            params.append(f'{key}="{value}"')
+                        elif isinstance(value, bool):
+                            params.append(f'{key}={str(value).lower()}')
+                        else:
+                            params.append(f'{key}={value}')
+
+                # Build function call string
+                python_call = f"{func_name}({', '.join(params)})"
+                python_calls.append(python_call)
+            else:
+                # If format is unexpected, return original
+                return json_tool_calls
+
+        # Return as Python list format
+        return f"[{', '.join(python_calls)}]"
+    except (json.JSONDecodeError, KeyError, TypeError):
+        # If conversion fails, return original
+        return json_tool_calls
+
+
 def inference(model: Model, test_entry: dict):
     # print(test_entry)
     functions = test_entry['function']
+
+    # Determine if this is a local model
+    local_model = None
+    if isinstance(model, LocalModelStruct):
+        local_model = model.model
+
     developer_prompt = gen_developer_prompt(
         function_calls=functions,
-        prompt_passing_in_english=True
+        prompt_passing_in_english=True,
+        model=local_model
     )
     user_question = test_entry["question"][0][0]['content']
     input_messages = gen_input_messages(
@@ -57,11 +128,12 @@ def inference(model: Model, test_entry: dict):
                         {"role": "user", "content": user_message},
                     ]
                     template = format_granite_chat_template(messages, functions=functions, add_generation_prompt=True)
+                    # Send the populated template to the generator
+                    raw_result = generator.send(template)
+                    # Convert Granite's JSON output to Python AST format
+                    result = convert_json_tool_calls_to_ast_format(raw_result)
                 case _:
                     raise ValueError(f"Unsupported local model: {local_model}")
-
-            # Send the populated template to the generator
-            result = generator.send(template)
         case _:
             raise ValueError(f"Unsupported model struct: {model}")
     result_to_write = {
