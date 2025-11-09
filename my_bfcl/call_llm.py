@@ -52,6 +52,22 @@ def api_inference(model: ApiModel, input_messages: list[dict]) -> str:
 
             return response.choices[0].message.content
 
+        case ApiModel.DEEPSEEK_CHAT:
+            # Use OpenAI-compatible client for DeepSeek
+            from openai import OpenAI
+            api_key = os.getenv("DEEPSEEK_API_KEY")
+            if not api_key:
+                raise EnvironmentError("DEEPSEEK_API_KEY not found in .env")
+
+            client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+            response = client.chat.completions.create(
+                model=model.value,
+                messages=input_messages,
+                temperature=0.001
+            )
+
+            return response.choices[0].message.content
+
         case ApiModel.CLAUDE_SONNET | ApiModel.CLAUDE_HAIKU:
             # Use Anthropic client
             from anthropic import Anthropic

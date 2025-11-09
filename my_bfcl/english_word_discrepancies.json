@@ -1,0 +1,368 @@
+[
+  {
+    "id": "multiple_104",
+    "original": "找出New York City和Washington D.C.之间的最短驾驶距离。",
+    "paraphrased": "确定从纽约市到华盛顿特区的最短行车距离。",
+    "missing_words": [
+      "C",
+      "City",
+      "D",
+      "New",
+      "Washington",
+      "York"
+    ]
+  },
+  {
+    "id": "multiple_110",
+    "original": "根据SNP（单核苷酸多态性）ID rs6034464查找基因突变类型。",
+    "paraphrased": "查询SNP（单核苷酸多态性）标识符rs6034464对应的基因变异类别。",
+    "missing_words": [
+      "ID"
+    ]
+  },
+  {
+    "id": "multiple_112",
+    "original": "预测未来5年Yellowstone National Park森林的增长情况，包括人类影响。",
+    "paraphrased": "预测未来五年内黄石国家公园森林的增长趋势，并分析人类活动对其产生的影响。",
+    "missing_words": [
+      "5",
+      "National",
+      "Park",
+      "Yellowstone"
+    ]
+  },
+  {
+    "id": "multiple_115",
+    "original": "我想在曼哈顿附近找到5家提供泰国菜和vegan菜单的餐厅。",
+    "paraphrased": "请帮我查找曼哈顿周边5家同时供应泰国菜和素食菜单的餐厅。",
+    "missing_words": [
+      "vegan"
+    ]
+  },
+  {
+    "id": "multiple_133",
+    "original": "计算一项总投资为50000美元、年收益率为5%的互惠基金在3年后的余额。",
+    "paraphrased": "计算一笔初始投资为50000美元、年化收益率为5%的互惠基金，在三年后的总价值。",
+    "missing_words": [
+      "3"
+    ]
+  },
+  {
+    "id": "multiple_138",
+    "original": "如何获取R vs Adams法律案件的详细案情信息？",
+    "paraphrased": "怎样查询R与Adams法律纠纷的完整案件详情？",
+    "missing_words": [
+      "vs"
+    ]
+  },
+  {
+    "id": "multiple_142",
+    "original": "佛罗里达州迈阿密未来7天的湿度水平如何？",
+    "paraphrased": "查询佛罗里达州迈阿密接下来一周的湿度情况。",
+    "missing_words": [
+      "7"
+    ]
+  },
+  {
+    "id": "multiple_151",
+    "original": "找出推特上关注者最多、发布与behaviour及group dynamics相关psychology内容的用户。",
+    "paraphrased": "搜索推特上关注者数量最多、发布内容涉及行为心理学及群体动力学的用户。",
+    "missing_words": [
+      "behaviour",
+      "dynamics",
+      "group",
+      "psychology"
+    ]
+  },
+  {
+    "id": "multiple_153",
+    "original": "Treaty of Lisbon是在何时签署的？",
+    "paraphrased": "Lisbon Treaty是在哪一天签署的？",
+    "missing_words": [
+      "of"
+    ]
+  },
+  {
+    "id": "multiple_155",
+    "original": "谁发现了neutron？给我详细的信息。",
+    "paraphrased": "请提供关于中子发现者的详细信息。",
+    "missing_words": [
+      "neutron"
+    ]
+  },
+  {
+    "id": "multiple_157",
+    "original": "历史上关于Jesus Christ最早的记载是什么？",
+    "paraphrased": "历史上关于耶稣基督的最早记录是什么？",
+    "missing_words": [
+      "Christ",
+      "Jesus"
+    ]
+  },
+  {
+    "id": "multiple_161",
+    "original": "找出upcoming month在纽约举行的顶级现代雕塑展览。",
+    "paraphrased": "查找下个月在纽约举办的顶尖现代雕塑展览。",
+    "missing_words": [
+      "month",
+      "upcoming"
+    ]
+  },
+  {
+    "id": "multiple_165",
+    "original": "在芝加哥地区寻找一把状况Excellent的二手Gibson Les Paul吉他的价格。",
+    "paraphrased": "查询芝加哥地区状况极佳的二手Gibson Les Paul吉他的售价。",
+    "missing_words": [
+      "Excellent"
+    ]
+  },
+  {
+    "id": "multiple_172",
+    "original": "查找篮球运动员Lebron James的详细资料",
+    "paraphrased": "寻找篮球运动员勒布朗·詹姆斯的详细信息",
+    "missing_words": [
+      "James",
+      "Lebron"
+    ]
+  },
+  {
+    "id": "multiple_174",
+    "original": "Manchester United在英超联赛中的排名是多少？",
+    "paraphrased": "曼联目前在英超联赛中的排名情况如何？",
+    "missing_words": [
+      "Manchester",
+      "United"
+    ]
+  },
+  {
+    "id": "multiple_176",
+    "original": "告诉我Manchester United接下来6场英超比赛的赛程。",
+    "paraphrased": "请提供Manchester United接下来六场英超联赛的赛程安排。",
+    "missing_words": [
+      "6"
+    ]
+  },
+  {
+    "id": "multiple_184",
+    "original": "给我一份两人份的素食pasta with cheese食谱。",
+    "paraphrased": "请提供一份适合两人份的素食芝士意面食谱。",
+    "missing_words": [
+      "cheese",
+      "pasta",
+      "with"
+    ]
+  },
+  {
+    "id": "multiple_187",
+    "original": "查看Los Angeles Whole Foods超市的tomatoes和lettuce价格。",
+    "paraphrased": "查询洛杉矶Whole Foods超市的西红柿和生菜价格。",
+    "missing_words": [
+      "Angeles",
+      "Los",
+      "lettuce",
+      "tomatoes"
+    ]
+  },
+  {
+    "id": "multiple_188",
+    "original": "找到离Berkeley最近、评分至少4.5星、销售tomatoes和pet food的杂货店。",
+    "paraphrased": "请查找距离Berkeley最近、评分不低于4.5星、同时销售西红柿和宠物食品的杂货店。",
+    "missing_words": [
+      "food",
+      "pet",
+      "tomatoes"
+    ]
+  },
+  {
+    "id": "multiple_190",
+    "original": "预订芝加哥Hilton Hotel的单人间，从2022年12月10日起，共两晚。",
+    "paraphrased": "为2022年12月10日开始的两晚住宿，预订芝加哥希尔顿酒店的单人间。",
+    "missing_words": [
+      "Hilton",
+      "Hotel"
+    ]
+  },
+  {
+    "id": "multiple_191",
+    "original": "预订拉斯维加斯Hotel Paradise的一间luxury客房，需带城市景观，入住时间为2022年5月12日起，共3天。",
+    "paraphrased": "为2022年5月12日开始的三天住宿，预订拉斯维加斯Hotel Paradise的一间豪华客房，要求带有城市景观。",
+    "missing_words": [
+      "3",
+      "luxury"
+    ]
+  },
+  {
+    "id": "multiple_193",
+    "original": "获取从Eiffel Tower到Louvre Museum的旅行距离和所需时间",
+    "paraphrased": "查询从埃菲尔铁塔到卢浮宫之间的路程距离及预计耗时",
+    "missing_words": [
+      "Eiffel",
+      "Louvre",
+      "Museum",
+      "Tower"
+    ]
+  },
+  {
+    "id": "multiple_194",
+    "original": "Metropolitan Museum of Art周六的开放时间是几点？",
+    "paraphrased": "请问大都会艺术博物馆星期六的开放时间是什么时候？",
+    "missing_words": [
+      "Art",
+      "Metropolitan",
+      "Museum",
+      "of"
+    ]
+  },
+  {
+    "id": "multiple_197",
+    "original": "根据SNP（单核苷酸多态性）ID rs6034464查找基因突变类型。",
+    "paraphrased": "查询SNP（单核苷酸多态性）标识符rs6034464对应的基因变异类别。",
+    "missing_words": [
+      "ID"
+    ]
+  },
+  {
+    "id": "multiple_199",
+    "original": "预测未来5年Yellowstone森林的增长情况，包括人类活动的影响。",
+    "paraphrased": "预测未来五年内黄石森林的增长趋势，需综合考虑人类活动对其产生的影响。",
+    "missing_words": [
+      "5",
+      "Yellowstone"
+    ]
+  },
+  {
+    "id": "multiple_27",
+    "original": "从Paris, France到Rome, Italy，乘坐公共交通的最短路径是什么？",
+    "paraphrased": "如何通过公共交通从法国巴黎前往意大利罗马，找到最短的路线？",
+    "missing_words": [
+      "France",
+      "Italy",
+      "Paris",
+      "Rome"
+    ]
+  },
+  {
+    "id": "multiple_6",
+    "original": "计算平行板电容器的电容，其中极板面积为10平方米，极板间距为0.01米，介电常数K为1.0。",
+    "paraphrased": "计算平行板电容器的电容值，已知极板面积为10平方米，极板间距为0.01米，介电常数为1.0。",
+    "missing_words": [
+      "K"
+    ]
+  },
+  {
+    "id": "multiple_61",
+    "original": "寻找一位在波特兰有5年小空间花园设计经验的景观设计师",
+    "paraphrased": "寻找一位在波特兰拥有五年小空间花园设计经验的景观设计师",
+    "missing_words": [
+      "5"
+    ]
+  },
+  {
+    "id": "multiple_68",
+    "original": "我能在New York public library找到一本历史小说书吗？",
+    "paraphrased": "我能在纽约公共图书馆找到一本历史小说书吗？",
+    "missing_words": [
+      "New",
+      "York",
+      "library",
+      "public"
+    ]
+  },
+  {
+    "id": "multiple_74",
+    "original": "查找Van Gogh画作Starry Night在所有拍卖平台上的价格。",
+    "paraphrased": "搜索梵高作品《星夜》在各大拍卖平台上的售价信息。",
+    "missing_words": [
+      "Gogh",
+      "Night",
+      "Starry",
+      "Van"
+    ]
+  },
+  {
+    "id": "multiple_82",
+    "original": "在C大调上以120 BPM的节奏播放一首歌曲。",
+    "paraphrased": "以每分钟120拍的速度，在C大调上演奏一首乐曲。",
+    "missing_words": [
+      "BPM"
+    ]
+  },
+  {
+    "id": "multiple_83",
+    "original": "截至目前，莱昂内尔·梅西为Barcelona队进了多少球？",
+    "paraphrased": "截至现在，莱昂内尔·梅西为巴塞罗那队打进了多少个球？",
+    "missing_words": [
+      "Barcelona"
+    ]
+  },
+  {
+    "id": "multiple_84",
+    "original": "给我Barcelona队在欧冠联赛中的前十名射手。",
+    "paraphrased": "列出巴塞罗那队在欧冠联赛中进球数排名前十的球员。",
+    "missing_words": [
+      "Barcelona"
+    ]
+  },
+  {
+    "id": "multiple_85",
+    "original": "获取Real Madrid最近5轮西甲联赛的足球比分。",
+    "paraphrased": "查询皇家马德里最近五场西甲联赛的足球比赛结果。",
+    "missing_words": [
+      "5",
+      "Madrid",
+      "Real"
+    ]
+  },
+  {
+    "id": "multiple_87",
+    "original": "查找游戏Cyberpunk 2077在Xbox平台上的最新更新或补丁。",
+    "paraphrased": "搜索游戏《赛博朋克2077》在Xbox平台上的最新更新或补丁信息。",
+    "missing_words": [
+      "Cyberpunk"
+    ]
+  },
+  {
+    "id": "multiple_88",
+    "original": "查找2020年游戏World of Warcraft的活跃玩家数量。",
+    "paraphrased": "查询2020年游戏《魔兽世界》的活跃玩家数量。",
+    "missing_words": [
+      "Warcraft",
+      "World",
+      "of"
+    ]
+  },
+  {
+    "id": "multiple_89",
+    "original": "找一份低于500卡路里的健康午餐食谱，需包含chicken和mushrooms。",
+    "paraphrased": "寻找一个包含鸡肉和蘑菇的健康午餐食谱，要求总热量低于500卡路里。",
+    "missing_words": [
+      "chicken",
+      "mushrooms"
+    ]
+  },
+  {
+    "id": "multiple_93",
+    "original": "在纽约Marriott hotel预订一间deluxe房间，入住两晚，并额外添加早餐服务。",
+    "paraphrased": "在纽约的Marriott酒店预订一间豪华客房，连续住宿两晚，并包含早餐服务。",
+    "missing_words": [
+      "deluxe",
+      "hotel"
+    ]
+  },
+  {
+    "id": "multiple_94",
+    "original": "我想在Hilton New York预订一间suite with queen size bed，住3晚。你能帮我查一下价格吗？",
+    "paraphrased": "请帮我查询在纽约希尔顿酒店预订一间带大床的套房，入住三晚的费用是多少？",
+    "missing_words": [
+      "3",
+      "Hilton",
+      "New",
+      "York",
+      "bed",
+      "queen",
+      "size",
+      "suite",
+      "with"
+    ]
+  }
+]

@@ -7,6 +7,7 @@ class ApiModel(Enum):
     GPT_4O_MINI = "gpt-4o-mini"
     CLAUDE_SONNET = "claude-sonnet-4-5"
     CLAUDE_HAIKU = "claude-haiku-4-5"
+    DEEPSEEK_CHAT = "deepseek-chat"
 
 class LocalModel(Enum):
     GRANITE_3_1_8B_INSTRUCT = "ibm-granite/granite-3.1-8b-instruct"
