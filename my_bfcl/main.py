@@ -208,8 +208,10 @@ for config in configs:
     match config.add_noise_mode:
         case AddNoiseMode.NO_NOISE:
             noise_postfix = ""
-        case AddNoiseMode.ADD_NOISE:
-            noise_postfix = "_noisy"
+        case AddNoiseMode.SYNONYM:
+            noise_postfix = "_syno"
+        case AddNoiseMode.PARAPHRASE:
+            noise_postfix = "_para"
     
     
     dataset_path = f"dataset/BFCL_v4_multiple{language_postfix}{translate_dataset_postfix}{noise_postfix}.json"
