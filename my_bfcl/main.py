@@ -3,7 +3,7 @@ import json
 from config import *
 from parse_ast import *
 import re
-from call_llm import api_inference, make_chat_pipeline
+from call_llm import api_inference, make_chat_pipeline, format_granite_chat_template
 def gen_developer_prompt(function_calls: list, prompt_passing_in_english: bool):
     function_calls_json = json.dumps(function_calls, ensure_ascii=False, indent=2)
     passing_in_english_prompt = " Pass in all parameters in function calls in English." if prompt_passing_in_english else ""
@@ -44,11 +44,24 @@ def inference(model: Model, test_entry: dict):
     match model:
         case ApiModel() as api_model:
             result = api_inference(api_model, input_messages)
-        case LocalModelStruct(model=local_model, generator=generator):            
-            # prepare the input for the generator
+        case LocalModelStruct(model=local_model, generator=generator):
+            # Generate the appropriate template based on model type
             system_message = input_messages[0]['content']
             user_message = input_messages[1]['content']
-            result = generator.send((system_message, user_message))
+
+            match local_model:
+                case LocalModel.GRANITE_3_1_8B_INSTRUCT:
+                    # Use Granite's custom chat template with function definitions
+                    messages = [
+                        {"role": "system", "content": system_message},
+                        {"role": "user", "content": user_message},
+                    ]
+                    template = format_granite_chat_template(messages, functions=functions, add_generation_prompt=True)
+                case _:
+                    raise ValueError(f"Unsupported local model: {local_model}")
+
+            # Send the populated template to the generator
+            result = generator.send(template)
         case _:
             raise ValueError(f"Unsupported model struct: {model}")
     result_to_write = {
@@ -92,7 +105,7 @@ for config in configs:
             pass
         case LocalModelStruct(model=local_model, generator=generator):
             # prepare the generator
-            model_pipeline = make_chat_pipeline(local_model.value)
+            model_pipeline = make_chat_pipeline(local_model)
             config.model.generator = model_pipeline
             assert config.model.generator is not None, "Local model generator is not initialized."
         case _:
