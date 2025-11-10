@@ -40,53 +40,53 @@ def gen_input_messages(developer_prompt: str, user_question: str) -> dict:
     user_message = {"role": "user", "content": user_question}
     return [system_message, user_message]
 
-def convert_json_tool_calls_to_ast_format(json_tool_calls: str) -> str:
-    """
-    Convert Granite's JSON tool call format to Python AST format that other models expect.
+# def convert_json_tool_calls_to_ast_format(json_tool_calls: str) -> str:
+#     """
+#     Convert Granite's JSON tool call format to Python AST format that other models expect.
 
-    Input (Granite JSON format):
-        [{"name": "func_name", "arguments": {param1: val1, param2: val2}}]
+#     Input (Granite JSON format):
+#         [{"name": "func_name", "arguments": {param1: val1, param2: val2}}]
 
-    Output (Python AST format):
-        [func_name(param1=val1, param2=val2)]
-    """
-    try:
-        # Parse the JSON output
-        tool_calls = json.loads(json_tool_calls)
+#     Output (Python AST format):
+#         [func_name(param1=val1, param2=val2)]
+#     """
+#     try:
+#         # Parse the JSON output
+#         tool_calls = json.loads(json_tool_calls)
 
-        if not isinstance(tool_calls, list):
-            return json_tool_calls  # Return as-is if not a list
+#         if not isinstance(tool_calls, list):
+#             return json_tool_calls  # Return as-is if not a list
 
-        python_calls = []
-        for tool_call in tool_calls:
-            if isinstance(tool_call, dict) and "name" in tool_call and "arguments" in tool_call:
-                func_name = tool_call["name"]
-                args = tool_call["arguments"]
+#         python_calls = []
+#         for tool_call in tool_calls:
+#             if isinstance(tool_call, dict) and "name" in tool_call and "arguments" in tool_call:
+#                 func_name = tool_call["name"]
+#                 args = tool_call["arguments"]
 
-                # Build parameter string
-                params = []
-                if isinstance(args, dict):
-                    for key, value in args.items():
-                        # Convert value to Python representation
-                        if isinstance(value, str):
-                            params.append(f'{key}="{value}"')
-                        elif isinstance(value, bool):
-                            params.append(f'{key}={str(value).lower()}')
-                        else:
-                            params.append(f'{key}={value}')
+#                 # Build parameter string
+#                 params = []
+#                 if isinstance(args, dict):
+#                     for key, value in args.items():
+#                         # Convert value to Python representation
+#                         if isinstance(value, str):
+#                             params.append(f'{key}="{value}"')
+#                         elif isinstance(value, bool):
+#                             params.append(f'{key}={str(value).lower()}')
+#                         else:
+#                             params.append(f'{key}={value}')
 
-                # Build function call string
-                python_call = f"{func_name}({', '.join(params)})"
-                python_calls.append(python_call)
-            else:
-                # If format is unexpected, return original
-                return json_tool_calls
+#                 # Build function call string
+#                 python_call = f"{func_name}({', '.join(params)})"
+#                 python_calls.append(python_call)
+#             else:
+#                 # If format is unexpected, return original
+#                 return json_tool_calls
 
-        # Return as Python list format
-        return f"[{', '.join(python_calls)}]"
-    except (json.JSONDecodeError, KeyError, TypeError):
-        # If conversion fails, return original
-        return json_tool_calls
+#         # Return as Python list format
+#         return f"[{', '.join(python_calls)}]"
+#     except (json.JSONDecodeError, KeyError, TypeError):
+#         # If conversion fails, return original
+#         return json_tool_calls
 
 
 def inference(model: Model, test_entry: dict):
@@ -129,9 +129,9 @@ def inference(model: Model, test_entry: dict):
                     ]
                     template = format_granite_chat_template(messages, functions=functions, add_generation_prompt=True)
                     # Send the populated template to the generator
-                    raw_result = generator.send(template)
+                    result = generator.send(template)
                     # Convert Granite's JSON output to Python AST format
-                    result = convert_json_tool_calls_to_ast_format(raw_result)
+                    # result = convert_json_tool_calls_to_ast_format(raw_result)
                 case _:
                     raise ValueError(f"Unsupported local model: {local_model}")
         case _:
@@ -145,6 +145,19 @@ def inference(model: Model, test_entry: dict):
 
 
 # Run inference
+
+def create_chat_pipeline(config):
+    # create chat pipeline for local model if needed
+    match config.model:
+        case ApiModel() as api_model:
+            pass
+        case LocalModelStruct(model=local_model, generator=generator):
+            # prepare the generator
+            model_pipeline = make_chat_pipeline(local_model)
+            config.model.generator = model_pipeline
+            assert config.model.generator is not None, "Local model generator is not initialized."
+        case _:
+            raise ValueError(f"Unsupported model struct: {config.model}")
 
 for config in configs:
     print(f"Processing config: {config}")
@@ -171,17 +184,7 @@ for config in configs:
                     raise ValueError(f"Unsupported local model: {model}")
         case _:
             raise ValueError(f"Unsupported model struct: {config.model}")
-    # create chat pipeline for local model if needed
-    match config.model:
-        case ApiModel() as api_model:
-            pass
-        case LocalModelStruct(model=local_model, generator=generator):
-            # prepare the generator
-            model_pipeline = make_chat_pipeline(local_model)
-            config.model.generator = model_pipeline
-            assert config.model.generator is not None, "Local model generator is not initialized."
-        case _:
-            raise ValueError(f"Unsupported model struct: {config.model}")
+    
         
     # map translate_info to language_postfix, translate_dataset_prefix, translate_mode_prefix
     match config.translate_mode:
@@ -225,6 +228,7 @@ for config in configs:
     # test_cases = test_cases[:1]
     # open or create the inference result file
     if requires_inference_raw:
+        chat_pipeline_created = False
         inference_raw_results = []
         existing_inference_ids = set()
         try:
@@ -248,6 +252,9 @@ for config in configs:
                     continue
                 # the actual inference
                 print(f"Inferencing case id {case['id']}, question: {case['question'][0][0]['content']}")
+                if not chat_pipeline_created:
+                    create_chat_pipeline(config)
+                    chat_pipeline_created = True
                 result = inference(config.model, case)
                 print("Answer: ", result["result"])
                 inference_raw_results.append(result)
@@ -277,7 +284,7 @@ for config in configs:
                 # convert raw result to json format
                 #                
                 id = inference_raw['id']
-                decoded_output = raw_to_json(id, inference_raw['result'])
+                decoded_output = raw_to_json(config.model, id, inference_raw['result'])
                 inference_json_entry = {
                     "id": id,
                     "result": decoded_output

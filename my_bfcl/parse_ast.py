@@ -1,5 +1,5 @@
 import ast
-
+from config import LocalModelStruct, Model, ApiModel, LocalModel
 def recursive_match(value, expected_list):
     """
     Recursively match a value against a list of expected values.
@@ -126,28 +126,69 @@ def resolve_ast_call(elem):
 
 
     
-def raw_to_json(case_id: str, model_result_raw: str) -> object:
-    model_result_raw = model_result_raw.strip("`\n ")
-    if not model_result_raw.startswith("["):
-        model_result_raw = "[" + model_result_raw
-    if not model_result_raw.endswith("]"):
-        model_result_raw = model_result_raw + "]"
-    # We only want to remove wrapping quotes that could have been added by the model.
-    cleaned_input = model_result_raw.strip().strip("'")
-    
-    parsed = ast.parse(cleaned_input, mode="eval")
-    extracted = []
-    if isinstance(parsed.body, ast.Call):
-        extracted.append(resolve_ast_call(parsed.body))
+def raw_to_json(model: Model, case_id: str, model_result_raw: str) -> object:
+    # print(f"model being decoded: {model}")
+    if isinstance(model, LocalModelStruct) and model.model == LocalModel.GRANITE_3_1_8B_INSTRUCT:
+        # print("Decoding granite model output...")
+        import json
+        # Parse Granite model's output format: <tool_call>[{...}]
+        model_result_raw = model_result_raw.strip()
+
+        # Remove <tool_call> wrapper if present
+        if model_result_raw.startswith("<tool_call>"):
+            model_result_raw = model_result_raw[len("<tool_call>"):]
+
+        model_result_raw = model_result_raw.strip("`\n ")
+
+        # Add brackets if missing
+        if not model_result_raw.startswith("["):
+            model_result_raw = "[" + model_result_raw
+        if not model_result_raw.endswith("]"):
+            model_result_raw = model_result_raw + "]"
+
+        try:
+            # Parse the JSON array
+            tool_calls = json.loads(model_result_raw)
+        except json.JSONDecodeError:
+            return f"Failed to decode JSON: Invalid JSON format."
+
+        # Convert Granite format to desired format
+        extracted = []
+        if isinstance(tool_calls, list):
+            for tool_call in tool_calls:
+                if isinstance(tool_call, dict) and "name" in tool_call and "arguments" in tool_call:
+                    func_name = tool_call["name"]
+                    func_args = tool_call["arguments"]
+                    extracted.append({func_name: func_args})
+                else:
+                    return f"Failed to decode JSON: Invalid tool call structure."
+        else:
+            return f"Failed to decode JSON: Expected a list of tool calls."
+
+        decoded_output = extracted
     else:
-        for elem in parsed.body.elts:
-            if not isinstance(elem, ast.Call):
-                # raise Exception(f"Expected AST Call node, but got {type(elem)}")
-                return f"Failed to decode AST: Expected AST Call node, but got {type(elem)}"
-            extracted.append(resolve_ast_call(elem))
-    decoded_output = extracted
-        
-   
+        model_result_raw = model_result_raw.strip("`\n ")
+        if not model_result_raw.startswith("["):
+            model_result_raw = "[" + model_result_raw
+        if not model_result_raw.endswith("]"):
+            model_result_raw = model_result_raw + "]"
+        # We only want to remove wrapping quotes that could have been added by the model.
+        cleaned_input = model_result_raw.strip().strip("'")
+        try:
+            parsed = ast.parse(cleaned_input, mode="eval")
+        except SyntaxError:
+            return f"Failed to decode AST: Invalid syntax."
+        extracted = []
+        if isinstance(parsed.body, ast.Call):
+            extracted.append(resolve_ast_call(parsed.body))
+        else:
+            for elem in parsed.body.elts:
+                if not isinstance(elem, ast.Call):
+                    # raise Exception(f"Expected AST Call node, but got {type(elem)}")
+                    return f"Failed to decode AST: Expected AST Call node, but got {type(elem)}"
+                extracted.append(resolve_ast_call(elem))
+        decoded_output = extracted
+
     return decoded_output
 
 
