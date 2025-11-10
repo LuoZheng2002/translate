@@ -149,15 +149,82 @@ def inference(model: Model, test_entry: dict):
 def create_chat_pipeline(config):
     # create chat pipeline for local model if needed
     match config.model:
-        case ApiModel() as api_model:
+        case ApiModel():
             pass
-        case LocalModelStruct(model=local_model, generator=generator):
+        case LocalModelStruct(model=local_model):
             # prepare the generator
             model_pipeline = make_chat_pipeline(local_model)
             config.model.generator = model_pipeline
             assert config.model.generator is not None, "Local model generator is not initialized."
         case _:
             raise ValueError(f"Unsupported model struct: {config.model}")
+
+
+def cleanup_gpu_memory(config):
+    """
+    Explicitly free GPU memory for local models.
+    Call this between configs to prevent memory accumulation.
+    """
+    import torch
+    import gc
+
+    if isinstance(config.model, LocalModelStruct) and config.model.generator is not None:
+        # Delete the generator (which holds reference to the model)
+        config.model.generator = None
+
+        # Force garbage collection
+        gc.collect()
+
+        # Clear CUDA cache
+        torch.cuda.empty_cache()
+        print("GPU memory cleared.")
+
+
+# Global variable to track if pipeline is initialized (reuse across configs)
+_global_pipeline = None
+_global_pipeline_model = None
+
+def get_or_create_pipeline(local_model: LocalModel):
+    """
+    Get or create a pipeline for a local model.
+    Reuses the same pipeline across configs with the same model.
+
+    Guarantees: If you switch to a different model, the previous model's memory
+    is immediately freed (assumes current model will never be used again in this run).
+    """
+    import torch
+    import gc
+
+    global _global_pipeline, _global_pipeline_model
+
+    # If we have a pipeline for the same model, reuse it
+    if _global_pipeline is not None and _global_pipeline_model == local_model:
+        print(f"Reusing existing pipeline for {local_model.value}")
+        return _global_pipeline
+
+    # Different model detected - aggressive cleanup of old pipeline
+    if _global_pipeline is not None:
+        print(f"Switching from {_global_pipeline_model.value} to {local_model.value}")
+        print(f"Freeing memory from previous model...")
+
+        # Delete the generator and model references
+        _global_pipeline = None
+        _global_pipeline_model = None
+
+        # Force immediate garbage collection
+        gc.collect()
+        gc.collect()  # Run twice to handle reference cycles
+
+        # Clear CUDA cache - this is the key step
+        torch.cuda.empty_cache()
+
+        print(f"Memory freed. Loading new model...")
+
+    # Create new pipeline for the new model
+    print(f"Creating pipeline for {local_model.value}")
+    _global_pipeline = make_chat_pipeline(local_model)
+    _global_pipeline_model = local_model
+    return _global_pipeline
 
 for config in configs:
     print(f"Processing config: {config}")
@@ -259,9 +326,11 @@ for config in configs:
             is_api_model = isinstance(config.model, ApiModel)
             is_local_model = isinstance(config.model, LocalModelStruct)
 
-            # Create chat pipeline once before processing (only for local models)
+            # Get or create chat pipeline for local models (reuses across configs)
             if is_local_model and len(cases_to_process) > 0:
-                create_chat_pipeline(config)
+                local_model = config.model.model
+                generator = get_or_create_pipeline(local_model)
+                config.model.generator = generator  # Assign to config for consistency
                 chat_pipeline_created = True
 
             # Process in batches
@@ -312,9 +381,8 @@ for config in configs:
                         )
                         batch_templates.append(template)
 
-                    # Send batch to generator
-                    generator = config.model.generator
-                    batch_results = generator.send(batch_templates)
+                    # Send batch to generator (reused across configs)
+                    batch_results = config.model.generator.send(batch_templates)
                 else:
                     raise ValueError(f"Unsupported model type: {type(config.model)}")
 

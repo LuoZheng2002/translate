@@ -1,9 +1,8 @@
 
-from config import ApiModel, LocalModel, Model
+from config import ApiModel, LocalModel
 from dotenv import load_dotenv
 import os
 import json
-import asyncio
 from typing import List
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -102,7 +101,7 @@ def api_inference(model: ApiModel, input_messages: list[dict]) -> str:
             # Build the API request
             kwargs = {
                 "model": model.value,
-                "max_tokens": 1024,
+                "max_tokens": 4096,
                 "temperature": 0.001,
                 "messages": messages_for_claude
             }
@@ -293,7 +292,7 @@ def make_chat_pipeline(model: LocalModel):
                     return_tensors="pt",
                     padding=True,           # Pad shorter sequences to max length
                     truncation=True,
-                    max_length=2048,
+                    max_length=4096,
                 ).to(hf_model.device)
             else:
                 print("Generating response...")
