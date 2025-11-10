@@ -216,27 +216,31 @@ for config in configs:
     
     dataset_path = f"dataset/BFCL_v4_multiple{language_postfix}{translate_dataset_postfix}{noise_postfix}.json"
     ground_truth_path = f"dataset/possible_answer/BFCL_v4_multiple.json"
-    inference_result_path = f"result/inference/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
+    inference_raw_result_path = f"result/inference_raw/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
+    inference_json_result_path = f"result/inference_json/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
     evaluation_result_path = f"result/evaluation/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
     score_path = f"result/score/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
     with open(dataset_path, 'r', encoding='utf-8') as f_dataset:
         test_cases = load_json_lines(f_dataset)
     # test_cases = test_cases[:1]
     # open or create the inference result file
-    if requires_inference:
-        inference_results = []
+    if requires_inference_raw:
+        inference_raw_results = []
+        existing_inference_ids = set()
         try:
-            with open(inference_result_path, 'r', encoding='utf-8') as f_inference_out:
-                if f_inference_out.readable():
+            with open(inference_raw_result_path, 'r', encoding='utf-8') as f_inference_raw_out:
+                if f_inference_raw_out.readable():
                     # read all lines and parse as list of dict
-                    for line in f_inference_out:
-                        inference_results.append(json.loads(line))
+                    for line in f_inference_raw_out:
+                        line_json = json.loads(line)
+                        id = line_json["id"]
+                        inference_raw_results.append(line_json)
+                        existing_inference_ids.add(id)
         except FileNotFoundError:
-            print(f"Inference result file {inference_result_path} not found. It will be created.")
-        existing_inference_ids = {entry['id'] for entry in inference_results}
+            print(f"Inference result file {inference_raw_result_path} not found. It will be created.")
         printed_warning = False
-        with open(inference_result_path, 'w', encoding='utf-8') as f_inference_out:
-            for i, case in enumerate(test_cases):
+        with open(inference_raw_result_path, 'w', encoding='utf-8') as f_inference_raw_out:
+            for case in test_cases:
                 if case['id'] in existing_inference_ids:
                     if not printed_warning:
                         print(f"Warning: some test cases already exist in inference result file. Skipping.")
@@ -246,62 +250,84 @@ for config in configs:
                 print(f"Inferencing case id {case['id']}, question: {case['question'][0][0]['content']}")
                 result = inference(config.model, case)
                 print("Answer: ", result["result"])
-                inference_results.append(result)
-                f_inference_out.seek(0)
-                f_inference_out.truncate()
-                for result in inference_results:
-                    f_inference_out.write(json.dumps(result, ensure_ascii=False) + '\n')
-                f_inference_out.flush()                
+                inference_raw_results.append(result)
+                f_inference_raw_out.seek(0)
+                f_inference_raw_out.truncate()
+                for result in inference_raw_results:
+                    f_inference_raw_out.write(json.dumps(result, ensure_ascii=False) + '\n')
+                f_inference_raw_out.flush()                
             # rewrite all results to the file
-            inference_results = sorted(inference_results, key=lambda x: int(re.search(r'\d+', x["id"]).group()) if re.search(r'\d+', x["id"]) else float('inf'))
-            f_inference_out.seek(0)
-            f_inference_out.truncate()
-            for result in inference_results:
-                f_inference_out.write(json.dumps(result, ensure_ascii=False) + '\n')
-            f_inference_out.flush()
+            inference_raw_results = sorted(inference_raw_results, key=lambda x: int(re.search(r'\d+', x["id"]).group()) if re.search(r'\d+', x["id"]) else float('inf'))
+            f_inference_raw_out.seek(0)
+            f_inference_raw_out.truncate()
+            for result in inference_raw_results:
+                f_inference_raw_out.write(json.dumps(result, ensure_ascii=False) + '\n')
+            f_inference_raw_out.flush()
+    if requires_inference_json:
+        inference_json_results = []
+        existing_inference_json_ids = set()
+        printed_warning = False
+        with open(inference_json_result_path, 'w', encoding='utf-8') as f_inference_json_out:
+            for inference_raw in inference_raw_results:
+                if inference_raw['id'] in existing_inference_json_ids:
+                    if not printed_warning:
+                        print(f"Warning: some test cases already exist in inference json result file. Skipping.")
+                        printed_warning = True
+                    continue
+                # convert raw result to json format
+                #                
+                id = inference_raw['id']
+                decoded_output = raw_to_json(id, inference_raw['result'])
+                inference_json_entry = {
+                    "id": id,
+                    "result": decoded_output
+                }
+                inference_json_results.append(inference_json_entry)
+                f_inference_json_out.write(json.dumps(inference_json_entry, ensure_ascii=False) + '\n')
+                f_inference_json_out.flush()
+            inference_json_results = sorted(inference_json_results, key=lambda x: int(re.search(r'\d+', x["id"]).group()) if re.search(r'\d+', x["id"]) else float('inf'))
+            f_inference_json_out.seek(0)
+            f_inference_json_out.truncate()
+            for result in inference_json_results:
+                f_inference_json_out.write(json.dumps(result, ensure_ascii=False) + '\n')
+            f_inference_json_out.flush()
     if requires_evaluation:
         evaluation_results = []
-        try:
-            with open(evaluation_result_path, 'r', encoding='utf-8') as f_evaluation_out:
-                if f_evaluation_out.readable():
-                    # read all lines and parse as list of dict
-                    for line in f_evaluation_out:
-                        evaluation_results.append(json.loads(line))
-        except FileNotFoundError:
-            print(f"Evaluation result file {evaluation_result_path} not found. It will be created.")
-        existing_evaluation_ids = {entry['id'] for entry in evaluation_results}
+        existing_evaluation_ids = set()
+        # try:
+        #     with open(evaluation_result_path, 'r', encoding='utf-8') as f_evaluation_out:
+        #         if f_evaluation_out.readable():
+        #             # read all lines and parse as list of dict
+        #             for line in f_evaluation_out:
+        #                 line_json = json.loads(line)
+        #                 id = line_json["id"]                        
+        #                 evaluation_results.append(line_json)
+        #                 existing_evaluation_ids.add(id)
+        # except FileNotFoundError:
+        #     print(f"Evaluation result file {evaluation_result_path} not found. It will be created.")
         printed_warning = False
-        with open(inference_result_path, 'r', encoding='utf-8') as f_inference_in, \
-                open(evaluation_result_path, 'w', encoding='utf-8') as f_evaluation_out, \
-                open(dataset_path, 'r', encoding='utf-8') as f_dataset_in, \
-                open(ground_truth_path, 'r', encoding='utf-8') as f_ground_truth_in:
-            if not f_inference_in.readable():
-                print(f"Error: inference result file {inference_result_path} is not readable.")
-                continue
-            inference_results = []
-            ground_truths = []
-            dataset = []
-            for line in f_dataset_in:
-                test_entry = json.loads(line)
-                dataset.append(test_entry)
-            for line in f_inference_in:
-                inference_results.append(json.loads(line))
+
+        # prepare ground truth
+        ground_truths = []
+        with open(ground_truth_path, 'r', encoding='utf-8') as f_ground_truth_in:
             for line in f_ground_truth_in:
                 ground_truths.append(json.loads(line))
-            for (inference_line, ground_truth_line, dataset_line) in zip(inference_results, ground_truths, dataset):
-                id = inference_line["id"]
+        with open(evaluation_result_path, 'w', encoding='utf-8') as f_evaluation_out:
+            for (inference_json_line, ground_truth_line, test_case) in zip(inference_json_results, ground_truths, test_cases):
+                id = inference_json_line["id"]
                 if id in existing_evaluation_ids:
                     if not printed_warning:
                         print(f"Warning: some test cases already exist in evaluation result file. Skipping.")
                         printed_warning = True
                     continue
                 assert id == ground_truth_line["id"], f"Mismatch in IDs: {id} vs {ground_truth_line['id']}"
-                assert id == dataset_line["id"], f"Mismatch in IDs: {id} vs {dataset_line['id']}"
-                inference_result = inference_line["result"]
+                assert id == test_case["id"], f"Mismatch in IDs: {id} vs {test_case['id']}"
+                inference_json_result = inference_json_line["result"]
                 ground_truth = ground_truth_line["ground_truth"]
-                func_description = dataset_line['function']
+                func_description = test_case['function']
                 # print("func_description: ", func_description)
-                evaluation_result = evaluate(id, inference_result, ground_truth, func_description)
+                
+                evaluation_result = evaluate_json(id, inference_json_result, ground_truth, func_description)
                 evaluation_result["id"] = id
                 evaluation_results.append(evaluation_result)
                 f_evaluation_out.seek(0)

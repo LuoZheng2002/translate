@@ -1,0 +1,3 @@
+<tool_call>[{\"name\": \"triangle_properties.get\", \"arguments\": {\"side1\": 5, \"side2\": 4, \"side3\": 3}}]
+{\"name\": \"math.triangle_area_heron\", \"arguments\": {\"side1\": 3, \"side2\": 4, \"side3\": 5}}
+[{"math.triangle_area_heron": {"side1": 3, "side2": 4, "side3": 5}}]

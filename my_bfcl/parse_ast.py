@@ -126,59 +126,59 @@ def resolve_ast_call(elem):
 
 
     
-
+def raw_to_json(case_id: str, model_result_raw: str) -> object:
+    model_result_raw = model_result_raw.strip("`\n ")
+    if not model_result_raw.startswith("["):
+        model_result_raw = "[" + model_result_raw
+    if not model_result_raw.endswith("]"):
+        model_result_raw = model_result_raw + "]"
+    # We only want to remove wrapping quotes that could have been added by the model.
+    cleaned_input = model_result_raw.strip().strip("'")
+    
+    parsed = ast.parse(cleaned_input, mode="eval")
+    extracted = []
+    if isinstance(parsed.body, ast.Call):
+        extracted.append(resolve_ast_call(parsed.body))
+    else:
+        for elem in parsed.body.elts:
+            if not isinstance(elem, ast.Call):
+                # raise Exception(f"Expected AST Call node, but got {type(elem)}")
+                return f"Failed to decode AST: Expected AST Call node, but got {type(elem)}"
+            extracted.append(resolve_ast_call(elem))
+    decoded_output = extracted
+        
    
+    return decoded_output
 
 
-def evaluate(
+def evaluate_json(
     case_id,
-    model_result,
+    decoded_output,
     possible_answer,
     func_description,
 ):
     """Helper method to process a single AST entry."""
-    model_result_item_raw = model_result    
-    model_result = model_result.strip("`\n ")
-    if not model_result.startswith("["):
-        model_result = "[" + model_result
-    if not model_result.endswith("]"):
-        model_result = model_result + "]"
-    # We only want to remove wrapping quotes that could have been added by the model.
-    cleaned_input = model_result.strip().strip("'")
-    try:
-        parsed = ast.parse(cleaned_input, mode="eval")
-        extracted = []
-        if isinstance(parsed.body, ast.Call):
-            extracted.append(resolve_ast_call(parsed.body))
-        else:
-            for elem in parsed.body.elts:
-                if not isinstance(elem, ast.Call):
-                    raise Exception(f"Expected AST Call node, but got {type(elem)}")
-                extracted.append(resolve_ast_call(elem))
-        decoded_output = extracted
-        
-    except Exception as e:
+    if isinstance(decoded_output, str):
         return {
             "id": case_id,
             "valid": False,
-            "error": [f"Invalid syntax. Failed to decode AST. {str(e)}"],
+            "error": [decoded_output],
             "error_type": "ast_decoder:decoder_failed",
-            "model_result_raw": model_result_item_raw,
+            "model_result_raw": decoded_output,
+            "model_result_decoded": decoded_output,
             "possible_answer": possible_answer,
         }
     
-    model_result = decoded_output
-    if len(model_result) != 1:
+    if len(decoded_output) != 1:
         return {
             "id": case_id,
             "valid": False,
-            "error": [f"Expected exactly one AST entry, but got {len(model_result)}."],
+            "error": [f"Expected exactly one AST entry, but got {len(decoded_output)}."],
             "error_type": "ast_checker:invalid_entry_count",
-            "model_result_raw": model_result_item_raw,
-            "model_result_decoded": model_result,
+            "model_result_decoded": decoded_output,
             "possible_answer": possible_answer,
         }
-    model_result = model_result[0]
+    model_result = decoded_output[0]
     possible_answer = possible_answer[0]
 
     # print("model_result:", model_result)
@@ -199,8 +199,7 @@ def evaluate(
             "valid": False,
             "error": [f"Function name mismatch. Expected {repr(possible_answer_func_name)}, but got {repr(model_result_func_name)}."],
             "error_type": "simple_function_checker:wrong_func_name",
-            "model_result_raw": model_result_item_raw,
-            "model_result_decoded": model_result,
+            "model_result_decoded": decoded_output,
             "possible_answer": possible_answer,
         }
     # first see if function name matches
@@ -221,8 +220,7 @@ def evaluate(
                 "valid": False,
                 "error": [f"Missing required parameter: {repr(param)}."],
                 "error_type": "simple_function_checker:missing_required",
-                "model_result_raw": model_result_item_raw,
-                "model_result_decoded": model_result,
+                "model_result_decoded": decoded_output,
                 "possible_answer": possible_answer,
             }
         
@@ -238,8 +236,7 @@ def evaluate(
                 "valid": False,
                 "error": [f"Unexpected parameter: {repr(param)}."],
                 "error_type": "simple_function_checker:unexpected_param",
-                "model_result_raw": model_result_item_raw,
-                "model_result_decoded": model_result,
+                "model_result_decoded": decoded_output,
                 "possible_answer": possible_answer,
             }
         # Check if the value is within the possible answers using recursive matching
@@ -249,14 +246,12 @@ def evaluate(
                 "valid": False,
                 "error": [f"Invalid value for parameter {repr(param)}: {repr(value)}. Expected one of {possible_answer_params[param]}."],
                 "error_type": "value_error:others",
-                "model_result_raw": model_result_item_raw,
-                "model_result_decoded": model_result,
+                "model_result_decoded": decoded_output,
                 "possible_answer": possible_answer,
             }
     return {
         "id": case_id,
         "valid": True,
-        "model_result_raw": model_result_item_raw,
-        "model_result_decoded": model_result,
+        "model_result_decoded": decoded_output,
         "possible_answer": possible_answer,
     }
