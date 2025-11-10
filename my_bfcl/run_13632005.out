@@ -1,0 +1,4 @@
+Processing config: Config(model=LocalModelStruct(model=<LocalModel.GRANITE_3_1_8B_INSTRUCT: 'ibm-granite/granite-3.1-8b-instruct'>, generator=None), translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.DATASET_FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Inference result file result/inference_raw/BFCL_v4_multiple_granite_zh_d.json not found. It will be created.
+Inferencing case id multiple_0, question: 如果我知道一个三角形的三条边长分别为5个单位、4个单位和3个单位，我能找到它的尺寸和属性吗？
+Loading local model: ibm-granite/granite-3.1-8b-instruct
