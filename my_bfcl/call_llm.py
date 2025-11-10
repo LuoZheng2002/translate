@@ -3,6 +3,9 @@ from config import ApiModel, LocalModel, Model
 from dotenv import load_dotenv
 import os
 import json
+import asyncio
+from typing import List
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def api_inference(model: ApiModel, input_messages: list[dict]) -> str:
@@ -115,7 +118,57 @@ def api_inference(model: ApiModel, input_messages: list[dict]) -> str:
 
         case _:
             raise ValueError(f"Unsupported model: {model}")
-        
+
+
+def api_inference_batch(model: ApiModel, batch_messages: List[list[dict]]) -> List[str]:
+    """
+    Run inference on multiple inputs concurrently using the API.
+    Makes parallel API calls for better throughput.
+
+    Args:
+        model: ApiModel enum value.
+        batch_messages: List of message lists, where each element is like:
+            [
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": "Hello!"}
+            ]
+
+    Returns:
+        List of responses in the same order as input batch_messages
+    """
+    # Use ThreadPoolExecutor for concurrent API calls
+    max_workers = min(8, len(batch_messages))  # Up to 8 concurrent requests
+    results = [None] * len(batch_messages)  # Pre-allocate to maintain order
+
+    def call_api_with_index(index_and_messages):
+        """Helper to call API and track original index"""
+        index, messages = index_and_messages
+        try:
+            response = api_inference(model, messages)
+            return index, response
+        except Exception as e:
+            print(f"Error calling API for batch item {index}: {e}")
+            return index, f"Error: {str(e)}"
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all tasks
+        futures = {
+            executor.submit(call_api_with_index, (i, messages)): i
+            for i, messages in enumerate(batch_messages)
+        }
+
+        # Collect results as they complete
+        for future in as_completed(futures):
+            try:
+                index, response = future.result()
+                results[index] = response
+            except Exception as e:
+                index = futures[future]
+                print(f"Error processing batch item {index}: {e}")
+                results[index] = f"Error: {str(e)}"
+
+    return results
+
 
 def format_granite_chat_template(messages: list[dict], functions: list[dict] = None, add_generation_prompt: bool = True) -> str:
     """
@@ -183,13 +236,14 @@ def format_granite_chat_template(messages: list[dict], functions: list[dict] = N
 
 def make_chat_pipeline(model: LocalModel):
     """
-    Returns a generator function that takes a populated template string and yields model responses.
+    Returns a generator function that takes populated template(s) and yields model responses.
+    Supports both single templates (string) and batch templates (list of strings).
 
     Args:
         model: A LocalModel enum value specifying which local model to use
 
     Returns:
-        A generator that accepts a populated template string and yields responses
+        A generator that accepts a template string or list of template strings and yields responses
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
     import torch
@@ -204,44 +258,78 @@ def make_chat_pipeline(model: LocalModel):
     # --- Load tokenizer ---
     tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
 
-    # --- (Optional) quantization configuration ---
-    # bnb_config = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16)
+    # Set pad token for batch processing
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
 
     # --- Load model ---
     hf_model = AutoModelForCausalLM.from_pretrained(
         model_id,
-        device_map="auto",
+        device_map="cuda:0",  # Keep model on GPU, avoid unnecessary offloading
         torch_dtype=torch.bfloat16,
         trust_remote_code=True,
-        offload_folder="/work/nvme/bfdz/zluo8/hf_offload",
-        # quantization_config=bnb_config,
+        # offload_folder="/work/nvme/bfdz/zluo8/hf_offload",  # Removed for better performance
     )
 
     hf_model.eval()
 
     # --- Define the generator pipeline ---
     def chat_generator():
-        template = yield  # Initial yield to start the generator
+        inputs = yield  # Initial yield to start the generator
         while True:
-            # Wait for a populated template string
-            if template is None:
-                template = yield
+            # Wait for a populated template string or list of strings
+            if inputs is None:
+                inputs = yield
                 continue
 
-            # Tokenize the populated template
-            inputs = tokenizer(template, return_tensors="pt").to(hf_model.device)
+            # Determine if this is a batch (list) or single input (string)
+            is_batch = isinstance(inputs, list)
+
+            # Tokenize with appropriate settings
+            if is_batch:
+                print(f"Generating responses for batch of {len(inputs)} inputs...")
+                tokenized = tokenizer(
+                    inputs,
+                    return_tensors="pt",
+                    padding=True,           # Pad shorter sequences to max length
+                    truncation=True,
+                    max_length=2048,
+                ).to(hf_model.device)
+            else:
+                print("Generating response...")
+                tokenized = tokenizer(inputs, return_tensors="pt").to(hf_model.device)
 
             # Generate
-            print("Generating response...")
             with torch.inference_mode():
-                outputs = hf_model.generate(**inputs, max_new_tokens=100, temperature=0.001)
-            print("Generation complete.")
-            # Decode
-            generated_tokens = outputs[0][inputs["input_ids"].shape[-1]:]
-            response = tokenizer.decode(generated_tokens, skip_special_tokens=True)
+                outputs = hf_model.generate(
+                    **tokenized,
+                    max_new_tokens=100,
+                    temperature=0.001,
+                    use_cache=True,  # Enable KV cache for faster generation
+                )
 
-            # Yield response and wait for next template
-            template = yield response
+            # Decode
+            generated_tokens = outputs[:, tokenized["input_ids"].shape[-1]:]
+
+            if is_batch:
+                # Return list of responses for batch
+                responses = tokenizer.batch_decode(
+                    generated_tokens,
+                    skip_special_tokens=True
+                )
+                print(f"Generation complete for batch of {len(responses)} responses.")
+                result = responses
+            else:
+                # Return single response for single input
+                response = tokenizer.decode(
+                    generated_tokens[0],
+                    skip_special_tokens=True
+                )
+                print("Generation complete.")
+                result = response
+
+            # Yield response and wait for next template(s)
+            inputs = yield result
 
     # Initialize and prime the generator
     gen = chat_generator()

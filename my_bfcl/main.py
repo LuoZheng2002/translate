@@ -3,7 +3,7 @@ import json
 from config import *
 from parse_ast import *
 import re
-from call_llm import api_inference, make_chat_pipeline, format_granite_chat_template
+from call_llm import api_inference, api_inference_batch, make_chat_pipeline, format_granite_chat_template
 def gen_developer_prompt(function_calls: list, prompt_passing_in_english: bool, model: LocalModel = None):
     function_calls_json = json.dumps(function_calls, ensure_ascii=False, indent=2)
     passing_in_english_prompt = " Pass in all parameters in function calls in English." if prompt_passing_in_english else ""
@@ -242,34 +242,108 @@ for config in configs:
                         existing_inference_ids.add(id)
         except FileNotFoundError:
             print(f"Inference result file {inference_raw_result_path} not found. It will be created.")
+
+        # Batch processing configuration
+        batch_size = 8  # Process 8 cases at a time for better GPU utilization
         printed_warning = False
+
         with open(inference_raw_result_path, 'w', encoding='utf-8') as f_inference_raw_out:
-            for case in test_cases:
-                if case['id'] in existing_inference_ids:
-                    if not printed_warning:
-                        print(f"Warning: some test cases already exist in inference result file. Skipping.")
-                        printed_warning = True
-                    continue
-                # the actual inference
-                print(f"Inferencing case id {case['id']}, question: {case['question'][0][0]['content']}")
-                if not chat_pipeline_created:
-                    create_chat_pipeline(config)
-                    chat_pipeline_created = True
-                result = inference(config.model, case)
-                print("Answer: ", result["result"])
-                inference_raw_results.append(result)
+            # Filter cases that haven't been processed yet
+            cases_to_process = [case for case in test_cases if case['id'] not in existing_inference_ids]
+
+            if not printed_warning and len(cases_to_process) < len(test_cases):
+                print(f"Warning: some test cases already exist in inference result file. Skipping {len(test_cases) - len(cases_to_process)} cases.")
+                printed_warning = True
+
+            # Determine if using API or local model
+            is_api_model = isinstance(config.model, ApiModel)
+            is_local_model = isinstance(config.model, LocalModelStruct)
+
+            # Create chat pipeline once before processing (only for local models)
+            if is_local_model and len(cases_to_process) > 0:
+                create_chat_pipeline(config)
+                chat_pipeline_created = True
+
+            # Process in batches
+            for batch_start in range(0, len(cases_to_process), batch_size):
+                batch_end = min(batch_start + batch_size, len(cases_to_process))
+                batch_cases = cases_to_process[batch_start:batch_end]
+
+                print(f"\nProcessing batch {batch_start // batch_size + 1}: cases {batch_start} to {batch_end}")
+
+                # Prepare batch of input messages
+                batch_input_messages = []
+                for case in batch_cases:
+                    functions = case['function']
+                    user_question = case["question"][0][0]['content']
+                    developer_prompt = gen_developer_prompt(
+                        function_calls=functions,
+                        prompt_passing_in_english=True,
+                        model=config.model.model if isinstance(config.model, LocalModelStruct) else None
+                    )
+                    input_messages = gen_input_messages(
+                        developer_prompt=developer_prompt,
+                        user_question=user_question
+                    )
+                    batch_input_messages.append((input_messages, functions))
+
+                # Process batch based on model type
+                if is_api_model:
+                    # For API models: use concurrent requests
+                    print(f"Sending {len(batch_cases)} concurrent API requests...")
+                    api_batch_messages = [messages for messages, _ in batch_input_messages]
+                    batch_results = api_inference_batch(config.model, api_batch_messages)
+                    print(f"Received {len(batch_results)} API responses.")
+
+                elif is_local_model:
+                    # For local models: use batch processing with generator
+                    # Format Granite templates for batch
+                    batch_templates = []
+                    for (input_messages, functions) in batch_input_messages:
+                        system_message = input_messages[0]['content']
+                        user_message = input_messages[1]['content']
+                        template = format_granite_chat_template(
+                            [
+                                {"role": "system", "content": system_message},
+                                {"role": "user", "content": user_message},
+                            ],
+                            functions=functions,
+                            add_generation_prompt=True
+                        )
+                        batch_templates.append(template)
+
+                    # Send batch to generator
+                    generator = config.model.generator
+                    batch_results = generator.send(batch_templates)
+                else:
+                    raise ValueError(f"Unsupported model type: {type(config.model)}")
+
+                # Process results
+                for case, result in zip(batch_cases, batch_results):
+                    print(f"Inferencing case id {case['id']}, question: {case['question'][0][0]['content']}")
+                    print("Answer: ", result)
+
+                    result_to_write = {
+                        "id": case["id"],
+                        "result": result
+                    }
+                    inference_raw_results.append(result_to_write)
+
+                # Write batch results to file
                 f_inference_raw_out.seek(0)
                 f_inference_raw_out.truncate()
                 for result in inference_raw_results:
                     f_inference_raw_out.write(json.dumps(result, ensure_ascii=False) + '\n')
-                f_inference_raw_out.flush()                
-            # rewrite all results to the file
-            inference_raw_results = sorted(inference_raw_results, key=lambda x: int(re.search(r'\d+', x["id"]).group()) if re.search(r'\d+', x["id"]) else float('inf'))
-            f_inference_raw_out.seek(0)
-            f_inference_raw_out.truncate()
-            for result in inference_raw_results:
-                f_inference_raw_out.write(json.dumps(result, ensure_ascii=False) + '\n')
-            f_inference_raw_out.flush()
+                f_inference_raw_out.flush()
+
+            # Final sort and write
+            if len(inference_raw_results) > 0:
+                inference_raw_results = sorted(inference_raw_results, key=lambda x: int(re.search(r'\d+', x["id"]).group()) if re.search(r'\d+', x["id"]) else float('inf'))
+                f_inference_raw_out.seek(0)
+                f_inference_raw_out.truncate()
+                for result in inference_raw_results:
+                    f_inference_raw_out.write(json.dumps(result, ensure_ascii=False) + '\n')
+                f_inference_raw_out.flush()
     if requires_inference_json:
         inference_json_results = []
         existing_inference_json_ids = set()
