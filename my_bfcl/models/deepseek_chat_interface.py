@@ -127,7 +127,7 @@ class DeepseekChatInterface(ModelInterface):
         """
         function_calls_json = json.dumps(functions, ensure_ascii=False, indent=2)
         passing_in_english_prompt = (
-            " Pass in all parameters in function calls in English."
+            " IMPORTANT: Pass in all parameters in function calls in English."
             if prompt_passing_in_english
             else ""
         )

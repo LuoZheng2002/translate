@@ -5,46 +5,46 @@ from parse_ast import *
 import re
 from call_llm import make_chat_pipeline
 from models.model_factory import create_model_interface
-def gen_developer_prompt(function_calls: list, prompt_passing_in_english: bool, model: LocalModel = None):
-    """
-    Generate system prompt for the model.
+# def gen_developer_prompt(function_calls: list, prompt_passing_in_english: bool, model: LocalModel = None):
+#     """
+#     Generate system prompt for the model.
 
-    Args:
-        function_calls: List of available function definitions
-        prompt_passing_in_english: Whether to request English parameter passing
-        model: Optional LocalModel to customize prompt for specific models
+#     Args:
+#         function_calls: List of available function definitions
+#         prompt_passing_in_english: Whether to request English parameter passing
+#         model: Optional LocalModel to customize prompt for specific models
 
-    Returns:
-        System prompt as a string
-    """
-    function_calls_json = json.dumps(function_calls, ensure_ascii=False, indent=2)
-    passing_in_english_prompt = " Pass in all parameters in function calls in English." if prompt_passing_in_english else ""
+#     Returns:
+#         System prompt as a string
+#     """
+#     function_calls_json = json.dumps(function_calls, ensure_ascii=False, indent=2)
+#     passing_in_english_prompt = " Pass in all parameters in function calls in English." if prompt_passing_in_english else ""
 
-    # Check if this is a Granite model
-    if model == LocalModel.GRANITE_3_1_8B_INSTRUCT:
-        # Granite should output in JSON format (list of function call objects)
-        return f'''You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
+#     # Check if this is a Granite model
+#     if model == LocalModel.GRANITE_3_1_8B_INSTRUCT:
+#         # Granite should output in JSON format (list of function call objects)
+#         return f'''You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
 
-You should only return the function calls in your response, in JSON format as a list where each element has the format {{"name": "function_name", "arguments": {{param1: value1, param2: value2, ...}}}}.{passing_in_english_prompt}
+# You should only return the function calls in your response, in JSON format as a list where each element has the format {{"name": "function_name", "arguments": {{param1: value1, param2: value2, ...}}}}.{passing_in_english_prompt}
 
-At each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user\'s request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.
+# At each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user\'s request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.
 
-Here is a list of functions in json format that you can invoke.
-{function_calls_json}
-'''
-    else:
-        # For API models, use Python function call syntax
-        return f'''You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
+# Here is a list of functions in json format that you can invoke.
+# {function_calls_json}
+# '''
+#     else:
+#         # For API models, use Python function call syntax
+#         return f'''You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
 
-You should only return the function calls in your response.
+# You should only return the function calls in your response.
 
-If you decide to invoke any of the function(s), you MUST put it in the format of [func_name1(params_name1=params_value1, params_name2=params_value2...), func_name2(params)].  You SHOULD NOT include any other text in the response.{passing_in_english_prompt}
+# If you decide to invoke any of the function(s), you MUST put it in the format of [func_name1(params_name1=params_value1, params_name2=params_value2...), func_name2(params)].  You SHOULD NOT include any other text in the response.{passing_in_english_prompt}
 
-At each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user\"s request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.
+# At each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user\"s request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.
 
-Here is a list of functions in json format that you can invoke.
-{function_calls_json}
-'''
+# Here is a list of functions in json format that you can invoke.
+# {function_calls_json}
+# '''
 
 
 def inference(model: Model, test_entry: dict, model_interface=None):
