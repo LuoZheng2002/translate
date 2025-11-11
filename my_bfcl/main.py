@@ -3,8 +3,20 @@ import json
 from config import *
 from parse_ast import *
 import re
-from call_llm import api_inference, api_inference_batch, make_chat_pipeline, format_granite_chat_template
+from call_llm import make_chat_pipeline
+from models.model_factory import create_model_interface
 def gen_developer_prompt(function_calls: list, prompt_passing_in_english: bool, model: LocalModel = None):
+    """
+    Generate system prompt for the model.
+
+    Args:
+        function_calls: List of available function definitions
+        prompt_passing_in_english: Whether to request English parameter passing
+        model: Optional LocalModel to customize prompt for specific models
+
+    Returns:
+        System prompt as a string
+    """
     function_calls_json = json.dumps(function_calls, ensure_ascii=False, indent=2)
     passing_in_english_prompt = " Pass in all parameters in function calls in English." if prompt_passing_in_english else ""
 
@@ -22,8 +34,7 @@ Here is a list of functions in json format that you can invoke.
 '''
     else:
         # For API models, use Python function call syntax
-        return f'''
-You are an expert in composing functions.You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
+        return f'''You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
 
 You should only return the function calls in your response.
 
@@ -35,107 +46,33 @@ Here is a list of functions in json format that you can invoke.
 {function_calls_json}
 '''
 
-def gen_input_messages(developer_prompt: str, user_question: str) -> dict:
-    system_message = {"role": "system", "content": developer_prompt}
-    user_message = {"role": "user", "content": user_question}
-    return [system_message, user_message]
 
-# def convert_json_tool_calls_to_ast_format(json_tool_calls: str) -> str:
-#     """
-#     Convert Granite's JSON tool call format to Python AST format that other models expect.
+def inference(model: Model, test_entry: dict, model_interface=None):
+    """
+    Run inference on a single test entry.
 
-#     Input (Granite JSON format):
-#         [{"name": "func_name", "arguments": {param1: val1, param2: val2}}]
+    Args:
+        model: Model configuration (ApiModel or LocalModelStruct)
+        test_entry: Test case entry with 'function' and 'question' fields
+        model_interface: Optional pre-created model interface. If None, will be created.
 
-#     Output (Python AST format):
-#         [func_name(param1=val1, param2=val2)]
-#     """
-#     try:
-#         # Parse the JSON output
-#         tool_calls = json.loads(json_tool_calls)
-
-#         if not isinstance(tool_calls, list):
-#             return json_tool_calls  # Return as-is if not a list
-
-#         python_calls = []
-#         for tool_call in tool_calls:
-#             if isinstance(tool_call, dict) and "name" in tool_call and "arguments" in tool_call:
-#                 func_name = tool_call["name"]
-#                 args = tool_call["arguments"]
-
-#                 # Build parameter string
-#                 params = []
-#                 if isinstance(args, dict):
-#                     for key, value in args.items():
-#                         # Convert value to Python representation
-#                         if isinstance(value, str):
-#                             params.append(f'{key}="{value}"')
-#                         elif isinstance(value, bool):
-#                             params.append(f'{key}={str(value).lower()}')
-#                         else:
-#                             params.append(f'{key}={value}')
-
-#                 # Build function call string
-#                 python_call = f"{func_name}({', '.join(params)})"
-#                 python_calls.append(python_call)
-#             else:
-#                 # If format is unexpected, return original
-#                 return json_tool_calls
-
-#         # Return as Python list format
-#         return f"[{', '.join(python_calls)}]"
-#     except (json.JSONDecodeError, KeyError, TypeError):
-#         # If conversion fails, return original
-#         return json_tool_calls
-
-
-def inference(model: Model, test_entry: dict):
-    # print(test_entry)
+    Returns:
+        Dictionary with 'id' and 'result' (raw model output)
+    """
     functions = test_entry['function']
-
-    # Determine if this is a local model
-    local_model = None
-    if isinstance(model, LocalModelStruct):
-        local_model = model.model
-
-    developer_prompt = gen_developer_prompt(
-        function_calls=functions,
-        prompt_passing_in_english=True,
-        model=local_model
-    )
     user_question = test_entry["question"][0][0]['content']
-    input_messages = gen_input_messages(
-        developer_prompt=developer_prompt,
-        user_question=user_question
-    )
-    # print("Prompt dict:")
-    # print(input_messages[0]['content'])
-    # print(input_messages[1]['content'])
-    # to do: call the LLM API with prompt_dict
-    match model:
-        case ApiModel() as api_model:
-            result = api_inference(api_model, input_messages)
-        case LocalModelStruct(model=local_model, generator=generator):
-            # Generate the appropriate template based on model type
-            system_message = input_messages[0]['content']
-            user_message = input_messages[1]['content']
 
-            match local_model:
-                case LocalModel.GRANITE_3_1_8B_INSTRUCT:
-                    # Use Granite's custom chat template with function definitions
-                    messages = [
-                        {"role": "system", "content": system_message},
-                        {"role": "user", "content": user_message},
-                    ]
-                    template = format_granite_chat_template(messages, functions=functions, add_generation_prompt=True)
-                    # Send the populated template to the generator
-                    result = generator.send(template)
-                    # Convert Granite's JSON output to Python AST format
-                    # result = convert_json_tool_calls_to_ast_format(raw_result)
-                case _:
-                    raise ValueError(f"Unsupported local model: {local_model}")
-        case _:
-            raise ValueError(f"Unsupported model struct: {model}")
+    # Create model interface if not provided
+    if model_interface is None:
+        model_interface = create_model_interface(model)
+
+    # Run inference with new interface (accepts functions directly)
+    result = model_interface.infer(
+        functions=functions,
+        user_query=user_question,
+        prompt_passing_in_english=True
+    )
+
     result_to_write = {
         "id": test_entry["id"],
         "result": result
@@ -340,49 +277,44 @@ for config in configs:
 
                 print(f"\nProcessing batch {batch_start // batch_size + 1}: cases {batch_start} to {batch_end}")
 
-                # Prepare batch of input messages
-                batch_input_messages = []
+                # Prepare batch data
+                batch_functions_list = []
+                batch_user_queries = []
                 for case in batch_cases:
                     functions = case['function']
                     user_question = case["question"][0][0]['content']
-                    developer_prompt = gen_developer_prompt(
-                        function_calls=functions,
-                        prompt_passing_in_english=True,
-                        model=config.model.model if isinstance(config.model, LocalModelStruct) else None
-                    )
-                    input_messages = gen_input_messages(
-                        developer_prompt=developer_prompt,
-                        user_question=user_question
-                    )
-                    batch_input_messages.append((input_messages, functions))
+                    batch_functions_list.append(functions)
+                    batch_user_queries.append(user_question)
 
-                # Process batch based on model type
+                # Create or reuse model interface
                 if is_api_model:
-                    # For API models: use concurrent requests
+                    model_interface = create_model_interface(config.model)
+                    # For API models: process each case individually (handles concurrent requests internally)
                     print(f"Sending {len(batch_cases)} concurrent API requests...")
-                    api_batch_messages = [messages for messages, _ in batch_input_messages]
-                    batch_results = api_inference_batch(config.model, api_batch_messages)
+                    batch_results = []
+                    for functions, user_query in zip(batch_functions_list, batch_user_queries):
+                        result = model_interface.infer(
+                            functions=functions,
+                            user_query=user_query,
+                            prompt_passing_in_english=True
+                        )
+                        batch_results.append(result)
                     print(f"Received {len(batch_results)} API responses.")
 
                 elif is_local_model:
-                    # For local models: use batch processing with generator
-                    # Format Granite templates for batch
-                    batch_templates = []
-                    for (input_messages, functions) in batch_input_messages:
-                        system_message = input_messages[0]['content']
-                        user_message = input_messages[1]['content']
-                        template = format_granite_chat_template(
-                            [
-                                {"role": "system", "content": system_message},
-                                {"role": "user", "content": user_message},
-                            ],
-                            functions=functions,
-                            add_generation_prompt=True
-                        )
-                        batch_templates.append(template)
+                    # For local models: create interface with generator
+                    local_model = config.model.model
+                    model_interface = create_model_interface(config.model, generator=config.model.generator)
 
-                    # Send batch to generator (reused across configs)
-                    batch_results = config.model.generator.send(batch_templates)
+                    if local_model == LocalModel.GRANITE_3_1_8B_INSTRUCT:
+                        # Use batch processing for Granite (true batch inference)
+                        batch_results = model_interface.infer_batch(
+                            functions_list=batch_functions_list,
+                            user_queries=batch_user_queries,
+                            prompt_passing_in_english=True
+                        )
+                    else:
+                        raise ValueError(f"Unsupported local model in batch processing: {local_model}")
                 else:
                     raise ValueError(f"Unsupported model type: {type(config.model)}")
 
