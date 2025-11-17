@@ -82,40 +82,6 @@ def append_and_rewrite_json_lines(file_path: str, results: list) -> None:
     sorted_results = sort_results_by_id(results)
     write_json_lines_to_file(file_path, sorted_results)
 
-def inference(model: Model, test_entry: dict, model_interface=None):
-    """
-    Run inference on a single test entry.
-
-    Args:
-        model: Model configuration (ApiModel or LocalModel)
-        test_entry: Test case entry with 'function' and 'question' fields
-        model_interface: Optional pre-created model interface. If None, will be created.
-
-    Returns:
-        Dictionary with 'id' and 'result' (raw model output)
-    """
-    functions = test_entry['function']
-    user_question = test_entry["question"][0][0]['content']
-
-    # Create model interface if not provided
-    if model_interface is None:
-        model_interface = create_model_interface(model)
-
-    # Run inference with new interface (accepts functions directly)
-    result = model_interface.infer(
-        functions=functions,
-        user_query=user_question,
-        prompt_passing_in_english=True
-    )
-
-    result_to_write = {
-        "id": test_entry["id"],
-        "result": result
-    }
-    return result_to_write
-
-
-
 # Run inference
 # Global variable to track if pipeline is initialized (reuse across configs)
 _global_pipeline = None
@@ -200,6 +166,7 @@ for config in configs:
             raise ValueError(f"Unsupported model struct: {config.model}")
     
     post_process_option = PostProcessOption.DONT_POST_PROCESS
+    prompt_translate = False
     # map translate_info to language_postfix, translate_dataset_prefix, translate_mode_prefix
     match config.translate_mode:
         case Translated(language, option):
@@ -211,21 +178,27 @@ for config in configs:
             match option:
                 case TranslateOption.FULLY_TRANSLATED:
                     translate_dataset_postfix = "_full"
-                    translate_mode_postfix = "_d" # default
+                    translate_mode_postfix = "_f" # fully translated, default
+                    translate_postfix = "_f" # fully translated, do not prompt translate
                 case TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE:
                     translate_dataset_postfix = "_full"
                     translate_mode_postfix = "_pt"  # prompt translate
+                    translate_postfix = "_fp" # fully translated, prompt translate
+                    prompt_translate = True
                 case TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT:
                     translate_dataset_postfix = "_full"
                     translate_mode_postfix = "_ppd"  # post-process different
+                    translate_postfix = "_f" # fully translated, do not prompt translate
                     post_process_option = PostProcessOption.POST_PROCESS_DIFFERENT
                 case TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME:
                     translate_dataset_postfix = "_full"
                     translate_mode_postfix = "_pps"  # post-process same
+                    translate_postfix = "_f" # fully translated, do not prompt translate
                     post_process_option = PostProcessOption.POST_PROCESS_SAME
                 case TranslateOption.PARTIALLY_TRANSLATED:
                     translate_dataset_postfix = "_partial"
-                    translate_mode_postfix = "_par" # partial                
+                    translate_mode_postfix = "_par" # partial            
+                    translate_postfix = "_f" # fully translated, do not prompt translate    
                 case _:
                     raise ValueError(f"Unsupported translate option: {option}")
         case NotTranslated():
@@ -245,8 +218,8 @@ for config in configs:
     
     dataset_path = f"dataset/BFCL_v4_multiple{language_postfix}{translate_dataset_postfix}{noise_postfix}.json"
     ground_truth_path = f"dataset/possible_answer/BFCL_v4_multiple.json"
-    inference_raw_result_path = f"result/inference_raw/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
-    inference_json_result_path = f"result/inference_json/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
+    inference_raw_result_path = f"result/inference_raw/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_postfix}{noise_postfix}.json"
+    inference_json_result_path = f"result/inference_json/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_postfix}{noise_postfix}.json"
     post_processing_result_path = f"result/post_processing/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
     evaluation_result_path = f"result/evaluation/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
     score_path = f"result/score/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
@@ -303,7 +276,7 @@ for config in configs:
             batch_results = model_interface.infer_batch(
                 functions_list=batch_functions_list,
                 user_queries=batch_user_queries,
-                prompt_passing_in_english=True
+                prompt_passing_in_english=prompt_translate
             )
             print(f"Received batch results.")
 
@@ -399,10 +372,12 @@ for config in configs:
                 post_processing_cache = post_processing_cache_same
                 post_processing_cache_stats = post_processing_cache_stats_same
                 cache_path = post_processing_cache_same_path
-            else:  # POST_PROCESS_DIFFERENT
+            elif post_process_option == PostProcessOption.POST_PROCESS_DIFFERENT:  # POST_PROCESS_DIFFERENT
                 post_processing_cache = post_processing_cache_different
                 post_processing_cache_stats = post_processing_cache_stats_different
                 cache_path = post_processing_cache_different_path
+            else:
+                raise ValueError(f"Unsupported post process option: {post_process_option}")
 
             # reload inference json results
             try:
@@ -431,6 +406,7 @@ for config in configs:
 
             for inference_json_line in samples_to_process:
                 id = inference_json_line['id']
+                print(f"Post-processing case id {id}...")
                 # Find matching ground truth
                 ground_truth_line = next((gt for gt in ground_truths if gt['id'] == id), None)
                 if ground_truth_line is None:
@@ -439,9 +415,10 @@ for config in configs:
                 post_processing_entry = process_post_processing_sample(
                     inference_json_line,
                     ground_truth_line,
-                    config.model,
+                    ApiModel.GPT_4O_MINI,  # Use a powerful model for post-processing
                     post_process_option,
                     post_processing_cache,
+                    cache_path,
                     post_processing_cache_stats
                 )
                 post_processing_results.append(post_processing_entry)
@@ -453,9 +430,7 @@ for config in configs:
             if len(post_processing_results) > 0:
                 append_and_rewrite_json_lines(post_processing_result_path, post_processing_results)
 
-            # Save appropriate cache
-            save_cache(cache_path, post_processing_cache)
-            print(f"Post-processing ({post_process_option.name}) cache statistics - Hits: {post_processing_cache_stats['hits']}, Misses: {post_processing_cache_stats['misses']}")
+            print(f"Post-processing ({post_process_option.name}) completed - Hits: {post_processing_cache_stats['hits']}, Misses: {post_processing_cache_stats['misses']}")
     if requires_evaluation:
         # reload post processing results
         try:

@@ -65,6 +65,8 @@ class Config:
     add_noise_mode: AddNoiseMode
 
 configs: list[Config] = [
+    Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.NO_NOISE),
+    Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=ApiModel.GPT_4O_MINI, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
@@ -85,7 +87,7 @@ configs: list[Config] = [
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.SYNONYM),
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.PARAPHRASE),
-    Config(model=LocalModel.GRANITE_3_1_8B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.GRANITE_3_1_8B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.SYNONYM),
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.PARAPHRASE),
@@ -100,6 +102,6 @@ requires_post_processing = True # rephrase parameter values if the raw output ha
 requires_evaluation = True
 requires_score = True
 
-evaluation_caching = True
+evaluation_caching = False
 
 

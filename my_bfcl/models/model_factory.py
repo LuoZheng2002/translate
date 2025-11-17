@@ -5,7 +5,7 @@ Provides a unified way to instantiate the correct model handler based on model t
 """
 
 from typing import Union, Optional, List, Dict, Any
-from config import ApiModel, LocalModel, LocalModelStruct
+from config import ApiModel, LocalModel
 from models.base import ModelInterface
 from models.gpt_4o_mini_interface import GPT4oMiniInterface
 from models.claude_sonnet_interface import ClaudeSonnetInterface
@@ -15,12 +15,12 @@ from models.granite_3_1_8b_instruct_interface import Granite3_1_8BInstructInterf
 
 
 def create_model_interface(model: Union[ApiModel, LocalModel],
-                          generator) -> ModelInterface:
+                          generator=None) -> ModelInterface:
     """
     Factory function to create appropriate model interface instance.
 
     Args:
-        model: Either an ApiModel enum or LocalModelStruct instance
+        model: Either an ApiModel enum or LocalModel enum
         generator: Optional pre-initialized generator for local models
 
     Returns:
@@ -79,6 +79,7 @@ def _create_local_model_interface(model: LocalModel, generator) -> ModelInterfac
     Raises:
         ValueError: If model is not supported
     """
+    assert generator is not None, "Generator must be provided for local models"
     match model:
         case LocalModel.GRANITE_3_1_8B_INSTRUCT:
             return Granite3_1_8BInstructInterface(generator)

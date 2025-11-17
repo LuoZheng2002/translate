@@ -1,5 +1,5 @@
 import ast
-from config import LocalModelStruct, Model, ApiModel, LocalModel
+from config import Model, ApiModel, LocalModel
 def recursive_match(value, expected_list):
     """
     Recursively match a value against a list of expected values.
@@ -128,7 +128,7 @@ def resolve_ast_call(elem):
     
 def raw_to_json(model: Model, case_id: str, model_result_raw: str) -> object:
     # print(f"model being decoded: {model}")
-    if isinstance(model, LocalModelStruct) and model.model == LocalModel.GRANITE_3_1_8B_INSTRUCT:
+    if model == LocalModel.GRANITE_3_1_8B_INSTRUCT:
         # print("Decoding granite model output...")
         import json
         # Parse Granite model's output format: <tool_call>[{...}]
