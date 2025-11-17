@@ -5,6 +5,11 @@ from parse_ast import *
 import re
 from call_llm import make_chat_pipeline
 from models.model_factory import create_model_interface
+from post_processing import (
+    load_or_create_cache,
+    save_cache,
+    process_post_processing_sample
+)
 
 
 # File operation helper functions
@@ -157,6 +162,12 @@ def get_or_create_local_pipeline(local_model: LocalModel):
     _global_pipeline = make_chat_pipeline(local_model)
     _global_pipeline_model = local_model
     return _global_pipeline
+
+
+# Global cache for post-processing parameter matching (shared across all configs)
+post_processing_cache_path = "post_processing_match_cache.json"
+post_processing_cache = load_or_create_cache(post_processing_cache_path)
+post_processing_cache_stats = {'hits': 0, 'misses': 0}
 
 for config in configs:
     print(f"Processing config: {config}")
@@ -367,12 +378,18 @@ for config in configs:
 
         for inference_json_line in samples_to_process:
             id = inference_json_line['id']
-            # TODO: Add core post processing logic here
-            pass
-            post_processing_entry = {
-                "id": id,
-                "result": None  # TODO: Replace with actual post processed result
-            }
+            # Find matching ground truth
+            ground_truth_line = next((gt for gt in ground_truths if gt['id'] == id), None)
+            if ground_truth_line is None:
+                raise ValueError(f"Ground truth not found for id: {id}")
+            # Process with LLM-based parameter matching
+            post_processing_entry = process_post_processing_sample(
+                inference_json_line,
+                ground_truth_line,
+                config.model,
+                post_processing_cache,
+                post_processing_cache_stats
+            )
             post_processing_results.append(post_processing_entry)
 
             # Write batch results to file
@@ -381,6 +398,10 @@ for config in configs:
         # Final sort and write
         if len(post_processing_results) > 0:
             append_and_rewrite_json_lines(post_processing_result_path, post_processing_results)
+
+        # Save global cache
+        save_cache(post_processing_cache_path, post_processing_cache)
+        print(f"Post-processing cache statistics - Hits: {post_processing_cache_stats['hits']}, Misses: {post_processing_cache_stats['misses']}")
     if requires_evaluation:
         # reload post processing results
         try:
