@@ -296,13 +296,13 @@ def make_chat_pipeline(model: LocalModel):
                 ).to(hf_model.device)
             else:
                 print("Generating response...")
-                tokenized = tokenizer(inputs, return_tensors="pt").to(hf_model.device)
+                tokenized = tokenizer(inputs, return_tensors="pt", max_length=4096).to(hf_model.device)
 
             # Generate
             with torch.inference_mode():
                 outputs = hf_model.generate(
                     **tokenized,
-                    max_new_tokens=100,
+                    max_new_tokens=4096,
                     temperature=0.001,
                     use_cache=True,  # Enable KV cache for faster generation
                 )

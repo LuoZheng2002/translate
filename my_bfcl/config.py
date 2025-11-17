@@ -12,12 +12,12 @@ class ApiModel(Enum):
 class LocalModel(Enum):
     GRANITE_3_1_8B_INSTRUCT = "ibm-granite/granite-3.1-8b-instruct"
 
-@dataclass
-class LocalModelStruct:
-    model: LocalModel
-    generator: any = None  # Placeholder for the actual generator object
+# @dataclass
+# class LocalModelStruct:
+#     model: LocalModel
+#     generator: any = None  # Placeholder for the actual generator object
 
-Model = Union[ApiModel, LocalModelStruct]
+Model = Union[ApiModel, LocalModel]
 
 class Language(Enum):
     CHINESE = auto()
@@ -27,6 +27,7 @@ class TranslateOption(Enum):
     DATASET_FULLY_TRANSLATED = auto()
     DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE = auto()
     DATASET_PARTIALLY_TRANSLATED = auto()
+    DATASET_FULLY_TRANSLATED_POST_PROCESS = auto()
 
 
 @dataclass(frozen=True)
@@ -80,7 +81,7 @@ configs: list[Config] = [
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.SYNONYM),
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.PARAPHRASE),
-    Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
+    Config(model=LocalModel.GRANITE_3_1_8B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.SYNONYM),
     # Config(model=LocalModelStruct(LocalModel.GRANITE_3_1_8B_INSTRUCT), translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.PARAPHRASE),
@@ -91,5 +92,10 @@ configs: list[Config] = [
 
 requires_inference_raw = True
 requires_inference_json = True
+requires_post_processing = True # rephrase parameter values if the raw output has a similar meaning as the ground truth but is not an exact match
 requires_evaluation = True
 requires_score = True
+
+evaluation_caching = True
+
+

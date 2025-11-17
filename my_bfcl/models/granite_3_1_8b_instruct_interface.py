@@ -20,7 +20,7 @@ except ImportError:
 class Granite3_1_8BInstructInterface(ModelInterface):
     """Handler for IBM Granite 3.1 8B Instruct local model."""
 
-    def __init__(self, generator=None):
+    def __init__(self, generator):
         """
         Initialize the Granite interface.
 
@@ -31,14 +31,14 @@ class Granite3_1_8BInstructInterface(ModelInterface):
         self.generator = generator
         self.model_id = "ibm-granite/granite-3.1-8b-instruct"
 
-    def set_generator(self, generator):
-        """
-        Set the model generator pipeline.
+    # def set_generator(self, generator):
+    #     """
+    #     Set the model generator pipeline.
 
-        Args:
-            generator: Generator from make_chat_pipeline()
-        """
-        self.generator = generator
+    #     Args:
+    #         generator: Generator from make_chat_pipeline()
+    #     """
+    #     self.generator = generator
 
     def infer(self, functions: List[Dict[str, Any]], user_query: str,
               prompt_passing_in_english: bool = True, model=None) -> str:

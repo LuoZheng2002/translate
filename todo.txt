@@ -53,3 +53,15 @@ Rearrange the order of operations (noise needs to be applied last)
 Implement the synonym replacement dataset
 
 deluxe room vs. deluxe 房间
+
+
+
+2025/11/17:
+
+1. revise the partial translated dataset
+2. add more models (qwen, llama)
+3. fc models?
+4. aggregate results
+
+5. check robustness paper for methods to mitigate gaps
+

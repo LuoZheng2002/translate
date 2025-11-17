@@ -14,8 +14,8 @@ from models.deepseek_chat_interface import DeepseekChatInterface
 from models.granite_3_1_8b_instruct_interface import Granite3_1_8BInstructInterface
 
 
-def create_model_interface(model: Union[ApiModel, LocalModelStruct],
-                          generator=None) -> ModelInterface:
+def create_model_interface(model: Union[ApiModel, LocalModel],
+                          generator) -> ModelInterface:
     """
     Factory function to create appropriate model interface instance.
 
@@ -32,8 +32,8 @@ def create_model_interface(model: Union[ApiModel, LocalModelStruct],
     """
     if isinstance(model, ApiModel):
         return _create_api_model_interface(model)
-    elif isinstance(model, LocalModelStruct):
-        return _create_local_model_interface(model.model, generator)
+    elif isinstance(model, LocalModel):
+        return _create_local_model_interface(model, generator)
     else:
         raise ValueError(f"Unsupported model type: {type(model)}")
 
@@ -65,7 +65,7 @@ def _create_api_model_interface(model: ApiModel) -> ModelInterface:
             raise ValueError(f"Unsupported API model: {model}")
 
 
-def _create_local_model_interface(model: LocalModel, generator=None) -> ModelInterface:
+def _create_local_model_interface(model: LocalModel, generator) -> ModelInterface:
     """
     Create interface for local models.
 
@@ -81,6 +81,6 @@ def _create_local_model_interface(model: LocalModel, generator=None) -> ModelInt
     """
     match model:
         case LocalModel.GRANITE_3_1_8B_INSTRUCT:
-            return Granite3_1_8BInstructInterface(generator=generator)
+            return Granite3_1_8BInstructInterface(generator)
         case _:
             raise ValueError(f"Unsupported local model: {model}")
