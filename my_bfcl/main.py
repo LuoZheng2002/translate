@@ -227,6 +227,7 @@ for config in configs:
     ground_truth_path = f"dataset/possible_answer/BFCL_v4_multiple.json"
     inference_raw_result_path = f"result/inference_raw/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
     inference_json_result_path = f"result/inference_json/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
+    post_processing_result_path = f"result/post_processing/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
     evaluation_result_path = f"result/evaluation/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
     score_path = f"result/score/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
 
@@ -340,12 +341,52 @@ for config in configs:
         # Final sort and write
         if len(inference_json_results) > 0:
             append_and_rewrite_json_lines(inference_json_result_path, inference_json_results)
-    if requires_evaluation:
+    if requires_post_processing:
         # reload inference json results
         try:
             inference_json_results, _ = load_json_lines_from_file(inference_json_result_path)
         except FileNotFoundError:
-            print(f"File {inference_json_result_path} not found. Skipping evaluation.")
+            print(f"File {inference_json_result_path} not found. Skipping post processing.")
+            continue
+        if evaluation_caching:
+            try:
+                post_processing_results, existing_post_processing_ids = load_json_lines_from_file(post_processing_result_path)
+            except FileNotFoundError:
+                print(f"File {post_processing_result_path} not found. Skipping post processing caching.")
+                post_processing_results = []
+                existing_post_processing_ids = set()
+        else:
+            post_processing_results = []
+            existing_post_processing_ids = set()
+        printed_warning = False
+        # Filter samples that haven't been processed yet
+        samples_to_process = [sample for sample in inference_json_results if sample['id'] not in existing_post_processing_ids]
+        if not printed_warning and len(samples_to_process) < len(inference_json_results):
+            print(f"Warning: some test cases already exist in post processing result file. Skipping {len(inference_json_results) - len(samples_to_process)} cases.")
+            printed_warning = True
+
+        for inference_json_line in samples_to_process:
+            id = inference_json_line['id']
+            # TODO: Add core post processing logic here
+            pass
+            post_processing_entry = {
+                "id": id,
+                "result": None  # TODO: Replace with actual post processed result
+            }
+            post_processing_results.append(post_processing_entry)
+
+            # Write batch results to file
+            write_json_lines_to_file(post_processing_result_path, post_processing_results)
+
+        # Final sort and write
+        if len(post_processing_results) > 0:
+            append_and_rewrite_json_lines(post_processing_result_path, post_processing_results)
+    if requires_evaluation:
+        # reload post processing results
+        try:
+            post_processing_results, _ = load_json_lines_from_file(post_processing_result_path)
+        except FileNotFoundError:
+            print(f"File {post_processing_result_path} not found. Skipping evaluation.")
             continue
         if evaluation_caching:
             try:
@@ -360,23 +401,23 @@ for config in configs:
         printed_warning = False
         # Filter samples that haven't been processed yet
         samples_to_process = [
-            (inference_json_line, ground_truth_line, test_case)
-            for inference_json_line, ground_truth_line, test_case in zip(inference_json_results, ground_truths, test_cases)
-            if inference_json_line["id"] not in existing_evaluation_ids
+            (post_processing_line, ground_truth_line, test_case)
+            for post_processing_line, ground_truth_line, test_case in zip(post_processing_results, ground_truths, test_cases)
+            if post_processing_line["id"] not in existing_evaluation_ids
         ]
-        if not printed_warning and len(samples_to_process) < len(inference_json_results):
-            print(f"Warning: some test cases already exist in evaluation result file. Skipping {len(inference_json_results) - len(samples_to_process)} cases.")
+        if not printed_warning and len(samples_to_process) < len(post_processing_results):
+            print(f"Warning: some test cases already exist in evaluation result file. Skipping {len(post_processing_results) - len(samples_to_process)} cases.")
             printed_warning = True
 
-        for (inference_json_line, ground_truth_line, test_case) in samples_to_process:
-            id = inference_json_line["id"]
+        for (post_processing_line, ground_truth_line, test_case) in samples_to_process:
+            id = post_processing_line["id"]
             assert id == ground_truth_line["id"], f"Mismatch in IDs: {id} vs {ground_truth_line['id']}"
             assert id == test_case["id"], f"Mismatch in IDs: {id} vs {test_case['id']}"
-            inference_json_result = inference_json_line["result"]
+            post_processing_result = post_processing_line["result"]
             ground_truth = ground_truth_line["ground_truth"]
             func_description = test_case['function']
 
-            evaluation_result = evaluate_json(id, inference_json_result, ground_truth, func_description)
+            evaluation_result = evaluate_json(id, post_processing_result, ground_truth, func_description)
             evaluation_result["id"] = id
             evaluation_results.append(evaluation_result)
 
