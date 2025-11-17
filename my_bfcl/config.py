@@ -24,10 +24,11 @@ class Language(Enum):
     HINDI = auto()
 
 class TranslateOption(Enum):
-    DATASET_FULLY_TRANSLATED = auto()
-    DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE = auto()
-    DATASET_PARTIALLY_TRANSLATED = auto()
-    DATASET_FULLY_TRANSLATED_POST_PROCESS = auto()
+    FULLY_TRANSLATED = auto()
+    FULLY_TRANSLATED_PROMPT_TRANSLATE = auto()
+    PARTIALLY_TRANSLATED = auto()
+    FULLY_TRANSLATED_POST_PROCESS_DIFFERENT = auto()
+    FULLY_TRANSLATED_POST_PROCESS_SAME = auto()
 
 
 @dataclass(frozen=True)
@@ -41,7 +42,10 @@ class NotTranslated:
 
 TranslateMode = Union[Translated, NotTranslated]
 
-
+class PostProcessOption(Enum):
+    DONT_POST_PROCESS = auto()
+    POST_PROCESS_DIFFERENT = auto()
+    POST_PROCESS_SAME = auto()
 
 class AddNoiseMode(Enum):
     NO_NOISE = auto()

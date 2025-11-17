@@ -10,7 +10,7 @@ import json
 import os
 from typing import Any, Dict, List, Tuple
 from call_llm import api_inference
-from config import ApiModel
+from config import ApiModel, PostProcessOption
 
 
 def load_or_create_cache(cache_path: str) -> Dict[str, bool]:
@@ -87,7 +87,8 @@ def _make_cache_key(param_value: Any, ground_truth_value: Any) -> str:
 
 
 def llm_match_parameters(param_value: Any, ground_truth_value: Any,
-                         model: ApiModel, cache: Dict[str, bool],
+                         model: ApiModel, post_process_option: PostProcessOption,
+                         cache: Dict[str, bool],
                          cache_stats: Dict[str, int]) -> bool:
     """
     Determine if a parameter value matches a ground truth value using LLM.
@@ -98,6 +99,7 @@ def llm_match_parameters(param_value: Any, ground_truth_value: Any,
         param_value: Parameter value from model output
         ground_truth_value: Expected ground truth value
         model: API model to use for matching
+        post_process_option: Determines matching strictness (language handling)
         cache: Global match cache dictionary
         cache_stats: Statistics dict with 'hits' and 'misses' counters
 
@@ -114,14 +116,23 @@ def llm_match_parameters(param_value: Any, ground_truth_value: Any,
     # If not in cache, use LLM to determine match
     cache_stats['misses'] += 1
 
-    system_prompt = """You are a semantic similarity checker. Given two parameter values (which may be in different formats or languages), determine if they mean the same thing or refer to the same entity.
+    system_prompt = """You are a semantic similarity checker. Given two parameter values (which may be in different formats or languages), determine if they meet the matching criteria.
 
-Respond with only "yes" if they match in meaning, or "no" if they don't. Do not include any other text."""
+Respond with only "yes" if they match, or "no" if they don't. Do not include any other text."""
 
-    user_prompt = f"""Parameter value from model: {json.dumps(param_value, ensure_ascii=False)}
+    # Conditional user prompt based on post_process_option
+    if post_process_option == PostProcessOption.POST_PROCESS_SAME:
+        # Strict: require same language AND same meaning
+        user_prompt = f"""Parameter value from model: {json.dumps(param_value, ensure_ascii=False)}
 Ground truth value: {json.dumps(ground_truth_value, ensure_ascii=False)}
 
-Do these values match in meaning?"""
+Do these values match in meaning AND are they in the same language?"""
+    else:
+        # POST_PROCESS_DIFFERENT: accept different languages as long as meaning matches
+        user_prompt = f"""Parameter value from model: {json.dumps(param_value, ensure_ascii=False)}
+Ground truth value: {json.dumps(ground_truth_value, ensure_ascii=False)}
+
+Do these values match in meaning (ignoring language differences)?"""
 
     try:
         messages = [
@@ -140,7 +151,8 @@ Do these values match in meaning?"""
 
 
 def recursive_replace_parameters(parsed_result: Any, ground_truth_result: Any,
-                                 model: ApiModel, cache: Dict[str, bool],
+                                 model: ApiModel, post_process_option: PostProcessOption,
+                                 cache: Dict[str, bool],
                                  cache_stats: Dict[str, int]) -> Any:
     """
     Recursively traverse and replace parameter values with ground truth values when they match.
@@ -151,6 +163,7 @@ def recursive_replace_parameters(parsed_result: Any, ground_truth_result: Any,
         parsed_result: Parsed function result (may contain nested dicts/lists)
         ground_truth_result: Ground truth result structure
         model: API model to use for matching
+        post_process_option: Determines matching strictness (language handling)
         cache: Global match cache dictionary
         cache_stats: Statistics dict with 'hits' and 'misses' counters
 
@@ -169,6 +182,7 @@ def recursive_replace_parameters(parsed_result: Any, ground_truth_result: Any,
                 parsed_result[key],
                 ground_truth_result[key],
                 model,
+                post_process_option,
                 cache,
                 cache_stats
             )
@@ -181,19 +195,19 @@ def recursive_replace_parameters(parsed_result: Any, ground_truth_result: Any,
             return parsed_result
 
         return [
-            recursive_replace_parameters(p, g, model, cache, cache_stats)
+            recursive_replace_parameters(p, g, model, post_process_option, cache, cache_stats)
             for p, g in zip(parsed_result, ground_truth_result)
         ]
 
     # Parsed is not a list but ground truth is a list: try matching against any element
     if not isinstance(parsed_result, list) and isinstance(ground_truth_result, list):
         for truth_item in ground_truth_result:
-            if llm_match_parameters(parsed_result, truth_item, model, cache, cache_stats):
+            if llm_match_parameters(parsed_result, truth_item, model, post_process_option, cache, cache_stats):
                 return truth_item
         return parsed_result
 
     # Both are scalars: check if they match, replace if so
-    if llm_match_parameters(parsed_result, ground_truth_result, model, cache, cache_stats):
+    if llm_match_parameters(parsed_result, ground_truth_result, model, post_process_option, cache, cache_stats):
         return ground_truth_result
     else:
         return parsed_result
@@ -202,6 +216,7 @@ def recursive_replace_parameters(parsed_result: Any, ground_truth_result: Any,
 def process_post_processing_sample(inference_json_line: Dict[str, Any],
                                    ground_truth_line: Dict[str, Any],
                                    model: ApiModel,
+                                   post_process_option: PostProcessOption,
                                    cache: Dict[str, bool],
                                    cache_stats: Dict[str, int]) -> Dict[str, Any]:
     """
@@ -211,6 +226,7 @@ def process_post_processing_sample(inference_json_line: Dict[str, Any],
         inference_json_line: Parsed inference result ({"id": "...", "result": {...}})
         ground_truth_line: Ground truth result ({"id": "...", "ground_truth": {...}})
         model: API model to use for matching
+        post_process_option: Determines matching strictness (language handling)
         cache: Global match cache dictionary
         cache_stats: Statistics dict with 'hits' and 'misses' counters
 
@@ -233,6 +249,7 @@ def process_post_processing_sample(inference_json_line: Dict[str, Any],
         parsed_result,
         ground_truth_result,
         model,
+        post_process_option,
         cache,
         cache_stats
     )

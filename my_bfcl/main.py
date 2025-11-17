@@ -164,10 +164,14 @@ def get_or_create_local_pipeline(local_model: LocalModel):
     return _global_pipeline
 
 
-# Global cache for post-processing parameter matching (shared across all configs)
-post_processing_cache_path = "post_processing_match_cache.json"
-post_processing_cache = load_or_create_cache(post_processing_cache_path)
-post_processing_cache_stats = {'hits': 0, 'misses': 0}
+# Global caches for post-processing parameter matching (shared across all configs)
+# Separate caches for different language handling options
+post_processing_cache_different_path = "post_processing_match_cache_different.json"
+post_processing_cache_same_path = "post_processing_match_cache_same.json"
+post_processing_cache_different = load_or_create_cache(post_processing_cache_different_path)
+post_processing_cache_same = load_or_create_cache(post_processing_cache_same_path)
+post_processing_cache_stats_different = {'hits': 0, 'misses': 0}
+post_processing_cache_stats_same = {'hits': 0, 'misses': 0}
 
 for config in configs:
     print(f"Processing config: {config}")
@@ -195,7 +199,7 @@ for config in configs:
         case _:
             raise ValueError(f"Unsupported model struct: {config.model}")
     
-        
+    post_process_option = PostProcessOption.DONT_POST_PROCESS
     # map translate_info to language_postfix, translate_dataset_prefix, translate_mode_prefix
     match config.translate_mode:
         case Translated(language, option):
@@ -205,18 +209,23 @@ for config in configs:
                 case Language.HINDI:
                     language_postfix = "_hi"
             match option:
-                case TranslateOption.DATASET_FULLY_TRANSLATED:
+                case TranslateOption.FULLY_TRANSLATED:
                     translate_dataset_postfix = "_full"
                     translate_mode_postfix = "_d" # default
-                case TranslateOption.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE:
+                case TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE:
                     translate_dataset_postfix = "_full"
                     translate_mode_postfix = "_pt"  # prompt translate
-                case TranslateOption.DATASET_PARTIALLY_TRANSLATED:
-                    translate_dataset_postfix = "_partial"
-                    translate_mode_postfix = "_par" # partial
-                case TranslateOption.DATASET_FULLY_TRANSLATED_POST_PROCESS:
+                case TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT:
                     translate_dataset_postfix = "_full"
-                    translate_mode_postfix = "_pp"  # post-process
+                    translate_mode_postfix = "_ppd"  # post-process different
+                    post_process_option = PostProcessOption.POST_PROCESS_DIFFERENT
+                case TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME:
+                    translate_dataset_postfix = "_full"
+                    translate_mode_postfix = "_pps"  # post-process same
+                    post_process_option = PostProcessOption.POST_PROCESS_SAME
+                case TranslateOption.PARTIALLY_TRANSLATED:
+                    translate_dataset_postfix = "_partial"
+                    translate_mode_postfix = "_par" # partial                
                 case _:
                     raise ValueError(f"Unsupported translate option: {option}")
         case NotTranslated():
@@ -353,55 +362,100 @@ for config in configs:
         if len(inference_json_results) > 0:
             append_and_rewrite_json_lines(inference_json_result_path, inference_json_results)
     if requires_post_processing:
-        # reload inference json results
-        try:
-            inference_json_results, _ = load_json_lines_from_file(inference_json_result_path)
-        except FileNotFoundError:
-            print(f"File {inference_json_result_path} not found. Skipping post processing.")
-            continue
-        if evaluation_caching:
+        if post_process_option == PostProcessOption.DONT_POST_PROCESS:
+            # Simply copy inference_json results to post_processing results without modification
             try:
-                post_processing_results, existing_post_processing_ids = load_json_lines_from_file(post_processing_result_path)
+                inference_json_results, _ = load_json_lines_from_file(inference_json_result_path)
             except FileNotFoundError:
-                print(f"File {post_processing_result_path} not found. Skipping post processing caching.")
+                print(f"File {inference_json_result_path} not found. Skipping post processing.")
+                continue
+
+            if evaluation_caching:
+                try:
+                    post_processing_results, existing_post_processing_ids = load_json_lines_from_file(post_processing_result_path)
+                except FileNotFoundError:
+                    print(f"File {post_processing_result_path} not found. Skipping post processing caching.")
+                    post_processing_results = []
+                    existing_post_processing_ids = set()
+            else:
                 post_processing_results = []
                 existing_post_processing_ids = set()
+
+            # Copy unprocessed results
+            for inference_json_line in inference_json_results:
+                if inference_json_line['id'] not in existing_post_processing_ids:
+                    post_processing_results.append(inference_json_line)
+
+            # Final sort and write
+            if len(post_processing_results) > 0:
+                append_and_rewrite_json_lines(post_processing_result_path, post_processing_results)
+
+            print(f"Post-processing: Copied {len(inference_json_results)} results without modification (DONT_POST_PROCESS)")
+
         else:
-            post_processing_results = []
-            existing_post_processing_ids = set()
-        printed_warning = False
-        # Filter samples that haven't been processed yet
-        samples_to_process = [sample for sample in inference_json_results if sample['id'] not in existing_post_processing_ids]
-        if not printed_warning and len(samples_to_process) < len(inference_json_results):
-            print(f"Warning: some test cases already exist in post processing result file. Skipping {len(inference_json_results) - len(samples_to_process)} cases.")
-            printed_warning = True
+            # POST_PROCESS_DIFFERENT or POST_PROCESS_SAME: use LLM-based parameter matching
+            # Select appropriate cache based on post_process_option
+            if post_process_option == PostProcessOption.POST_PROCESS_SAME:
+                post_processing_cache = post_processing_cache_same
+                post_processing_cache_stats = post_processing_cache_stats_same
+                cache_path = post_processing_cache_same_path
+            else:  # POST_PROCESS_DIFFERENT
+                post_processing_cache = post_processing_cache_different
+                post_processing_cache_stats = post_processing_cache_stats_different
+                cache_path = post_processing_cache_different_path
 
-        for inference_json_line in samples_to_process:
-            id = inference_json_line['id']
-            # Find matching ground truth
-            ground_truth_line = next((gt for gt in ground_truths if gt['id'] == id), None)
-            if ground_truth_line is None:
-                raise ValueError(f"Ground truth not found for id: {id}")
-            # Process with LLM-based parameter matching
-            post_processing_entry = process_post_processing_sample(
-                inference_json_line,
-                ground_truth_line,
-                config.model,
-                post_processing_cache,
-                post_processing_cache_stats
-            )
-            post_processing_results.append(post_processing_entry)
+            # reload inference json results
+            try:
+                inference_json_results, _ = load_json_lines_from_file(inference_json_result_path)
+            except FileNotFoundError:
+                print(f"File {inference_json_result_path} not found. Skipping post processing.")
+                continue
 
-            # Write batch results to file
-            write_json_lines_to_file(post_processing_result_path, post_processing_results)
+            if evaluation_caching:
+                try:
+                    post_processing_results, existing_post_processing_ids = load_json_lines_from_file(post_processing_result_path)
+                except FileNotFoundError:
+                    print(f"File {post_processing_result_path} not found. Skipping post processing caching.")
+                    post_processing_results = []
+                    existing_post_processing_ids = set()
+            else:
+                post_processing_results = []
+                existing_post_processing_ids = set()
 
-        # Final sort and write
-        if len(post_processing_results) > 0:
-            append_and_rewrite_json_lines(post_processing_result_path, post_processing_results)
+            printed_warning = False
+            # Filter samples that haven't been processed yet
+            samples_to_process = [sample for sample in inference_json_results if sample['id'] not in existing_post_processing_ids]
+            if not printed_warning and len(samples_to_process) < len(inference_json_results):
+                print(f"Warning: some test cases already exist in post processing result file. Skipping {len(inference_json_results) - len(samples_to_process)} cases.")
+                printed_warning = True
 
-        # Save global cache
-        save_cache(post_processing_cache_path, post_processing_cache)
-        print(f"Post-processing cache statistics - Hits: {post_processing_cache_stats['hits']}, Misses: {post_processing_cache_stats['misses']}")
+            for inference_json_line in samples_to_process:
+                id = inference_json_line['id']
+                # Find matching ground truth
+                ground_truth_line = next((gt for gt in ground_truths if gt['id'] == id), None)
+                if ground_truth_line is None:
+                    raise ValueError(f"Ground truth not found for id: {id}")
+                # Process with LLM-based parameter matching
+                post_processing_entry = process_post_processing_sample(
+                    inference_json_line,
+                    ground_truth_line,
+                    config.model,
+                    post_process_option,
+                    post_processing_cache,
+                    post_processing_cache_stats
+                )
+                post_processing_results.append(post_processing_entry)
+
+                # Write batch results to file
+                write_json_lines_to_file(post_processing_result_path, post_processing_results)
+
+            # Final sort and write
+            if len(post_processing_results) > 0:
+                append_and_rewrite_json_lines(post_processing_result_path, post_processing_results)
+
+            # Save appropriate cache
+            save_cache(cache_path, post_processing_cache)
+            print(f"Post-processing ({post_process_option.name}) cache statistics - Hits: {post_processing_cache_stats['hits']}, Misses: {post_processing_cache_stats['misses']}")
     if requires_evaluation:
         # reload post processing results
         try:
