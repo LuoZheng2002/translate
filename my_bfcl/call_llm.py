@@ -303,7 +303,7 @@ def make_chat_pipeline(model: LocalModel):
                 outputs = hf_model.generate(
                     **tokenized,
                     max_new_tokens=4096,
-                    temperature=0,
+                    temperature=0.001,
                     use_cache=True,  # Enable KV cache for faster generation
                 )
 

@@ -154,12 +154,26 @@ for config in configs:
                     model_postfix = "_claude_sonnet"
                 case ApiModel.CLAUDE_HAIKU:
                     model_postfix = "_claude_haiku"
+                case ApiModel.DEEPSEEK_CHAT:
+                    model_postfix = "_deepseek"
+                case ApiModel.LLAMA_3_1_8B:
+                    model_postfix = "_llama3_1_8b"
+                case ApiModel.LLAMA_3_1_70B:
+                    model_postfix = "_llama3_1_70b"
                 case _:
                     raise ValueError(f"Unsupported API model: {api_model}")
         case LocalModel() as local_model:
             match local_model:
                 case LocalModel.GRANITE_3_1_8B_INSTRUCT:
                     model_postfix = "_granite"
+                case LocalModel.QWEN_2_5_7B_INSTRUCT:
+                    model_postfix = "_qwen2_5_7b"
+                case LocalModel.QWEN_2_5_14B_INSTRUCT:
+                    model_postfix = "_qwen2_5_14b"
+                case LocalModel.QWEN_2_5_32B_INSTRUCT:
+                    model_postfix = "_qwen2_5_32b"
+                case LocalModel.QWEN_2_5_72B_INSTRUCT:
+                    model_postfix = "_qwen2_5_72b"
                 case _:
                     raise ValueError(f"Unsupported local model: {local_model}")
         case _:
@@ -205,6 +219,7 @@ for config in configs:
             language_postfix = ""
             translate_dataset_postfix = ""
             translate_mode_postfix = ""
+            translate_postfix = ""
     match config.add_noise_mode:
         case AddNoiseMode.NO_NOISE:
             noise_postfix = ""
@@ -234,8 +249,7 @@ for config in configs:
             print(f"File {inference_raw_result_path} not found. It will be created.")
             inference_raw_results = []
             existing_inference_ids = set()
-        # Batch processing configuration
-        batch_size = 8  # Process 8 cases at a time for better GPU utilization
+        
         printed_warning = False
         # Filter cases that haven't been processed yet
         cases_to_process = [case for case in test_cases if case['id'] not in existing_inference_ids]
@@ -246,6 +260,12 @@ for config in configs:
         # Determine model type and create interface once (outside batch loop)
         is_api_model = isinstance(config.model, ApiModel)
         is_local_model = isinstance(config.model, LocalModel)
+
+        # Batch processing configuration
+        if is_api_model:
+            batch_size = 32  # Process 32 cases at a time for better GPU utilization
+        else:
+            batch_size = 8  # Smaller batch size for local models to avoid OOM
 
         if is_api_model:
             model_interface = create_model_interface(config.model)

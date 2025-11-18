@@ -29,22 +29,23 @@ class Llama31Interface(ModelInterface):
         load_dotenv(dotenv_path=".env")
 
         # Get AWS credentials from environment
-        self.aws_region = os.getenv("AWS_REGION", "us-east-1")
-        self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
-        self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+        # self.aws_region = os.getenv("AWS_REGION", "us-east-1")
+        # self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
+        # self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
 
-        if not self.aws_access_key_id or not self.aws_secret_access_key:
-            raise EnvironmentError(
-                "AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY not found in .env"
-            )
+        # if not self.aws_access_key_id or not self.aws_secret_access_key:
+        #     raise EnvironmentError(
+        #         "AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY not found in .env"
+        #     )
 
         # Lazy import to avoid dependency if not using this model
         import boto3
         self.client = boto3.client(
             "bedrock-runtime",
-            region_name=self.aws_region,
-            aws_access_key_id=self.aws_access_key_id,
-            aws_secret_access_key=self.aws_secret_access_key
+            region_name="us-west-2",
+            # region_name=self.aws_region,
+            # aws_access_key_id=self.aws_access_key_id,
+            # aws_secret_access_key=self.aws_secret_access_key
         )
 
         self.model_id = model_id

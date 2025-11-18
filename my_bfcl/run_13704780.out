@@ -1,0 +1,9 @@
+Processing config: Config(model=<LocalModel.QWEN_2_5_7B_INSTRUCT: 'Qwen/Qwen2.5-7B-Instruct'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+File result/inference_raw/BFCL_v4_multiple_qwen2_5_7b.json not found. It will be created.
+Creating pipeline for Qwen/Qwen2.5-7B-Instruct
+Loading local model: Qwen/Qwen2.5-7B-Instruct
+Local model loaded and generator is ready.
+
+Processing batch 1: cases 0 to 8
+Calling model interface for batch of size 8...
+Generating responses for batch of 8 inputs...

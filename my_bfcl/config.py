@@ -13,6 +13,10 @@ class ApiModel(Enum):
 
 class LocalModel(Enum):
     GRANITE_3_1_8B_INSTRUCT = "ibm-granite/granite-3.1-8b-instruct"
+    QWEN_2_5_7B_INSTRUCT = "Qwen/Qwen2.5-7B-Instruct"
+    QWEN_2_5_14B_INSTRUCT = "Qwen/Qwen2.5-14B-Instruct"
+    QWEN_2_5_32B_INSTRUCT = "Qwen/Qwen2.5-32B-Instruct"
+    QWEN_2_5_72B_INSTRUCT = "Qwen/Qwen2.5-72B-Instruct"
 
 # @dataclass
 # class LocalModelStruct:
@@ -67,8 +71,8 @@ class Config:
     add_noise_mode: AddNoiseMode
 
 configs: list[Config] = [
-    Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.NO_NOISE),
-    Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=ApiModel.GPT_4O_MINI, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_PARTIALLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
@@ -97,8 +101,10 @@ configs: list[Config] = [
     # Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.NO_NOISE),
 
 
-    Config(model=ApiModel.LLAMA_3_1_8B, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
-    Config(model=ApiModel.LLAMA_3_1_70B, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=ApiModel.LLAMA_3_1_8B, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=ApiModel.LLAMA_3_1_70B, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
+    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
+    Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
 ]
 
 requires_inference_raw = True
