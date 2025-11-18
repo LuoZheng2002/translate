@@ -261,6 +261,9 @@ def make_chat_pipeline(model: LocalModel):
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
+    # Set padding side to left for decoder-only models (prevents generation issues in batch mode)
+    tokenizer.padding_side = "left"
+
     # --- Load model ---
     hf_model = AutoModelForCausalLM.from_pretrained(
         model_id,
