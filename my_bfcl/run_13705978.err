@@ -1,0 +1,21 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:07,  2.57s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:05<00:05,  2.52s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:07<00:02,  2.51s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  2.46s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  2.49s/it]
+Traceback (most recent call last):
+  File "/projects/bfdz/zluo8/translate/my_bfcl/call_llm.py", line 295, in chat_generator
+    tokenized = tokenizer(
+                ^^^^^^^^^
+UnboundLocalError: cannot access local variable 'tokenizer' where it is not associated with a value
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/projects/bfdz/zluo8/translate/my_bfcl/main.py", line 304, in <module>
+    batch_results = model_interface.infer_batch(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/projects/bfdz/zluo8/translate/my_bfcl/models/qwen2_5_interface.py", line 107, in infer_batch
+    results = self.generator.send(templates)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/projects/bfdz/zluo8/translate/my_bfcl/call_llm.py", line 341, in chat_generator
+    hf_model.to("cpu")
+    ^^^^^^^^
+UnboundLocalError: cannot access local variable 'hf_model' where it is not associated with a value

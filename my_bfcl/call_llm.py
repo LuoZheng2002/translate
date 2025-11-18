@@ -278,60 +278,74 @@ def make_chat_pipeline(model: LocalModel):
     # --- Define the generator pipeline ---
     def chat_generator():
         inputs = yield  # Initial yield to start the generator
-        while True:
-            # Wait for a populated template string or list of strings
-            if inputs is None:
-                inputs = yield
-                continue
+        try:
+            while True:
+                # Wait for a populated template string or list of strings
+                if inputs is None:
+                    inputs = yield
+                    continue
 
-            # Determine if this is a batch (list) or single input (string)
-            is_batch = isinstance(inputs, list)
+                # Determine if this is a batch (list) or single input (string)
+                is_batch = isinstance(inputs, list)
 
-            # Tokenize with appropriate settings
-            if is_batch:
-                print(f"Generating responses for batch of {len(inputs)} inputs...")
-                tokenized = tokenizer(
-                    inputs,
-                    return_tensors="pt",
-                    padding=True,           # Pad shorter sequences to max length
-                    truncation=True,
-                    max_length=4096,
-                ).to(hf_model.device)
-            else:
-                print("Generating response...")
-                tokenized = tokenizer(inputs, return_tensors="pt", max_length=4096).to(hf_model.device)
+                # Tokenize with appropriate settings
+                if is_batch:
+                    print(f"Generating responses for batch of {len(inputs)} inputs...")
+                    tokenized = tokenizer(
+                        inputs,
+                        return_tensors="pt",
+                        padding=True,           # Pad shorter sequences to max length
+                        truncation=True,
+                        max_length=4096,
+                    ).to(hf_model.device)
+                else:
+                    print("Generating response...")
+                    tokenized = tokenizer(inputs, return_tensors="pt", max_length=4096).to(hf_model.device)
 
-            # Generate
-            with torch.inference_mode():
-                outputs = hf_model.generate(
-                    **tokenized,
-                    max_new_tokens=4096,
-                    temperature=0.001,
-                    use_cache=True,  # Enable KV cache for faster generation
-                )
+                # Generate
+                with torch.inference_mode():
+                    outputs = hf_model.generate(
+                        **tokenized,
+                        max_new_tokens=4096,
+                        temperature=0.001,
+                        use_cache=True,  # Enable KV cache for faster generation
+                    )
 
-            # Decode
-            generated_tokens = outputs[:, tokenized["input_ids"].shape[-1]:]
+                # Decode
+                generated_tokens = outputs[:, tokenized["input_ids"].shape[-1]:]
 
-            if is_batch:
-                # Return list of responses for batch
-                responses = tokenizer.batch_decode(
-                    generated_tokens,
-                    skip_special_tokens=True
-                )
-                print(f"Generation complete for batch of {len(responses)} responses.")
-                result = responses
-            else:
-                # Return single response for single input
-                response = tokenizer.decode(
-                    generated_tokens[0],
-                    skip_special_tokens=True
-                )
-                print("Generation complete.")
-                result = response
+                if is_batch:
+                    # Return list of responses for batch
+                    responses = tokenizer.batch_decode(
+                        generated_tokens,
+                        skip_special_tokens=True
+                    )
+                    print(f"Generation complete for batch of {len(responses)} responses.")
+                    result = responses
+                else:
+                    # Return single response for single input
+                    response = tokenizer.decode(
+                        generated_tokens[0],
+                        skip_special_tokens=True
+                    )
+                    print("Generation complete.")
+                    result = response
 
-            # Yield response and wait for next template(s)
-            inputs = yield result
+                # Yield response and wait for next template(s)
+                inputs = yield result
+        finally:
+            # Cleanup when generator is closed or an exception occurs
+            # IMPORTANT: Do NOT delete closure variables (tokenizer, hf_model) here!
+            # Deleting them corrupts the generator if it gets reused after an exception.
+            # Instead, just move the model to CPU and clear GPU memory.
+            print(f"Cleaning up model {model_id}...")
+            try:
+                hf_model.to("cpu")
+                gc.collect()
+                torch.cuda.empty_cache()
+                print(f"Model {model_id} cleaned up successfully.")
+            except Exception as e:
+                print(f"Warning: Error during cleanup of {model_id}: {e}")
 
     # Initialize and prime the generator
     gen = chat_generator()

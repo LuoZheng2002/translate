@@ -110,6 +110,14 @@ def get_or_create_local_pipeline(local_model: LocalModel):
         print(f"Switching from {_global_pipeline_model.value} to {local_model.value}")
         print(f"Freeing memory from previous model...")
 
+        # Properly close the generator to trigger cleanup of its closure variables
+        try:
+            _global_pipeline.close()
+        except (StopIteration, GeneratorExit):
+            pass
+        except Exception as e:
+            print(f"Warning: Error closing generator: {e}")
+
         # Delete the generator and model references
         _global_pipeline = None
         _global_pipeline_model = None
@@ -265,7 +273,7 @@ for config in configs:
         if is_api_model:
             batch_size = 32  # Process 32 cases at a time for better GPU utilization
         else:
-            batch_size = 8  # Smaller batch size for local models to avoid OOM
+            batch_size = 24  # Smaller batch size for local models to avoid OOM
 
         if is_api_model:
             model_interface = create_model_interface(config.model)
@@ -341,7 +349,8 @@ for config in configs:
         for inference_raw in samples_to_process:
             id = inference_raw['id']
             # convert raw result to json format
-            decoded_output = raw_to_json(config.model, id, inference_raw['result'])
+            # decoded_output = raw_to_json(config.model, id, inference_raw['result'])
+            decoded_output = model_interface.parse_output(inference_raw['result'])
             inference_json_entry = {
                 "id": id,
                 "result": decoded_output
