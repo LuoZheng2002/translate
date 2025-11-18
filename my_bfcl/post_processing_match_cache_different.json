@@ -337,6 +337,14 @@
     "\"Los Angeles Lakers\"|||\"Lakers\"": true,
     "\"Los Angeles Clippers\"|||\"Clippers\"": true,
     "\"Los Angeles\"|||\"\"": false,
-    "\"黄石公园\"|||\"Yellowstone\"": true
+    "\"黄石公园\"|||\"Yellowstone\"": true,
+    "{\"max\": 400000.0, \"min\": 300000.0}|||{\"max\": [400000], \"min\": [300000]}": true,
+    "\"用户\"|||\"user\"": true,
+    "\"汽油\"|||\"gas\"": true,
+    "\"2022年12月10日\"|||\"2022-12-10\"": true,
+    "\"希尔顿纽约\"|||\"Hilton New York\"": true,
+    "\"希尔顿旅馆\"|||\"Hilton Hotel\"": true,
+    "\"苹果\"|||\"Apple Inc\"": false,
+    "\"苹果\"|||\"Apple Inc.\"": false
   }
 }

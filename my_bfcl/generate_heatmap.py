@@ -187,7 +187,8 @@ def generate_heatmap(model_name: str, output_dir: str = ".", result_dir: str = "
 # Example usage
 if __name__ == "__main__":
     # Generate heatmaps for different models
-    models = ["llama3_1_8b", "llama3_1_70b", "qwen2_5_7b", "qwen2_5_14b", "gpt4o_mini"]
+    # models = ["llama3_1_8b", "llama3_1_70b", "qwen2_5_7b", "qwen2_5_14b", "gpt4o_mini"]
+    models = ["deepseek"]
 
     for model in models:
         print(f"\n{'='*60}")

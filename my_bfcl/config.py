@@ -37,6 +37,10 @@ class TranslateOption(Enum):
     FULLY_TRANSLATED_POST_PROCESS_SAME = auto(),
     FULLY_TRANSLATED_PROMPT_TRANSLATE_POST_PROCESS_SAME = auto(),
 
+class AddNoiseMode(Enum):
+    NO_NOISE = auto()
+    SYNONYM = auto()
+    PARAPHRASE = auto()
 
 @dataclass(frozen=True)
 class Translated:
@@ -54,10 +58,7 @@ class PostProcessOption(Enum):
     POST_PROCESS_DIFFERENT = 1
     POST_PROCESS_SAME = 2
 
-class AddNoiseMode(Enum):
-    NO_NOISE = auto()
-    SYNONYM = auto()
-    PARAPHRASE = auto()
+
 
 # class Config:
 #     def __init__(self, model: Model, translate_info: TranslateMode, add_noise_mode: AddNoiseMode):
@@ -145,7 +146,9 @@ configs: list[Config] = [
     # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
 ]
 # for model in [LocalModel.QWEN_2_5_7B_INSTRUCT, LocalModel.QWEN_2_5_14B_INSTRUCT]:
-for model in [ApiModel.GPT_4O_MINI]:
+# for model in [ApiModel.DEEPSEEK_CHAT]:
+for model in [ApiModel.LLAMA_3_1_8B, ApiModel.LLAMA_3_1_70B]:
+# for model in [ApiModel.GPT_4O_MINI]:
     for translate_mode in [
         NotTranslated(),
         Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED),
