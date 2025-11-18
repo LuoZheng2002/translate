@@ -84,7 +84,7 @@ models/base.py (abstract interface)
 
 | Model | Type | Output Format | Batch Support | Key Features |
 |-------|------|---------------|---------------|--------------|
-| GPT-4o-mini | API | Python function calls | Sequential | OpenAI SDK, temperature 0.001 |
+| GPT-4o-mini | API | Python function calls | Sequential | OpenAI SDK, temperature 0 |
 | Claude Sonnet | API | Python function calls | Sequential | Anthropic SDK, system param |
 | Claude Haiku | API | Python function calls | Sequential | Anthropic SDK, system param |
 | DeepSeek Chat | API | Python function calls | Sequential | OpenAI-compatible, DeepSeek API |

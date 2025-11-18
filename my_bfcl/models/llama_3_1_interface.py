@@ -1,9 +1,9 @@
 """
-Interface for OpenAI GPT-4o-mini model.
+Interface for Meta Llama 3.1 models via AWS Bedrock.
 
 Handles:
-- API calls to OpenAI
-- Input formatting for GPT-4o
+- API calls to AWS Bedrock for Llama 3.1 (8B and 70B)
+- Input formatting using Llama 3.1 chat template
 - Output parsing from Python function call syntax
 """
 
@@ -15,25 +15,44 @@ from dotenv import load_dotenv
 from models.base import ModelInterface
 
 
-class GPT4oMiniInterface(ModelInterface):
-    """Handler for OpenAI GPT-4o-mini model."""
+class Llama31Interface(ModelInterface):
+    """Handler for Meta Llama 3.1 models via AWS Bedrock."""
 
-    def __init__(self):
-        """Initialize the GPT-4o-mini interface."""
+    def __init__(self, model_id: str = "meta.llama3-1-8b-instruct-v1:0"):
+        """
+        Initialize the Llama 3.1 interface.
+
+        Args:
+            model_id: AWS Bedrock model ID for Llama 3.1
+                     Options: "meta.llama3-1-8b-instruct-v1:0" or "meta.llama3-1-70b-instruct-v1:0"
+        """
         load_dotenv(dotenv_path=".env")
-        self.api_key = os.getenv("OPENAI_API_KEY")
-        if not self.api_key:
-            raise EnvironmentError("OPENAI_API_KEY not found in .env")
+
+        # Get AWS credentials from environment
+        self.aws_region = os.getenv("AWS_REGION", "us-east-1")
+        self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
+        self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+
+        if not self.aws_access_key_id or not self.aws_secret_access_key:
+            raise EnvironmentError(
+                "AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY not found in .env"
+            )
 
         # Lazy import to avoid dependency if not using this model
-        from openai import OpenAI
-        self.client = OpenAI(api_key=self.api_key)
-        self.model_name = "gpt-4o-mini"
+        import boto3
+        self.client = boto3.client(
+            "bedrock-runtime",
+            region_name=self.aws_region,
+            aws_access_key_id=self.aws_access_key_id,
+            aws_secret_access_key=self.aws_secret_access_key
+        )
+
+        self.model_id = model_id
 
     def infer(self, functions: List[Dict[str, Any]], user_query: str,
               prompt_passing_in_english: bool = True, model=None) -> str:
         """
-        Run inference with GPT-4o-mini.
+        Run inference with Llama 3.1 model via AWS Bedrock.
 
         Args:
             functions: List of available function definitions in JSON format
@@ -46,26 +65,38 @@ class GPT4oMiniInterface(ModelInterface):
         """
         system_prompt = self._generate_system_prompt(
             functions=functions,
-            prompt_passing_in_english=prompt_passing_in_english,
-            is_granite=False
+            prompt_passing_in_english=prompt_passing_in_english
         )
 
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_query}
-        ]
-
-        response = self.client.chat.completions.create(
-            model=self.model_name,
-            messages=messages,
-            temperature=0
+        # Format using Llama 3.1 chat template
+        formatted_prompt = self._format_llama_3_1_chat_template(
+            system_prompt=system_prompt,
+            user_query=user_query
         )
 
-        return response.choices[0].message.content
+        # Prepare request body for Bedrock
+        request_body = {
+            "prompt": formatted_prompt,
+            "temperature": 0,
+            "top_p": 0.9,
+            "max_gen_len": 2048
+        }
 
-    def parse_output(self, raw_output: str) -> Union[List[Dict[str, Any]], str]:
+        # Call Bedrock API
+        response = self.client.invoke_model(
+            modelId=self.model_id,
+            body=json.dumps(request_body),
+            contentType="application/json",
+            accept="application/json"
+        )
+
+        # Parse response
+        response_body = json.loads(response["body"].read())
+        return response_body.get("generation", "")
+
+    def parse_output(self, raw_output: str) -> Union[List[Dict[str, Dict[str, Any]]], str]:
         """
-        Parse raw output from GPT-4o-mini using parse_ast.py strategy.
+        Parse raw output from Llama 3.1 model using parse_ast.py strategy.
 
         Expects Python function call syntax:
         [func_name1(param1=value1, param2=value2), func_name2(param3=value3)]
@@ -110,17 +141,15 @@ class GPT4oMiniInterface(ModelInterface):
         return extracted
 
     def _generate_system_prompt(self, functions: List[Dict[str, Any]],
-                               prompt_passing_in_english: bool = True,
-                               is_granite: bool = False) -> str:
+                               prompt_passing_in_english: bool = True) -> str:
         """
-        Generate system prompt for the model based on available functions.
+        Generate system prompt for Llama 3.1 model based on available functions.
 
         Adapted from main.py's gen_developer_prompt() function.
 
         Args:
             functions: List of available function definitions
             prompt_passing_in_english: Whether to request English parameter passing
-            is_granite: Whether this is for Granite model (uses different format)
 
         Returns:
             System prompt as a string
@@ -132,30 +161,44 @@ class GPT4oMiniInterface(ModelInterface):
             else ""
         )
 
-        if is_granite:
-            # Granite format - JSON output
-            return f'''You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
-
-You should only return the function calls in your response, in JSON format as a list where each element has the format {{"name": "function_name", "arguments": {{param1: value1, param2: value2, ...}}}}.{passing_in_english_prompt}
-
-At each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user\'s request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.
-
-Here is a list of functions in json format that you can invoke.
-{function_calls_json}
-'''
-        else:
-            # API format - Python function call syntax
-            return f'''You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
+        return f'''You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose. If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
 
 You should only return the function calls in your response.
 
 If you decide to invoke any of the function(s), you MUST put it in the format of [func_name1(params_name1=params_value1, params_name2=params_value2...), func_name2(params)].  You SHOULD NOT include any other text in the response.{passing_in_english_prompt}
 
-At each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user\"s request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.
+At each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user's request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.
 
 Here is a list of functions in json format that you can invoke.
 {function_calls_json}
 '''
+
+    def _format_llama_3_1_chat_template(self, system_prompt: str, user_query: str) -> str:
+        """
+        Format messages using the Llama 3.1 chat template.
+
+        Llama 3.1 uses special tokens for chat formatting:
+        <|begin_of_text|><|start_header_id|>role<|end_header_id|>
+        content<|eot_id|>
+
+        Args:
+            system_prompt: System prompt as a string
+            user_query: User query as a string
+
+        Returns:
+            Formatted prompt string using Llama 3.1's chat template
+        """
+        formatted_prompt = (
+            "<|begin_of_text|>"
+            "<|start_header_id|>system<|end_header_id|>\n"
+            f"{system_prompt}"
+            "<|eot_id|>"
+            "<|start_header_id|>user<|end_header_id|>\n"
+            f"{user_query}"
+            "<|eot_id|>"
+            "<|start_header_id|>assistant<|end_header_id|>\n"
+        )
+        return formatted_prompt
 
     def _resolve_ast_call(self, elem: ast.Call) -> Dict[str, Dict[str, Any]]:
         """

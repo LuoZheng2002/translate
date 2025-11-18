@@ -8,6 +8,8 @@ class ApiModel(Enum):
     CLAUDE_SONNET = "claude-sonnet-4-5"
     CLAUDE_HAIKU = "claude-haiku-4-5"
     DEEPSEEK_CHAT = "deepseek-chat"
+    LLAMA_3_1_8B = "meta.llama3-1-8b-instruct-v1:0"
+    LLAMA_3_1_70B = "meta.llama3-1-70b-instruct-v1:0"
 
 class LocalModel(Enum):
     GRANITE_3_1_8B_INSTRUCT = "ibm-granite/granite-3.1-8b-instruct"
@@ -94,6 +96,9 @@ configs: list[Config] = [
 
     # Config(model=ApiModel.GPT_4O_MINI, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.DATASET_FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.NO_NOISE),
 
+
+    Config(model=ApiModel.LLAMA_3_1_8B, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
+    Config(model=ApiModel.LLAMA_3_1_70B, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
 ]
 
 requires_inference_raw = True

@@ -49,7 +49,7 @@ def api_inference(model: ApiModel, input_messages: list[dict]) -> str:
             response = client.chat.completions.create(
                 model=model.value,
                 messages=input_messages,
-                temperature=0.001
+                temperature=0
             )
 
             return response.choices[0].message.content
@@ -65,7 +65,7 @@ def api_inference(model: ApiModel, input_messages: list[dict]) -> str:
             response = client.chat.completions.create(
                 model=model.value,
                 messages=input_messages,
-                temperature=0.001
+                temperature=0
             )
 
             return response.choices[0].message.content
@@ -102,7 +102,7 @@ def api_inference(model: ApiModel, input_messages: list[dict]) -> str:
             kwargs = {
                 "model": model.value,
                 "max_tokens": 4096,
-                "temperature": 0.001,
+                "temperature": 0,
                 "messages": messages_for_claude
             }
 
@@ -303,7 +303,7 @@ def make_chat_pipeline(model: LocalModel):
                 outputs = hf_model.generate(
                     **tokenized,
                     max_new_tokens=4096,
-                    temperature=0.001,
+                    temperature=0,
                     use_cache=True,  # Enable KV cache for faster generation
                 )
 

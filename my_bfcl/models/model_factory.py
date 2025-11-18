@@ -11,6 +11,7 @@ from models.gpt_4o_mini_interface import GPT4oMiniInterface
 from models.claude_sonnet_interface import ClaudeSonnetInterface
 from models.claude_haiku_interface import ClaudeHaikuInterface
 from models.deepseek_chat_interface import DeepseekChatInterface
+from models.llama_3_1_interface import Llama31Interface
 from models.granite_3_1_8b_instruct_interface import Granite3_1_8BInstructInterface
 
 
@@ -61,6 +62,10 @@ def _create_api_model_interface(model: ApiModel) -> ModelInterface:
             return ClaudeHaikuInterface()
         case ApiModel.DEEPSEEK_CHAT:
             return DeepseekChatInterface()
+        case ApiModel.LLAMA_3_1_8B:
+            return Llama31Interface(model_id="meta.llama3-1-8b-instruct-v1:0")
+        case ApiModel.LLAMA_3_1_70B:
+            return Llama31Interface(model_id="meta.llama3-1-70b-instruct-v1:0")
         case _:
             raise ValueError(f"Unsupported API model: {model}")
 

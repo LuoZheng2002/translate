@@ -186,7 +186,7 @@ class GPT4oMiniInterface(ModelInterface):
         response = self.client.chat.completions.create(
             model="gpt-4o-mini",
             messages=messages,
-            temperature=0.001
+            temperature=0
         )
         return response.choices[0].message.content
 

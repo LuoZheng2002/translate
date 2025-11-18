@@ -58,7 +58,7 @@ class ClaudeHaikuInterface(ModelInterface):
         response = self.client.messages.create(
             model=self.model_name,
             max_tokens=4096,
-            temperature=0.001,
+            temperature=0,
             system=system_prompt,
             messages=messages
         )
