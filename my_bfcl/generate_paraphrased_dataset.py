@@ -7,10 +7,10 @@ from config import ApiModel
 from parse_dataset import load_json_lines
 
 
-translated = False
+translated = True
 postfix_to_generate = [
     # "_zh_partial"
-    ""
+    "_zh_full"
 ]
 
 
@@ -39,7 +39,7 @@ def generate_paraphrased_case(question: str) -> str:
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": question}
     ]
-    paraphrased_question = api_inference(ApiModel.GPT_4O_MINI, input_messages)
+    paraphrased_question = api_inference(ApiModel.DEEPSEEK_CHAT, input_messages)
     return paraphrased_question
 
 
@@ -47,7 +47,7 @@ def generate_paraphrased_case(question: str) -> str:
 for postfix in postfix_to_generate:
     print(f"Generating paraphrased dataset for postfix: {postfix}")
     original_dataset_path = f'dataset/BFCL_v4_multiple{postfix}.json'
-    paraphrased_dataset_path = f'dataset/BFCL_v4_multiple{postfix}_paraphrased.json'
+    paraphrased_dataset_path = f'dataset/BFCL_v4_multiple{postfix}_para.json'
     with open(original_dataset_path, 'r', encoding='utf-8') as f:
         original_data = load_json_lines(f)
     paraphrased_data = []

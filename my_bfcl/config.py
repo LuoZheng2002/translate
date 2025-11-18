@@ -34,7 +34,8 @@ class TranslateOption(Enum):
     FULLY_TRANSLATED_PROMPT_TRANSLATE = auto()
     PARTIALLY_TRANSLATED = auto()
     FULLY_TRANSLATED_POST_PROCESS_DIFFERENT = auto()
-    FULLY_TRANSLATED_POST_PROCESS_SAME = auto()
+    FULLY_TRANSLATED_POST_PROCESS_SAME = auto(),
+    FULLY_TRANSLATED_PROMPT_TRANSLATE_POST_PROCESS_SAME = auto(),
 
 
 @dataclass(frozen=True)
@@ -104,27 +105,68 @@ configs: list[Config] = [
     # Config(model=ApiModel.LLAMA_3_1_8B, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=ApiModel.LLAMA_3_1_70B, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.PARAPHRASE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.SYNONYM),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.PARAPHRASE),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.SYNONYM),
 
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.NO_NOISE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.NO_NOISE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME), add_noise_mode=AddNoiseMode.NO_NOISE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.PARAPHRASE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.PARAPHRASE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.PARAPHRASE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME), add_noise_mode=AddNoiseMode.PARAPHRASE),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.SYNONYM),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.SYNONYM),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.SYNONYM),
-    Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME), add_noise_mode=AddNoiseMode.SYNONYM),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.PARAPHRASE),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.PARAPHRASE),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.PARAPHRASE),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME), add_noise_mode=AddNoiseMode.PARAPHRASE),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.SYNONYM),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.SYNONYM),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.SYNONYM),
+    # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME), add_noise_mode=AddNoiseMode.SYNONYM),
     
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.PARAPHRASE),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.SYNONYM),
+
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME), add_noise_mode=AddNoiseMode.NO_NOISE),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.PARAPHRASE),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.PARAPHRASE),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.PARAPHRASE),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME), add_noise_mode=AddNoiseMode.PARAPHRASE),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.SYNONYM),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE), add_noise_mode=AddNoiseMode.SYNONYM),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT), add_noise_mode=AddNoiseMode.SYNONYM),
+    # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME), add_noise_mode=AddNoiseMode.SYNONYM),
+    
+
 
     # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
 ]
+for model in [LocalModel.QWEN_2_5_7B_INSTRUCT, LocalModel.QWEN_2_5_14B_INSTRUCT]:
+# for model in [ApiModel.LLAMA_3_1_8B, ApiModel.LLAMA_3_1_70B]:
+    for translate_mode in [
+        NotTranslated(),
+        Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED),
+        Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE),
+        Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT),
+        Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME),
+        Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE_POST_PROCESS_SAME),
+    ]:
+        for add_noise_mode in [
+            AddNoiseMode.NO_NOISE,
+            AddNoiseMode.SYNONYM,
+            AddNoiseMode.PARAPHRASE,
+        ]:
+            configs.append(
+                Config(
+                    model=model,
+                    translate_mode=translate_mode,
+                    add_noise_mode=add_noise_mode,
+                )
+            )
+
 
 requires_inference_raw = True
 requires_inference_json = True

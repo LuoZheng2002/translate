@@ -3,6 +3,7 @@ from config import ApiModel, LocalModel
 from dotenv import load_dotenv
 import os
 import json
+import gc
 from typing import List
 from concurrent.futures import ThreadPoolExecutor, as_completed
 

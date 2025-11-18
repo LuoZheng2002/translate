@@ -7,10 +7,10 @@ from config import ApiModel
 from parse_dataset import load_json_lines
 
 
-translated = False
+translated = True
 postfix_to_generate = [
     # "_zh_partial"
-    ""
+    "_zh_full"
 ]
 
 
@@ -56,7 +56,7 @@ def generate_synonym_case(question: str) -> str:
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": question}
     ]
-    synonym_question = api_inference(ApiModel.GPT_4O_MINI, input_messages)
+    synonym_question = api_inference(ApiModel.DEEPSEEK_CHAT, input_messages)
     return synonym_question
 
 
@@ -64,7 +64,7 @@ def generate_synonym_case(question: str) -> str:
 for postfix in postfix_to_generate:
     print(f"Generating synonym dataset for postfix: {postfix}")
     original_dataset_path = f'dataset/BFCL_v4_multiple{postfix}.json'
-    synonym_dataset_path = f'dataset/BFCL_v4_multiple{postfix}_synonym.json'
+    synonym_dataset_path = f'dataset/BFCL_v4_multiple{postfix}_syno.json'
     with open(original_dataset_path, 'r', encoding='utf-8') as f:
         original_data = load_json_lines(f)
     synonym_data = []

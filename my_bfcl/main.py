@@ -216,7 +216,12 @@ for config in configs:
                     translate_dataset_postfix = "_full"
                     translate_mode_postfix = "_pps"  # post-process same
                     translate_postfix = "_f" # fully translated, do not prompt translate
-                    post_process_option = PostProcessOption.POST_PROCESS_SAME
+                    post_process_option = PostProcessOption.POST_PROCESS_SAME,
+                case TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE_POST_PROCESS_SAME:
+                    translate_dataset_postfix = "_full"
+                    translate_mode_postfix = "_ptps"  # prompt translate + post-process same
+                    translate_postfix = "_fp" # fully translated, prompt translate
+                    post_process_option = PostProcessOption.POST_PROCESS_SAME,
                 case TranslateOption.PARTIALLY_TRANSLATED:
                     translate_dataset_postfix = "_partial"
                     translate_mode_postfix = "_par" # partial            
@@ -271,9 +276,9 @@ for config in configs:
 
         # Batch processing configuration
         if is_api_model:
-            batch_size = 32  # Process 32 cases at a time for better GPU utilization
+            batch_size = 16  # Process 16 cases at a time for better GPU utilization
         else:
-            batch_size = 24  # Smaller batch size for local models to avoid OOM
+            batch_size = 12  # Smaller batch size for local models to avoid OOM
 
         if is_api_model:
             model_interface = create_model_interface(config.model)
