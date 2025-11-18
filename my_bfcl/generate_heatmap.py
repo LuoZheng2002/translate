@@ -134,6 +134,9 @@ def generate_heatmap(model_name: str, output_dir: str = ".", result_dir: str = "
 
     df = pd.DataFrame(data, index=translate_modes, columns=noise_modes)
 
+    # Transpose the dataframe for heatmap visualization
+    df = df.T
+
     # Check if we have any data
     if df.isna().all().all():
         print(f"Error: No valid data found for model '{model_name}'")
@@ -152,9 +155,9 @@ def generate_heatmap(model_name: str, output_dir: str = ".", result_dir: str = "
     # Colorbar
     plt.colorbar(label="Accuracy")
 
-    # Ticks
-    plt.xticks(np.arange(len(noise_modes)), noise_modes, rotation=45)
-    plt.yticks(np.arange(len(translate_modes)), translate_modes)
+    # Ticks (transposed: translate modes on x-axis, noise modes on y-axis)
+    plt.xticks(np.arange(len(translate_modes)), translate_modes, rotation=45)
+    plt.yticks(np.arange(len(noise_modes)), noise_modes)
 
     # Annotate values in each grid cell
     for i in range(df.shape[0]):

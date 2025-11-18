@@ -145,7 +145,7 @@ configs: list[Config] = [
     # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
 ]
 # for model in [LocalModel.QWEN_2_5_7B_INSTRUCT, LocalModel.QWEN_2_5_14B_INSTRUCT]:
-for model in [ApiModel.LLAMA_3_1_8B, ApiModel.LLAMA_3_1_70B]:
+for model in [ApiModel.GPT_4O_MINI]:
     for translate_mode in [
         NotTranslated(),
         Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED),
