@@ -169,7 +169,7 @@
 {"id": "multiple_168", "result": [{"get_song_lyrics": {"song_title": "Bohemian Rhapsody", "artist_name": "Queen", "lang": "English"}}]}
 {"id": "multiple_169", "result": [{"musical_scale": {"key": "C", "scale_type": "major"}}]}
 {"id": "multiple_170", "result": [{"soccer_stat.get_player_stats": {"player_name": "克里斯蒂亚诺·罗纳尔多", "season": "2019-2020"}}]}
-{"id": "multiple_171", "result": [{"game_result.get_winner": {"teams": ["洛杉矶湖人队", "Clippers"], "date": "2021-01-28"}}]}
+{"id": "multiple_171", "result": [{"game_result.get_winner": {"teams": ["Lakers", "Clippers"], "date": "2021-01-28"}}]}
 {"id": "multiple_172", "result": [{"sports_db.find_athlete": {"name": "勒布朗·詹姆斯", "sport": "Basketball"}}]}
 {"id": "multiple_173", "result": [{"get_defense_ranking": {"season": 2021, "top": 10}}]}
 {"id": "multiple_174", "result": [{"sports_ranking": {"team": "曼联", "league": "英超联赛"}}]}

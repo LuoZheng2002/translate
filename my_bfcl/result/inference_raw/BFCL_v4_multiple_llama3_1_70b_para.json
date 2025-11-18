@@ -103,7 +103,7 @@
 {"id": "multiple_102", "result": "[calculate_displacement(initial_velocity=10, time=5, acceleration=9.8)]"}
 {"id": "multiple_103", "result": "[calculate_final_speed(initial_velocity=0, height=100, gravity=9.8)]"}
 {"id": "multiple_104", "result": "[get_shortest_driving_distance(origin='New York City', destination='Washington D.C.')]"}
-{"id": "multiple_105", "result": "Error: An error occurred (ThrottlingException) when calling the InvokeModel operation (reached max retries: 4): Too many requests, please wait before trying again."}
+{"id": "multiple_105", "result": "calculate_magnetic_field(current=5, radius=4)"}
 {"id": "multiple_106", "result": "[calculate_electric_field_strength(charge=0.01, distance=4, medium='vacuum')]"}
 {"id": "multiple_107", "result": "[calculate_density(mass=45, volume=15)]"}
 {"id": "multiple_108", "result": "[calc_heat_capacity(temp=298, volume=10, gas='air')]"}
@@ -135,7 +135,7 @@
 {"id": "multiple_134", "result": "[crime_record.get_record(case_number='CA123456', county='San Diego')]"}
 {"id": "multiple_135", "result": "[get_case_info(docket='2022/AL2562', court='California', info_type='victim')]"}
 {"id": "multiple_136", "result": "[get_crime_rate(city='San Francisco', state='California', type='violent', year=2020)]"}
-{"id": "multiple_137", "result": "Error: An error occurred (ThrottlingException) when calling the InvokeModel operation (reached max retries: 4): Too many requests, please wait before trying again."}
+{"id": "multiple_137", "result": "[lawsuit_search(company='Google', start_date='2021-01-01', location='California')]"}
 {"id": "multiple_138", "result": "[legal_case.fetch(case_id='R vs Adams', details=True)]"}
 {"id": "multiple_139", "result": "[lawsuit_details.find(company_name='Apple Inc.', year=2010, case_type='Patent')]"}
 {"id": "multiple_140", "result": "[lawsuits_search(company_name='Google', location='California', year=2020)]"}

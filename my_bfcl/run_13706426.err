@@ -1,70 +1,0 @@
-`torch_dtype` is deprecated! Use `dtype` instead!
-Loading checkpoint shards:   0%|          | 0/8 [00:00<?, ?it/s]Loading checkpoint shards:  12%|█▎        | 1/8 [00:02<00:18,  2.60s/it]Loading checkpoint shards:  25%|██▌       | 2/8 [00:05<00:16,  2.67s/it]Loading checkpoint shards:  38%|███▊      | 3/8 [00:07<00:13,  2.64s/it]Loading checkpoint shards:  50%|█████     | 4/8 [00:10<00:10,  2.59s/it]Loading checkpoint shards:  62%|██████▎   | 5/8 [00:13<00:07,  2.61s/it]Loading checkpoint shards:  75%|███████▌  | 6/8 [00:15<00:05,  2.58s/it]Loading checkpoint shards:  88%|████████▊ | 7/8 [00:18<00:02,  2.56s/it]Loading checkpoint shards: 100%|██████████| 8/8 [00:19<00:00,  2.10s/it]Loading checkpoint shards: 100%|██████████| 8/8 [00:19<00:00,  2.41s/it]
-Traceback (most recent call last):
-  File "/projects/bfdz/zluo8/translate/my_bfcl/main.py", line 304, in <module>
-    batch_results = model_interface.infer_batch(
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/projects/bfdz/zluo8/translate/my_bfcl/models/qwen2_5_interface.py", line 107, in infer_batch
-    results = self.generator.send(templates)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/projects/bfdz/zluo8/translate/my_bfcl/call_llm.py", line 308, in chat_generator
-    outputs = hf_model.generate(
-              ^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/generation/utils.py", line 2564, in generate
-    result = decoding_method(
-             ^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/generation/utils.py", line 2784, in _sample
-    outputs = self(**model_inputs, return_dict=True)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
-    output = func(self, *args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 449, in forward
-    outputs: BaseModelOutputWithPast = self.model(
-                                       ^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 1064, in wrapper
-    outputs = func(self, *args, **kwargs)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 384, in forward
-    hidden_states = decoder_layer(
-                    ^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/modeling_layers.py", line 94, in __call__
-    return super().__call__(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 249, in forward
-    hidden_states = self.mlp(hidden_states)
-                    ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 46, in forward
-    down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
-torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.03 GiB. GPU 0 has a total capacity of 39.38 GiB of which 308.12 MiB is free. Including non-PyTorch memory, this process has 39.07 GiB memory in use. Of the allocated memory 36.36 GiB is allocated by PyTorch, and 2.21 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

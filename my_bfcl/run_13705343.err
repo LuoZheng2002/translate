@@ -1,35 +1,0 @@
-`torch_dtype` is deprecated! Use `dtype` instead!
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:07,  2.35s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:04<00:04,  2.32s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:07<00:02,  2.39s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  2.29s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  2.31s/it]
-Loading checkpoint shards:   0%|          | 0/8 [00:00<?, ?it/s]Loading checkpoint shards:  12%|█▎        | 1/8 [00:02<00:19,  2.82s/it]Loading checkpoint shards:  25%|██▌       | 2/8 [00:05<00:15,  2.65s/it]Loading checkpoint shards:  38%|███▊      | 3/8 [00:07<00:12,  2.55s/it]Loading checkpoint shards:  50%|█████     | 4/8 [00:10<00:10,  2.58s/it]Loading checkpoint shards:  62%|██████▎   | 5/8 [00:12<00:07,  2.54s/it]Loading checkpoint shards:  75%|███████▌  | 6/8 [00:15<00:05,  2.55s/it]Loading checkpoint shards:  75%|███████▌  | 6/8 [00:17<00:05,  2.85s/it]
-Traceback (most recent call last):
-  File "/projects/bfdz/zluo8/translate/my_bfcl/main.py", line 274, in <module>
-    generator = get_or_create_local_pipeline(local_model)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/projects/bfdz/zluo8/translate/my_bfcl/main.py", line 128, in get_or_create_local_pipeline
-    _global_pipeline = make_chat_pipeline(local_model)
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/projects/bfdz/zluo8/translate/my_bfcl/call_llm.py", line 268, in make_chat_pipeline
-    hf_model = AutoModelForCausalLM.from_pretrained(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained
-    return model_class.from_pretrained(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 277, in _wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 5048, in from_pretrained
-    ) = cls._load_pretrained_model(
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 5468, in _load_pretrained_model
-    _error_msgs, disk_offload_index = load_shard_file(args)
-                                      ^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 843, in load_shard_file
-    disk_offload_index = _load_state_dict_into_meta_model(
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 748, in _load_state_dict_into_meta_model
-    param = param[...]
-            ~~~~~^^^^^
-torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 136.00 MiB. GPU 0 has a total capacity of 39.38 GiB of which 94.12 MiB is free. Including non-PyTorch memory, this process has 39.28 GiB memory in use. Of the allocated memory 38.85 GiB is allocated by PyTorch, and 25.36 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

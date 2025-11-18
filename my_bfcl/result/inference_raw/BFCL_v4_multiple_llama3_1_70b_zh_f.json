@@ -109,7 +109,7 @@
 {"id": "multiple_108", "result": "[calc_heat_capacity(temp=298, volume=10, gas='air')]"}
 {"id": "multiple_109", "result": "[cellbio.get_proteins(cell_compartment='plasma membrane')]"}
 {"id": "multiple_110", "result": "[mutation_type.find(snp_id='rs6034464')]"}
-{"id": "multiple_111", "result": "Error: An error occurred (ThrottlingException) when calling the InvokeModel operation (reached max retries: 4): Too many requests, please wait before trying again."}
+{"id": "multiple_111", "result": "[calculate_genotype_frequency(allele_frequency=0.3, genotype='AA')]"}
 {"id": "multiple_112", "result": "[forest_growth_forecast(location='Yellowstone National Park', years=5, include_human_impact=True)]"}
 {"id": "multiple_113", "result": "[calculate_fitness(trait_values=[0.8, 0.7], trait_contributions=[0.4, 0.6])]"}
 {"id": "multiple_114", "result": "[prediction.evolution(species='human', years=50, model='Darwin')]"}
@@ -186,7 +186,7 @@
 {"id": "multiple_185", "result": "[restaurant_search.find_closest(location=\"Boston, MA\", cuisine=\"Sushi\", amenities=[\"Patio\"])]"}
 {"id": "multiple_186", "result": "[find_recipe(dietary_restrictions='vegetarian', recipe_type='dessert', time=30)]"}
 {"id": "multiple_187", "result": "[whole_foods.check_price(location=\"Los Angeles\", items=[\"tomato\", \"lettuce\"])]"}
-{"id": "multiple_188", "result": "Error: An error occurred (ThrottlingException) when calling the InvokeModel operation (reached max retries: 4): Too many requests, please wait before trying again."}
+{"id": "multiple_188", "result": "[grocery_store.find_best(my_location=\"Berkeley\", rating=4.5, products=[\"tomato\", \"pet food\"])]"}
 {"id": "multiple_189", "result": "[timezone.convert(time='3pm', from_timezone='New York', to_timezone='London')]"}
 {"id": "multiple_190", "result": "[book_hotel(hotel_name='希尔顿酒店', location='芝加哥', room_type='单人间', start_date='2022-12-10', nights=2)]"}
 {"id": "multiple_191", "result": "[book_hotel(hotel_name='拉斯维加斯天堂酒店', location='拉斯维加斯', room_type='豪华客房', start_date='05-12-2022', stay_duration=3, view='城市景观')]"}

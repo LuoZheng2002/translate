@@ -216,12 +216,12 @@ for config in configs:
                     translate_dataset_postfix = "_full"
                     translate_mode_postfix = "_pps"  # post-process same
                     translate_postfix = "_f" # fully translated, do not prompt translate
-                    post_process_option = PostProcessOption.POST_PROCESS_SAME,
+                    post_process_option = PostProcessOption.POST_PROCESS_SAME
                 case TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE_POST_PROCESS_SAME:
                     translate_dataset_postfix = "_full"
                     translate_mode_postfix = "_ptps"  # prompt translate + post-process same
                     translate_postfix = "_fp" # fully translated, prompt translate
-                    post_process_option = PostProcessOption.POST_PROCESS_SAME,
+                    post_process_option = PostProcessOption.POST_PROCESS_SAME
                 case TranslateOption.PARTIALLY_TRANSLATED:
                     translate_dataset_postfix = "_partial"
                     translate_mode_postfix = "_par" # partial            
@@ -258,6 +258,12 @@ for config in configs:
     if requires_inference_raw:
         try:
             inference_raw_results, existing_inference_ids = load_json_lines_from_file(inference_raw_result_path)
+            # Filter out entries with error results
+            inference_raw_results = [
+                entry for entry in inference_raw_results
+                if not (isinstance(entry.get("result"), str) and "Error: An error occurred" in entry.get("result", ""))
+            ]
+            existing_inference_ids = {entry["id"] for entry in inference_raw_results}
         except FileNotFoundError:
             print(f"File {inference_raw_result_path} not found. It will be created.")
             inference_raw_results = []
@@ -276,7 +282,7 @@ for config in configs:
 
         # Batch processing configuration
         if is_api_model:
-            batch_size = 16  # Process 16 cases at a time for better GPU utilization
+            batch_size = 8  # Process 8 cases at a time for better GPU utilization
         else:
             batch_size = 12  # Smaller batch size for local models to avoid OOM
 
@@ -440,7 +446,7 @@ for config in configs:
 
             for inference_json_line in samples_to_process:
                 id = inference_json_line['id']
-                print(f"Post-processing case id {id}...")
+                # print(f"Post-processing case id {id}...")
                 # Find matching ground truth
                 ground_truth_line = next((gt for gt in ground_truths if gt['id'] == id), None)
                 if ground_truth_line is None:

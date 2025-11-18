@@ -120,7 +120,7 @@
 {"id": "multiple_119", "result": "Failed to decode AST: Invalid syntax."}
 {"id": "multiple_120", "result": "Failed to decode AST: Invalid syntax."}
 {"id": "multiple_121", "result": [{"geometry.area_triangle": {"base": 6, "height": 10}}]}
-{"id": "multiple_122", "result": "Failed to decode AST: Invalid syntax."}
+{"id": "multiple_122", "result": [{"run_linear_regression": {"predictors": ["Age", "Income", "Education"], "target": "Purchase_Amount", "standardize": true}}]}
 {"id": "multiple_123", "result": [{"calculate_probability": {"total_outcomes": 52, "favorable_outcomes": 4, "round_to": 2}}]}
 {"id": "multiple_124", "result": [{"probabilities.calculate_single": {"total_outcomes": 52, "event_outcomes": 4}}]}
 {"id": "multiple_125", "result": [{"run_two_sample_ttest": {"group1": [3, 4, 5, 6, 4], "group2": [7, 8, 9, 8, 7], "equal_variance": true}}]}

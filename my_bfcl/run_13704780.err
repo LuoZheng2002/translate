@@ -1,25 +1,0 @@
-`torch_dtype` is deprecated! Use `dtype` instead!
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:07,  2.50s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:04<00:04,  2.46s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:07<00:02,  2.49s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  2.39s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  2.43s/it]
-A decoder-only architecture is being used, but right-padding was detected! For correct generation results, please set `padding_side='left'` when initializing the tokenizer.
-Traceback (most recent call last):
-  File "/projects/bfdz/zluo8/translate/my_bfcl/main.py", line 296, in <module>
-    batch_results = model_interface.infer_batch(
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/projects/bfdz/zluo8/translate/my_bfcl/models/qwen2_5_interface.py", line 107, in infer_batch
-    results = self.generator.send(templates)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/projects/bfdz/zluo8/translate/my_bfcl/call_llm.py", line 303, in chat_generator
-    outputs = hf_model.generate(
-              ^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/generation/utils.py", line 2543, in generate
-    prepared_logits_processor = self._get_logits_processor(
-                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/generation/utils.py", line 1267, in _get_logits_processor
-    processors.append(TemperatureLogitsWarper(generation_config.temperature))
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/work/nvme/bfdz/zluo8/translate/.venv/lib/python3.12/site-packages/transformers/generation/logits_process.py", line 287, in __init__
-    raise ValueError(except_msg)
-ValueError: `temperature` (=0) has to be a strictly positive float, otherwise your next token scores will be invalid.

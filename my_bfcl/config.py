@@ -50,9 +50,9 @@ class NotTranslated:
 TranslateMode = Union[Translated, NotTranslated]
 
 class PostProcessOption(Enum):
-    DONT_POST_PROCESS = auto()
-    POST_PROCESS_DIFFERENT = auto()
-    POST_PROCESS_SAME = auto()
+    DONT_POST_PROCESS = 0
+    POST_PROCESS_DIFFERENT = 1
+    POST_PROCESS_SAME = 2
 
 class AddNoiseMode(Enum):
     NO_NOISE = auto()
@@ -144,8 +144,8 @@ configs: list[Config] = [
     # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
 ]
-for model in [LocalModel.QWEN_2_5_7B_INSTRUCT, LocalModel.QWEN_2_5_14B_INSTRUCT]:
-# for model in [ApiModel.LLAMA_3_1_8B, ApiModel.LLAMA_3_1_70B]:
+# for model in [LocalModel.QWEN_2_5_7B_INSTRUCT, LocalModel.QWEN_2_5_14B_INSTRUCT]:
+for model in [ApiModel.LLAMA_3_1_8B, ApiModel.LLAMA_3_1_70B]:
     for translate_mode in [
         NotTranslated(),
         Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED),
