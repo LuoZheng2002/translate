@@ -269,7 +269,7 @@ def make_chat_pipeline(model: LocalModel):
     hf_model = AutoModelForCausalLM.from_pretrained(
         model_id,
         device_map="cuda:0",  # Keep model on GPU, avoid unnecessary offloading
-        torch_dtype=torch.bfloat16,
+        dtype=torch.bfloat16,
         trust_remote_code=True,
         # offload_folder="/work/nvme/bfdz/zluo8/hf_offload",  # Removed for better performance
     )
@@ -349,9 +349,15 @@ def make_chat_pipeline(model: LocalModel):
                 print(f"Warning: Error during cleanup of {model_id}: {e}")
 
     # Initialize and prime the generator
+    print("Initializing generator...")
     gen = chat_generator()
-    next(gen)
-    print("Local model loaded and generator is ready.")
+    print("Generator created, priming with next()...")
+    try:
+        next(gen)
+        print("Local model loaded and generator is ready.")
+    except Exception as e:
+        print(f"Error during generator initialization: {e}")
+        raise
     return gen
 
 
