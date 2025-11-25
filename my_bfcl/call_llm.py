@@ -250,7 +250,7 @@ def make_chat_pipeline(model: LocalModel):
 
     # Extract model_id from the enum
     model_id = model.value
-    print(f"Loading local model: {model_id}")
+    print(f"Loading local model with HuggingFace: {model_id}")
 
     # --- Environment setup ---
     os.environ["HF_HOME"] = "/work/nvme/bfdz/zluo8/huggingface"
@@ -339,7 +339,7 @@ def make_chat_pipeline(model: LocalModel):
             # IMPORTANT: Do NOT delete closure variables (tokenizer, hf_model) here!
             # Deleting them corrupts the generator if it gets reused after an exception.
             # Instead, just move the model to CPU and clear GPU memory.
-            print(f"Cleaning up model {model_id}...")
+            print(f"Cleaning up HuggingFace model {model_id}...")
             try:
                 hf_model.to("cpu")
                 gc.collect()
@@ -352,4 +352,93 @@ def make_chat_pipeline(model: LocalModel):
     gen = chat_generator()
     next(gen)
     print("Local model loaded and generator is ready.")
+    return gen
+
+
+def make_chat_pipeline_vllm(model: LocalModel):
+    """
+    Returns a generator function that takes populated template(s) and yields model responses using vLLM.
+    Supports both single templates (string) and batch templates (list of strings).
+
+    Args:
+        model: A LocalModel enum value specifying which local model to use
+
+    Returns:
+        A generator that accepts a template string or list of template strings and yields responses
+    """
+    from vllm import LLM, SamplingParams
+
+    # Extract model_id from the enum
+    model_id = model.value
+    print(f"Loading local model with vLLM: {model_id}")
+
+    # --- Environment setup ---
+    os.environ["HF_HOME"] = "/work/nvme/bfdz/zluo8/huggingface"
+
+    # --- Initialize vLLM ---
+    # vLLM automatically handles batching and GPU management
+    llm = LLM(
+        model=model_id,
+        dtype="bfloat16",
+        trust_remote_code=True,
+        gpu_memory_utilization=0.9,  # Use up to 90% of GPU memory
+        max_model_len=4096,  # Maximum context length
+    )
+
+    # Set up sampling parameters (similar to HF pipeline)
+    sampling_params = SamplingParams(
+        temperature=0.001,  # Nearly deterministic
+        max_tokens=4096,
+        skip_special_tokens=True,
+    )
+
+    # --- Define the generator pipeline ---
+    def chat_generator():
+        inputs = yield  # Initial yield to start the generator
+        try:
+            while True:
+                # Wait for a populated template string or list of strings
+                if inputs is None:
+                    inputs = yield
+                    continue
+
+                # Determine if this is a batch (list) or single input (string)
+                is_batch = isinstance(inputs, list)
+
+                if is_batch:
+                    print(f"Generating responses for batch of {len(inputs)} inputs with vLLM...")
+                    # vLLM natively handles batching
+                    outputs = llm.generate(inputs, sampling_params)
+                    # Extract generated text from outputs
+                    responses = [output.outputs[0].text for output in outputs]
+                    print(f"Generation complete for batch of {len(responses)} responses.")
+                    result = responses
+                else:
+                    print("Generating response with vLLM...")
+                    # Single input - vLLM still expects a list
+                    outputs = llm.generate([inputs], sampling_params)
+                    response = outputs[0].outputs[0].text
+                    print("Generation complete.")
+                    result = response
+
+                # Yield response and wait for next template(s)
+                inputs = yield result
+        finally:
+            # Cleanup when generator is closed or an exception occurs
+            print(f"Cleaning up vLLM model {model_id}...")
+            try:
+                # vLLM handles cleanup internally when the object is deleted
+                # Just clear the reference and force garbage collection
+                del llm
+                gc.collect()
+                import torch
+                torch.cuda.empty_cache()
+                print(f"vLLM model {model_id} cleaned up successfully.")
+            except Exception as e:
+                print(f"Warning: Error during cleanup of {model_id}: {e}")
+
+    # Initialize and prime the generator
+    gen = chat_generator()
+    next(gen)
+    print("vLLM model loaded and generator is ready.")
     return gen

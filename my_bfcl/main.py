@@ -15,6 +15,14 @@ from post_processing import (
     process_post_processing_sample
 )
 
+# ============================================================================
+# LOCAL MODEL INFERENCE BACKEND CONFIGURATION
+# ============================================================================
+# Set to True to use vLLM backend for local models (faster, better batching)
+# Set to False to use HuggingFace transformers backend (default)
+USE_VLLM_BACKEND = True
+# ============================================================================
+
 
 def load_configs_from_file(config_file_path: str):
     """
@@ -187,28 +195,38 @@ def get_result_filename(language_postfix: str, mode_postfix: str, noise_postfix:
 # Global variable to track if pipeline is initialized (reuse across configs)
 _global_pipeline = None
 _global_pipeline_model = None
+_global_pipeline_backend = None
 
-def get_or_create_local_pipeline(local_model: LocalModel):
+def get_or_create_local_pipeline(local_model: LocalModel, use_vllm: bool = False):
     """
     Get or create a pipeline for a local model.
-    Reuses the same pipeline across configs with the same model.
+    Reuses the same pipeline across configs with the same model and backend.
 
-    Guarantees: If you switch to a different model, the previous model's memory
+    Args:
+        local_model: LocalModel enum value
+        use_vllm: If True, use vLLM backend; if False, use HuggingFace backend
+
+    Guarantees: If you switch to a different model or backend, the previous model's memory
     is immediately freed (assumes current model will never be used again in this run).
     """
     import torch
     import gc
 
-    global _global_pipeline, _global_pipeline_model
+    global _global_pipeline, _global_pipeline_model, _global_pipeline_backend
 
-    # If we have a pipeline for the same model, reuse it
-    if _global_pipeline is not None and _global_pipeline_model == local_model:
-        print(f"Reusing existing pipeline for {local_model.value}")
+    backend_name = "vLLM" if use_vllm else "HuggingFace"
+
+    # If we have a pipeline for the same model and backend, reuse it
+    if (_global_pipeline is not None and
+        _global_pipeline_model == local_model and
+        _global_pipeline_backend == use_vllm):
+        print(f"Reusing existing {backend_name} pipeline for {local_model.value}")
         return _global_pipeline
 
-    # Different model detected - aggressive cleanup of old pipeline
+    # Different model or backend detected - aggressive cleanup of old pipeline
     if _global_pipeline is not None:
-        print(f"Switching from {_global_pipeline_model.value} to {local_model.value}")
+        old_backend_name = "vLLM" if _global_pipeline_backend else "HuggingFace"
+        print(f"Switching from {_global_pipeline_model.value} ({old_backend_name}) to {local_model.value} ({backend_name})")
         print(f"Freeing memory from previous model...")
 
         # Properly close the generator to trigger cleanup of its closure variables
@@ -222,6 +240,7 @@ def get_or_create_local_pipeline(local_model: LocalModel):
         # Delete the generator and model references
         _global_pipeline = None
         _global_pipeline_model = None
+        _global_pipeline_backend = None
 
         # Force immediate garbage collection
         gc.collect()
@@ -232,10 +251,15 @@ def get_or_create_local_pipeline(local_model: LocalModel):
 
         print(f"Memory freed. Loading new model...")
 
-    # Create new pipeline for the new model
-    print(f"Creating pipeline for {local_model.value}")
-    _global_pipeline = make_chat_pipeline(local_model)
+    # Create new pipeline for the new model with specified backend
+    print(f"Creating {backend_name} pipeline for {local_model.value}")
+    if use_vllm:
+        from call_llm import make_chat_pipeline_vllm
+        _global_pipeline = make_chat_pipeline_vllm(local_model)
+    else:
+        _global_pipeline = make_chat_pipeline(local_model)
     _global_pipeline_model = local_model
+    _global_pipeline_backend = use_vllm
     return _global_pipeline
 
 
@@ -398,7 +422,7 @@ for config in configs:
             model_interface = create_model_interface(config.model)
         elif is_local_model:
             local_model = config.model
-            generator = get_or_create_local_pipeline(local_model)
+            generator = get_or_create_local_pipeline(local_model, use_vllm=USE_VLLM_BACKEND)
             model_interface = create_model_interface(local_model, generator)
         else:
             raise ValueError(f"Unsupported model type: {type(config.model)}")
@@ -454,7 +478,7 @@ for config in configs:
                 model_interface = create_model_interface(config.model)
             elif is_local_model:
                 local_model = config.model
-                generator = get_or_create_local_pipeline(local_model)
+                generator = get_or_create_local_pipeline(local_model, use_vllm=USE_VLLM_BACKEND)
                 model_interface = create_model_interface(local_model, generator)
             else:
                 raise ValueError(f"Unsupported model type: {type(config.model)}")
