@@ -25,6 +25,11 @@ configs = [
         ),
         add_noise_mode=AddNoiseMode.NO_NOISE
     ),
+    Config(
+        model=ApiModel.GPT_5,
+        translate_mode=NotTranslated(),
+        add_noise_mode=AddNoiseMode.NO_NOISE
+    ),
 
     # Example: Test GPT-5-MINI with Chinese translation
     # Config(

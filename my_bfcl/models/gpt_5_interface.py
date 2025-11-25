@@ -244,6 +244,7 @@ class GPT5Interface(ModelInterface):
         Only fixes critical type issues that are invalid in standard JSON Schema:
         - Replace type: "dict" with type: "object"
         - Replace type: "float" with type: "number"
+        - Remove type: "any" (not a valid JSON Schema type)
 
         Does NOT enforce strict mode requirements (all properties required, etc.)
 
@@ -267,6 +268,9 @@ class GPT5Interface(ModelInterface):
                     fixed[key] = "number"
                 elif value == "tuple":
                     fixed[key] = "array"
+                elif value == "any":
+                    # Skip "any" type - omit the type field to allow any value
+                    continue
                 else:
                     fixed[key] = value
             elif isinstance(value, dict):
@@ -290,6 +294,7 @@ class GPT5Interface(ModelInterface):
         GPT-5 strict mode requirements:
         - Replace type: "dict" with type: "object"
         - Replace type: "float" with type: "number"
+        - Remove type: "any" (not a valid JSON Schema type)
         - All properties must be in the "required" array
         - All nested objects must have "additionalProperties": false
         - No unsupported JSON Schema features
@@ -315,6 +320,9 @@ class GPT5Interface(ModelInterface):
                     fixed[key] = "number"
                 elif value == "tuple":
                     fixed[key] = "array"
+                elif value == "any":
+                    # Skip "any" type - omit the type field to allow any value
+                    continue
                 else:
                     fixed[key] = value
             elif key == "properties" and isinstance(value, dict):
