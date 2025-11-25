@@ -16,7 +16,8 @@ translate_modes = [
     "PT", # Fully Translated + Prompt Translate
     "PPD", # Fully translated + Post-Process Different
     "PPS", # Fully translated + Post-Process Same
-    "PTPS" # Fully Translated + Prompt Translate + Post-Process Same
+    "PTPS", # Fully Translated + Prompt Translate + Post-Process Same
+    "PAR", # Partially Translated
 ]
 
 noise_modes = ["NO_NOISE", "PARAPHRASE", "SYNONYM"]
@@ -28,7 +29,8 @@ translate_mode_mapping = {
     "_pt": "PT",   # Prompt Translate
     "_ppd": "PPD", # Post-Process Different
     "_pps": "PPS", # Post-Process Same
-    "_ptps": "PTPS" # Prompt Translate + Post-Process Same
+    "_ptps": "PTPS", # Prompt Translate + Post-Process Same
+    "_par": "PAR" # Partially Translated
 }
 
 noise_mode_mapping = {
@@ -43,7 +45,7 @@ def generate_heatmap(model_name: str, output_dir: str = ".", result_dir: str = "
     Generate a heatmap for a given model showing accuracy across translate and noise modes.
 
     Args:
-        model_name: The model name (e.g., "llama3_1_8b", "gpt4o_mini", "qwen2_5_7b")
+        model_name: The model directory name (e.g., "gpt-5", "gpt-5-mini", "gpt-5-nano")
         output_dir: Directory to save the heatmap image (default: current directory)
         result_dir: Directory containing the score files (default: "result/score")
     """
@@ -55,15 +57,19 @@ def generate_heatmap(model_name: str, output_dir: str = ".", result_dir: str = "
         for nm in noise_modes:
             data_dict[tm][nm] = None
 
-    # Find all score files matching this model
-    score_dir = Path(result_dir)
+    # Path to model's score directory
+    model_score_dir = Path(result_dir) / model_name
 
-    # Construct the pattern to match: BFCL_v4_multiple{model_name}*
-    # The file naming convention from main.py is:
-    # BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json
-    # We look for files containing the model_name postfix
+    if not model_score_dir.exists():
+        print(f"Error: Model directory '{model_score_dir}' does not exist")
+        return
 
-    for score_file in score_dir.glob(f"BFCL_v4_multiple*{model_name}*.json"):
+    # The new file naming convention from main.py is:
+    # - vanilla.json (for NT + NO_NOISE)
+    # - {language_postfix}{mode_postfix}{noise_postfix}.json
+    # Example: zh_f.json, zh_par_para.json, etc.
+
+    for score_file in model_score_dir.glob("*.json"):
         try:
             with open(score_file, 'r', encoding='utf-8') as f:
                 first_line = f.readline()
@@ -75,18 +81,29 @@ def generate_heatmap(model_name: str, output_dir: str = ".", result_dir: str = "
                     continue
 
                 # Extract translate and noise modes from filename
-                # Remove prefix and suffix
                 filename = score_file.stem  # Remove .json
-                filename = filename.replace("BFCL_v4_multiple", "").replace(model_name, "")
 
-                # Parse the remaining postfixes
-                # Format: {language_postfix}{translate_mode_postfix}{noise_postfix}
-                # Language postfix: _zh, _hi (we'll ignore for now since we're focusing on model)
-                # Translate mode postfix: _f, _pt, _ppd, _pps, _ptps, or empty (NT)
-                # Noise postfix: _para, _syno, or empty (NO_NOISE)
+                # Special case: vanilla.json means NT + NO_NOISE
+                if filename == "vanilla":
+                    translate_mode = "NT"
+                    noise_mode = "NO_NOISE"
+                    data_dict[translate_mode][noise_mode] = accuracy
+                    print(f"Loaded {score_file.name}: {translate_mode} + {noise_mode} = {accuracy:.3f}")
+                    continue
+
+                # Parse the filename: {language_postfix}{mode_postfix}{noise_postfix}
+                # Language postfix: zh_, hi_ (we ignore the language, just look for mode and noise)
+                # Translate mode postfix: f, pt, ppd, pps, ptps, par
+                # Noise postfix: _para, _syno
 
                 translate_mode_str = ""
                 noise_mode_str = ""
+
+                # Remove language prefix if present (zh_, hi_)
+                if filename.startswith("zh_"):
+                    filename = filename[3:]  # Remove "zh_"
+                elif filename.startswith("hi_"):
+                    filename = filename[3:]  # Remove "hi_"
 
                 # Extract noise mode (check for _para or _syno at the end)
                 if filename.endswith("_para"):
@@ -96,19 +113,26 @@ def generate_heatmap(model_name: str, output_dir: str = ".", result_dir: str = "
                     noise_mode_str = "_syno"
                     filename = filename[:-5]  # Remove _syno
 
-                # Extract translate mode from what remains
-                # Check for translate mode postfixes in what's left
-                if "_ptps" in filename:
+                # What remains should be the translate mode
+                # Check for translate mode postfixes
+                if filename == "ptps":
                     translate_mode_str = "_ptps"
-                elif "_ppd" in filename:
+                elif filename == "ppd":
                     translate_mode_str = "_ppd"
-                elif "_pps" in filename:
+                elif filename == "pps":
                     translate_mode_str = "_pps"
-                elif "_pt" in filename:
+                elif filename == "pt":
                     translate_mode_str = "_pt"
-                elif "_f" in filename:
+                elif filename == "f":
                     translate_mode_str = "_f"
-                # else: empty string for NT
+                elif filename == "par":
+                    translate_mode_str = "_par"
+                elif filename == "":
+                    # No translate mode means NT (but we already handled vanilla above)
+                    translate_mode_str = ""
+                else:
+                    print(f"Warning: Unknown translate mode in filename: {score_file.name}")
+                    continue
 
                 # Convert to display names
                 translate_mode = translate_mode_mapping.get(translate_mode_str, "UNKNOWN")
@@ -187,8 +211,9 @@ def generate_heatmap(model_name: str, output_dir: str = ".", result_dir: str = "
 # Example usage
 if __name__ == "__main__":
     # Generate heatmaps for different models
-    # models = ["llama3_1_8b", "llama3_1_70b", "qwen2_5_7b", "qwen2_5_14b", "gpt4o_mini"]
-    models = ["deepseek"]
+    # Model names should match the directory names in result/score/
+    # Examples: "gpt-5", "gpt-5-mini", "gpt-5-nano"
+    models = ["gpt-5"]
 
     for model in models:
         print(f"\n{'='*60}")

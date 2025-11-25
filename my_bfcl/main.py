@@ -61,6 +61,12 @@ parser.add_argument(
     default=None,
     help="Path to a Python file containing the 'configs' list (default: use configs from config.py)"
 )
+parser.add_argument(
+    "--num-gpus",
+    type=int,
+    default=1,
+    help="Number of GPUs to use for local inference (default: 1)"
+)
 args = parser.parse_args()
 
 # Load configs from specified file or use default from config.py
@@ -190,6 +196,54 @@ def get_result_filename(language_postfix: str, mode_postfix: str, noise_postfix:
     # Remove leading underscore and add .json extension
     filename = combined.lstrip("_") + ".json"
     return filename
+
+
+def extract_model_size_in_billions(local_model: LocalModel) -> int:
+    """
+    Extract model size in billions from LocalModel enum value.
+
+    Args:
+        local_model: LocalModel enum
+
+    Returns:
+        Model size in billions (e.g., 8 for 8B model)
+
+    Raises:
+        ValueError: If model size cannot be extracted from model name
+    """
+    model_value = local_model.value
+
+    # Extract number followed by 'B' (case insensitive)
+    # Matches patterns like "8B", "14B", "32B", "80B"
+    match = re.search(r'(\d+)B', model_value, re.IGNORECASE)
+
+    if match:
+        return int(match.group(1))
+    else:
+        raise ValueError(f"Cannot extract model size from model name: {model_value}")
+
+
+def calculate_batch_size_for_local_model(local_model: LocalModel, num_gpus: int) -> int:
+    """
+    Calculate batch size for local inference based on model size and number of GPUs.
+
+    Formula: batch_size * x = 120 * num_gpus
+    Where x is the model size in billions (e.g., 8 for an 8B model)
+
+    Args:
+        local_model: LocalModel enum
+        num_gpus: Number of GPUs available
+
+    Returns:
+        Calculated batch size (rounded down to nearest integer)
+    """
+    model_size_b = extract_model_size_in_billions(local_model)
+    batch_size = (120 * num_gpus) // model_size_b
+
+    # Ensure batch size is at least 1
+    batch_size = max(1, batch_size)
+
+    return batch_size
 
 # Run inference
 # Global variable to track if pipeline is initialized (reuse across configs)
@@ -416,7 +470,14 @@ for config in configs:
         if is_api_model:
             batch_size = 8  # Process 8 cases at a time for better GPU utilization
         else:
-            batch_size = 12  # Smaller batch size for local models to avoid OOM
+            # Calculate batch size for local models based on model size and num_gpus
+            batch_size = calculate_batch_size_for_local_model(config.model, args.num_gpus)
+            model_size_b = extract_model_size_in_billions(config.model)
+            print(f"Local model inference configuration:")
+            print(f"  Model: {config.model.value}")
+            print(f"  Model size: {model_size_b}B")
+            print(f"  Number of GPUs: {args.num_gpus}")
+            print(f"  Calculated batch size: {batch_size} (formula: batch_size * {model_size_b} = 120 * {args.num_gpus})")
 
         if is_api_model:
             model_interface = create_model_interface(config.model)
