@@ -63,48 +63,12 @@ class Granite4Interface(ModelInterface):
             add_generation_prompt=True
         )
 
-        # Send template to generator and get response
-        result = self.generator.send(template)
+        # Call generate method on wrapper
+        result = self.generator.generate(template)
         return result
 
-    def infer_batch(self, functions_list: List[List[Dict[str, Any]]],
-                   user_queries: List[str],
-                   prompt_passing_in_english: bool = True) -> List[str]:
-        """
-        Run batch inference with Granite 4 model.
-
-        Args:
-            functions_list: List of function lists (one per query)
-            user_queries: List of user queries as strings
-            prompt_passing_in_english: Whether to request English parameter passing
-
-        Returns:
-            List of raw model outputs as strings
-        """
-        if self.generator is None:
-            raise RuntimeError("Generator not initialized. Call set_generator() first.")
-
-        if len(functions_list) != len(user_queries):
-            raise ValueError("functions_list and user_queries must have same length")
-
-        # Format all templates
-        templates = []
-        for functions, user_query in zip(functions_list, user_queries):
-            system_prompt = self._generate_system_prompt(
-                functions=functions,
-                prompt_passing_in_english=prompt_passing_in_english
-            )
-            template = self._format_granite4_chat_template(
-                system_prompt=system_prompt,
-                user_query=user_query,
-                functions=functions,
-                add_generation_prompt=True
-            )
-            templates.append(template)
-
-        # Send batch to generator and get responses
-        results = self.generator.send(templates)
-        return results
+    # Removed infer_batch() - now uses base class implementation with ThreadPoolExecutor
+    # This allows concurrent request submission, and vLLM handles internal batching
 
     def parse_output(self, raw_output: str) -> Union[List[Dict[str, Dict[str, Any]]], str]:
         """

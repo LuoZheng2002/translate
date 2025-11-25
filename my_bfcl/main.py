@@ -283,13 +283,16 @@ def get_or_create_local_pipeline(local_model: LocalModel, use_vllm: bool = False
         print(f"Switching from {_global_pipeline_model.value} ({old_backend_name}) to {local_model.value} ({backend_name})")
         print(f"Freeing memory from previous model...")
 
-        # Properly close the generator to trigger cleanup of its closure variables
+        # Cleanup: for vLLM wrapper, call cleanup(); for HF generator, close it
         try:
-            _global_pipeline.close()
+            if _global_pipeline_backend:  # vLLM
+                _global_pipeline.cleanup()
+            else:  # HuggingFace generator
+                _global_pipeline.close()
         except (StopIteration, GeneratorExit):
             pass
         except Exception as e:
-            print(f"Warning: Error closing generator: {e}")
+            print(f"Warning: Error during cleanup: {e}")
 
         # Delete the generator and model references
         _global_pipeline = None
@@ -462,22 +465,27 @@ for config in configs:
             print(f"Warning: some test cases already exist in inference result file. Skipping {len(test_cases) - len(cases_to_process)} cases.")
             printed_warning = True
 
-        # Determine model type and create interface once (outside batch loop)
+        # Determine model type and create interface once
         is_api_model = isinstance(config.model, ApiModel)
         is_local_model = isinstance(config.model, LocalModel)
 
-        # Batch processing configuration
+        # Configure concurrent request settings
         if is_api_model:
-            batch_size = 8  # Process 8 cases at a time for better GPU utilization
+            max_concurrent = 8  # API models: up to 8 concurrent requests
+            print(f"API model inference configuration:")
+            print(f"  Model: {config.model.value}")
+            print(f"  Max concurrent requests: {max_concurrent}")
         else:
-            # Calculate batch size for local models based on model size and num_gpus
-            batch_size = calculate_batch_size_for_local_model(config.model, args.num_gpus)
+            # For local models with vLLM, we can submit all requests concurrently
+            # vLLM's engine will handle internal batching automatically
+            max_concurrent = len(cases_to_process)  # Submit all at once
             model_size_b = extract_model_size_in_billions(config.model)
             print(f"Local model inference configuration:")
             print(f"  Model: {config.model.value}")
             print(f"  Model size: {model_size_b}B")
             print(f"  Number of GPUs: {args.num_gpus}")
-            print(f"  Calculated batch size: {batch_size} (formula: batch_size * {model_size_b} = 120 * {args.num_gpus})")
+            print(f"  Backend: {'vLLM' if USE_VLLM_BACKEND else 'HuggingFace'}")
+            print(f"  Concurrent requests: {max_concurrent} (vLLM handles internal batching)")
 
         if is_api_model:
             model_interface = create_model_interface(config.model)
@@ -488,41 +496,35 @@ for config in configs:
         else:
             raise ValueError(f"Unsupported model type: {type(config.model)}")
 
-        # Process in batches
-        for batch_start in range(0, len(cases_to_process), batch_size):
-            batch_end = min(batch_start + batch_size, len(cases_to_process))
-            batch_cases = cases_to_process[batch_start:batch_end]
+        # Prepare all data for concurrent processing
+        all_functions_list = []
+        all_user_queries = []
+        for case in cases_to_process:
+            functions = case['function']
+            user_question = case["question"][0][0]['content']
+            all_functions_list.append(functions)
+            all_user_queries.append(user_question)
 
-            print(f"\nProcessing batch {batch_start // batch_size + 1}: cases {batch_start} to {batch_end}")
+        print(f"\nSubmitting {len(cases_to_process)} requests concurrently...")
+        all_results = model_interface.infer_batch(
+            functions_list=all_functions_list,
+            user_queries=all_user_queries,
+            prompt_passing_in_english=prompt_translate
+        )
+        print(f"All {len(cases_to_process)} requests completed.")
 
-            # Prepare batch data
-            batch_functions_list = []
-            batch_user_queries = []
-            for case in batch_cases:
-                functions = case['function']
-                user_question = case["question"][0][0]['content']
-                batch_functions_list.append(functions)
-                batch_user_queries.append(user_question)
-            
-            print(f"Calling model interface for batch of size {len(batch_cases)}...")
-            batch_results = model_interface.infer_batch(
-                functions_list=batch_functions_list,
-                user_queries=batch_user_queries,
-                prompt_passing_in_english=prompt_translate
-            )
-            print(f"Received batch results.")
+        # Process and save results
+        for case, result in zip(cases_to_process, all_results):
+            print(f"Case {case['id']}: {case['question'][0][0]['content'][:60]}...")
+            result_to_write = {
+                "id": case["id"],
+                "result": result
+            }
+            inference_raw_results.append(result_to_write)
 
-            # Process results
-            for case, result in zip(batch_cases, batch_results):
-                print(f"Inferencing case id {case['id']}, question: {case['question'][0][0]['content']}")
-                print("Answer: ", result)
-                result_to_write = {
-                    "id": case["id"],
-                    "result": result
-                }
-                inference_raw_results.append(result_to_write)
-            # Write batch results to file
-            write_json_lines_to_file(inference_raw_result_path, inference_raw_results)
+        # Write all results to file
+        write_json_lines_to_file(inference_raw_result_path, inference_raw_results)
+
         # Final sort and write
         if len(inference_raw_results) > 0:
             append_and_rewrite_json_lines(inference_raw_result_path, inference_raw_results)

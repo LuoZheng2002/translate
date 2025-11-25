@@ -70,48 +70,12 @@ class Granite3_1_8BInstructInterface(ModelInterface):
             add_generation_prompt=True
         )
 
-        # Send template to generator and get response
-        result = self.generator.send(template)
+        # Call generate method on wrapper
+        result = self.generator.generate(template)
         return result
 
-    def infer_batch(self, functions_list: List[List[Dict[str, Any]]],
-                   user_queries: List[str],
-                   prompt_passing_in_english: bool = True) -> List[str]:
-        """
-        Run batch inference with Granite model.
-
-        Args:
-            functions_list: List of function lists (one per query)
-            user_queries: List of user queries as strings
-            prompt_passing_in_english: Whether to request English parameter passing
-
-        Returns:
-            List of raw model outputs as strings
-        """
-        if self.generator is None:
-            raise RuntimeError("Generator not initialized. Call set_generator() first.")
-
-        if len(functions_list) != len(user_queries):
-            raise ValueError("functions_list and user_queries must have same length")
-
-        # Format all templates
-        templates = []
-        for functions, user_query in zip(functions_list, user_queries):
-            system_prompt = self._generate_system_prompt(
-                functions=functions,
-                prompt_passing_in_english=prompt_passing_in_english
-            )
-            template = self._format_granite_chat_template(
-                system_prompt=system_prompt,
-                user_query=user_query,
-                functions=functions,
-                add_generation_prompt=True
-            )
-            templates.append(template)
-
-        # Send batch to generator and get responses
-        results = self.generator.send(templates)
-        return results
+    # Removed infer_batch() - now uses base class implementation with ThreadPoolExecutor
+    # This allows concurrent request submission, and vLLM handles internal batching
 
     def infer_with_functions(self, system_prompt: str, user_query: str,
                            functions: List[Dict[str, Any]]) -> str:
@@ -137,44 +101,12 @@ class Granite3_1_8BInstructInterface(ModelInterface):
             add_generation_prompt=True
         )
 
-        # Send template to generator and get response
-        result = self.generator.send(template)
+        # Call generate method on wrapper
+        result = self.generator.generate(template)
         return result
 
-    def infer_batch_with_functions(self, system_prompts: List[str],
-                                   user_queries: List[str],
-                                   batch_functions: List[List[Dict[str, Any]]]) -> List[str]:
-        """
-        Run batch inference with explicit system prompts and function definitions.
-
-        Args:
-            system_prompts: List of system prompts as strings
-            user_queries: List of user queries as strings
-            batch_functions: List of function definition lists
-
-        Returns:
-            List of raw model outputs as strings
-        """
-        if self.generator is None:
-            raise RuntimeError("Generator not initialized. Call set_generator() first.")
-
-        if not (len(system_prompts) == len(user_queries) == len(batch_functions)):
-            raise ValueError("All input lists must have same length")
-
-        # Format all templates with their respective functions
-        templates = []
-        for system_prompt, user_query, functions in zip(system_prompts, user_queries, batch_functions):
-            template = self._format_granite_chat_template(
-                system_prompt=system_prompt,
-                user_query=user_query,
-                functions=functions,
-                add_generation_prompt=True
-            )
-            templates.append(template)
-
-        # Send batch to generator and get responses
-        results = self.generator.send(templates)
-        return results
+    # Removed infer_batch_with_functions() - not commonly used
+    # Use infer_with_functions() with base class infer_batch() if needed
 
     def parse_output(self, raw_output: str) -> Union[List[Dict[str, Dict[str, Any]]], str]:
         """
