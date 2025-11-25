@@ -4,20 +4,20 @@ from dataclasses import dataclass
 from typing import NamedTuple, Union
 
 class ApiModel(Enum):
-    GPT_4O_MINI = "gpt-4o-mini"
-    GPT_5 = "gpt-5"
-    CLAUDE_SONNET = "claude-sonnet-4-5"
-    CLAUDE_HAIKU = "claude-haiku-4-5"
+    GPT_5 = "gpt-5",
+    GPT_5_MINI = "gpt-5-mini",
+    GPT_5_NANO = "gpt-5-nano",
     DEEPSEEK_CHAT = "deepseek-chat"
     LLAMA_3_1_8B = "meta.llama3-1-8b-instruct-v1:0"
     LLAMA_3_1_70B = "meta.llama3-1-70b-instruct-v1:0"
 
 class LocalModel(Enum):
-    GRANITE_3_1_8B_INSTRUCT = "ibm-granite/granite-3.1-8b-instruct"
-    QWEN_2_5_7B_INSTRUCT = "Qwen/Qwen2.5-7B-Instruct"
-    QWEN_2_5_14B_INSTRUCT = "Qwen/Qwen2.5-14B-Instruct"
-    QWEN_2_5_32B_INSTRUCT = "Qwen/Qwen2.5-32B-Instruct"
-    QWEN_2_5_72B_INSTRUCT = "Qwen/Qwen2.5-72B-Instruct"
+    GRANITE_4_0_H_TINY = "ibm-granite/granite-4.0-h-tiny",
+    GRANITE_4_0_H_SMALL = "ibm-granite/granite-4.0-h-small",
+    QWEN3_8B = "Qwen/Qwen3-8B",
+    QWEN3_14B = "Qwen/Qwen3-14B",
+    QWEN3_32B = "Qwen/Qwen3-32B-A3B",
+    QWEN3_NEXT_80B = "Qwen/Qwen3-Next-80B-A3B-Instruct",
 
 # @dataclass
 # class LocalModelStruct:
@@ -148,8 +148,11 @@ configs: list[Config] = [
 ]
 # for model in [LocalModel.QWEN_2_5_7B_INSTRUCT, LocalModel.QWEN_2_5_14B_INSTRUCT]:
 # for model in [ApiModel.DEEPSEEK_CHAT]:
-for model in [ApiModel.LLAMA_3_1_8B, ApiModel.LLAMA_3_1_70B]:
+# for model in [ApiModel.LLAMA_3_1_8B, ApiModel.LLAMA_3_1_70B]:
 # for model in [ApiModel.GPT_4O_MINI]:
+
+configs.append(Config(model=ApiModel.GPT_5))
+for model in []:
     for translate_mode in [
         NotTranslated(),
         Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED),
@@ -157,6 +160,7 @@ for model in [ApiModel.LLAMA_3_1_8B, ApiModel.LLAMA_3_1_70B]:
         Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT),
         Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME),
         Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE_POST_PROCESS_SAME),
+        Translated(language=Language.CHINESE, option=TranslateOption.PARTIALLY_TRANSLATED),
     ]:
         for add_noise_mode in [
             AddNoiseMode.NO_NOISE,

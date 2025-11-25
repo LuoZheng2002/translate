@@ -1,5 +1,6 @@
 from parse_dataset import load_json_lines
 import json
+import os
 from config import *
 from parse_ast import *
 import re
@@ -42,11 +43,17 @@ def load_json_lines_from_file(file_path: str) -> tuple[list, set]:
 def write_json_lines_to_file(file_path: str, results: list) -> None:
     """
     Write JSON lines to a file, overwriting existing content.
+    Creates parent directory if it doesn't exist.
 
     Args:
         file_path: Path to the output file
         results: List of dictionaries to write
     """
+    # Create parent directory if it doesn't exist
+    parent_dir = os.path.dirname(file_path)
+    if parent_dir:
+        os.makedirs(parent_dir, exist_ok=True)
+
     with open(file_path, 'w', encoding='utf-8') as f:
         for result in results:
             f.write(json.dumps(result, ensure_ascii=False) + '\n')
@@ -81,6 +88,48 @@ def append_and_rewrite_json_lines(file_path: str, results: list) -> None:
     """
     sorted_results = sort_results_by_id(results)
     write_json_lines_to_file(file_path, sorted_results)
+
+
+def get_model_directory_name(model: Model) -> str:
+    """
+    Get a filesystem-safe directory name from model enum value.
+
+    Args:
+        model: ApiModel or LocalModel enum
+
+    Returns:
+        Filesystem-safe directory name based on model's official name
+    """
+    model_value = model.value
+    # Replace filesystem-unsafe characters
+    # "/" -> "-" (for models like "Qwen/Qwen2.5-7B-Instruct")
+    # ":" -> "-" (for models like "meta.llama3-1-8b-instruct-v1:0")
+    safe_name = model_value.replace("/", "-").replace(":", "-")
+    return safe_name
+
+
+def get_result_filename(language_postfix: str, mode_postfix: str, noise_postfix: str) -> str:
+    """
+    Construct result filename from postfix components.
+
+    Args:
+        language_postfix: Language postfix (e.g., "_zh", "_hi", or "")
+        mode_postfix: Translate/processing mode postfix (e.g., "_f", "_pt", "_par", or "")
+        noise_postfix: Noise mode postfix (e.g., "_syno", "_para", or "")
+
+    Returns:
+        Filename for the result file
+    """
+    # Combine all postfixes
+    combined = language_postfix + mode_postfix + noise_postfix
+
+    # If no postfixes, this is the vanilla/baseline case
+    if not combined:
+        return "vanilla.json"
+
+    # Remove leading underscore and add .json extension
+    filename = combined.lstrip("_") + ".json"
+    return filename
 
 # Run inference
 # Global variable to track if pipeline is initialized (reuse across configs)
@@ -243,14 +292,21 @@ for config in configs:
         case _:
             raise ValueError(f"Unsupported add noise mode: {config.add_noise_mode}")
     
-    
+
+    # Get model directory name from enum value
+    model_dir_name = get_model_directory_name(config.model)
+
+    # Construct filenames based on configuration
+    inference_filename = get_result_filename(language_postfix, translate_postfix, noise_postfix)
+    processing_filename = get_result_filename(language_postfix, translate_mode_postfix, noise_postfix)
+
     dataset_path = f"dataset/BFCL_v4_multiple{language_postfix}{translate_dataset_postfix}{noise_postfix}.json"
     ground_truth_path = f"dataset/possible_answer/BFCL_v4_multiple.json"
-    inference_raw_result_path = f"result/inference_raw/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_postfix}{noise_postfix}.json"
-    inference_json_result_path = f"result/inference_json/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_postfix}{noise_postfix}.json"
-    post_processing_result_path = f"result/post_processing/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
-    evaluation_result_path = f"result/evaluation/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
-    score_path = f"result/score/BFCL_v4_multiple{model_postfix}{language_postfix}{translate_mode_postfix}{noise_postfix}.json"
+    inference_raw_result_path = f"result/inference_raw/{model_dir_name}/{inference_filename}"
+    inference_json_result_path = f"result/inference_json/{model_dir_name}/{inference_filename}"
+    post_processing_result_path = f"result/post_processing/{model_dir_name}/{processing_filename}"
+    evaluation_result_path = f"result/evaluation/{model_dir_name}/{processing_filename}"
+    score_path = f"result/score/{model_dir_name}/{processing_filename}"
 
     test_cases, _ = load_json_lines_from_file(dataset_path)
     ground_truths, _ = load_json_lines_from_file(ground_truth_path)
