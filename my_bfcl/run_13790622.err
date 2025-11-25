@@ -1,0 +1,20 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading safetensors checkpoint shards:   0% Completed | 0/5 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  20% Completed | 1/5 [00:00<00:03,  1.14it/s]
+Loading safetensors checkpoint shards:  40% Completed | 2/5 [00:02<00:04,  1.52s/it]
+Loading safetensors checkpoint shards:  60% Completed | 3/5 [00:05<00:04,  2.15s/it]
+Loading safetensors checkpoint shards:  80% Completed | 4/5 [00:08<00:02,  2.30s/it]
+Loading safetensors checkpoint shards: 100% Completed | 5/5 [00:11<00:00,  2.58s/it]
+Loading safetensors checkpoint shards: 100% Completed | 5/5 [00:11<00:00,  2.29s/it]
+
+Traceback (most recent call last):
+  File "/projects/bfdz/zluo8/translate/my_bfcl/main.py", line 508, in <module>
+    batch_results = model_interface.infer_batch(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/projects/bfdz/zluo8/translate/my_bfcl/models/qwen3_interface.py", line 110, in infer_batch
+    results = self.generator.send(templates)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/projects/bfdz/zluo8/translate/my_bfcl/call_llm.py", line 411, in chat_generator
+    outputs = llm.generate(inputs, sampling_params)
+              ^^^
+UnboundLocalError: cannot access local variable 'llm' where it is not associated with a value

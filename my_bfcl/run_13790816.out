@@ -1,0 +1,10 @@
+Loading configs from: config_slurm.py
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+File result/inference_raw/Qwen-Qwen3-8B/vanilla.json not found. It will be created.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Creating HuggingFace pipeline for Qwen/Qwen3-8B
+Loading local model with HuggingFace: Qwen/Qwen3-8B

@@ -269,7 +269,7 @@ def make_chat_pipeline(model: LocalModel):
     hf_model = AutoModelForCausalLM.from_pretrained(
         model_id,
         device_map="cuda:0",  # Keep model on GPU, avoid unnecessary offloading
-        torch_dtype=torch.bfloat16,
+        dtype=torch.bfloat16,
         trust_remote_code=True,
         # offload_folder="/work/nvme/bfdz/zluo8/hf_offload",  # Removed for better performance
     )
@@ -349,9 +349,15 @@ def make_chat_pipeline(model: LocalModel):
                 print(f"Warning: Error during cleanup of {model_id}: {e}")
 
     # Initialize and prime the generator
+    print("Initializing generator...")
     gen = chat_generator()
-    next(gen)
-    print("Local model loaded and generator is ready.")
+    print("Generator created, priming with next()...")
+    try:
+        next(gen)
+        print("Local model loaded and generator is ready.")
+    except Exception as e:
+        print(f"Error during generator initialization: {e}")
+        raise
     return gen
 
 
@@ -383,17 +389,21 @@ def make_chat_pipeline_vllm(model: LocalModel):
         trust_remote_code=True,
         gpu_memory_utilization=0.9,  # Use up to 90% of GPU memory
         max_model_len=4096,  # Maximum context length
+        tokenizer_mode="auto",  # Auto-detect tokenizer
+        tensor_parallel_size=1,  # Single GPU
     )
 
     # Set up sampling parameters (similar to HF pipeline)
+    # Note: max_tokens must be much smaller than max_model_len to leave room for input prompt
     sampling_params = SamplingParams(
         temperature=0.001,  # Nearly deterministic
-        max_tokens=4096,
+        max_tokens=2048,  # Leave room for input context (max_model_len - max_tokens = 2048)
         skip_special_tokens=True,
     )
 
     # --- Define the generator pipeline ---
     def chat_generator():
+        nonlocal llm
         inputs = yield  # Initial yield to start the generator
         try:
             while True:

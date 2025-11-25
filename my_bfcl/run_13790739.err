@@ -1,0 +1,12 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading safetensors checkpoint shards:   0% Completed | 0/5 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  20% Completed | 1/5 [00:00<00:03,  1.14it/s]
+Loading safetensors checkpoint shards:  40% Completed | 2/5 [00:02<00:04,  1.58s/it]
+Loading safetensors checkpoint shards:  60% Completed | 3/5 [00:05<00:04,  2.05s/it]
+Loading safetensors checkpoint shards:  80% Completed | 4/5 [00:08<00:02,  2.28s/it]
+Loading safetensors checkpoint shards: 100% Completed | 5/5 [00:10<00:00,  2.41s/it]
+Loading safetensors checkpoint shards: 100% Completed | 5/5 [00:10<00:00,  2.17s/it]
+
+Processed prompts:   0%|          | 0/15 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]Processed prompts:   7%|▋         | 1/15 [00:04<00:58,  4.18s/it, est. speed input: 154.57 toks/s, output: 53.83 toks/s]Processed prompts:  13%|█▎        | 2/15 [00:37<04:40, 21.55s/it, est. speed input: 37.56 toks/s, output: 59.99 toks/s] Processed prompts: 100%|██████████| 15/15 [00:37<00:00,  2.53s/it, est. speed input: 270.38 toks/s, output: 762.20 toks/s]
+Processed prompts:   0%|          | 0/15 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]Processed prompts:   7%|▋         | 1/15 [00:12<02:49, 12.10s/it, est. speed input: 63.62 toks/s, output: 56.68 toks/s]Processed prompts:  13%|█▎        | 2/15 [00:36<04:08, 19.12s/it, est. speed input: 39.34 toks/s, output: 73.35 toks/s]Processed prompts:  20%|██        | 3/15 [00:37<02:12, 11.08s/it, est. speed input: 56.33 toks/s, output: 124.79 toks/s]Processed prompts: 100%|██████████| 15/15 [00:37<00:00,  2.51s/it, est. speed input: 264.03 toks/s, output: 776.98 toks/s]
+Processed prompts:   0%|          | 0/15 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]Processed prompts:   7%|▋         | 1/15 [00:01<00:16,  1.19s/it, est. speed input: 515.92 toks/s, output: 44.61 toks/s]Processed prompts:  27%|██▋       | 4/15 [00:01<00:02,  3.85it/s, est. speed input: 1949.89 toks/s, output: 170.71 toks/s]Processed prompts:  40%|████      | 6/15 [00:01<00:02,  3.57it/s, est. speed input: 1967.75 toks/s, output: 212.48 toks/s]Processed prompts:  47%|████▋     | 7/15 [00:04<00:06,  1.23it/s, est. speed input: 990.36 toks/s, output: 150.31 toks/s] slurmstepd: error: *** JOB 13790739 ON gpua088 CANCELLED AT 2025-11-25T01:47:15 ***

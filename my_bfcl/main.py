@@ -20,7 +20,7 @@ from post_processing import (
 # ============================================================================
 # Set to True to use vLLM backend for local models (faster, better batching)
 # Set to False to use HuggingFace transformers backend (default)
-USE_VLLM_BACKEND = True
+USE_VLLM_BACKEND = False
 # ============================================================================
 
 
@@ -327,7 +327,7 @@ post_processing_cache_stats_different = {'hits': 0, 'misses': 0}
 post_processing_cache_stats_same = {'hits': 0, 'misses': 0}
 
 for config in configs:
-    print(f"Processing config: {config}")
+    print(f"Processing config: {config}", flush=True)
     # config is composed of (model, translate_mode, add_noise_mode)
 
     # process model configuration

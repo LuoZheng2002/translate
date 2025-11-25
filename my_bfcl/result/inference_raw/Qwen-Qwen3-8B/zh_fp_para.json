@@ -1,0 +1,75 @@
+{"id": "multiple_0", "result": "<tool_call>\n{\"name\": \"triangle_properties.get\", \"arguments\": {\"side1\": 5, \"side2\": 4, \"side3\": 3, \"get_area\": true, \"get_perimeter\": true, \"get_angles\": true}}\n</tool_call>"}
+{"id": "multiple_1", "result": "<tool_call>\n{\"name\": \"math.triangle_area_heron\", \"arguments\": {\"side1\": 3, \"side2\": 4, \"side3\": 5}}\n</tool_call>"}
+{"id": "multiple_2", "result": "<tool_call>\n{\"name\": \"country_info.capital\", \"arguments\": {\"country\": \"巴西\"}}\n</tool_call>"}
+{"id": "multiple_3", "result": "<tool_call>\n{\"name\": \"EuclideanDistance.calculate\", \"arguments\": {\"pointA\": [3, 4], \"pointB\": [1, 2]}}\n</tool_call>"}
+{"id": "multiple_4", "result": "<tool_call>\n{\"name\": \"kinematics.calculate_displacement\", \"arguments\": {\"initial_speed\": 20, \"acceleration\": 10, \"time\": 5}}\n</tool_call>"}
+{"id": "multiple_5", "result": "<tool_call>\n{\"name\": \"weather.get_by_coordinates_date\", \"arguments\": {\"coordinates\": [46.603354, 1.8883340], \"date\": \"2019-12-13\"}}\n</tool_call>"}
+{"id": "multiple_6", "result": "<tool_call>\n{\"name\": \"capacitance_calculator.calculate\", \"arguments\": {\"A\": 10, \"d\": 0.01, \"K\": 1.0}}\n</tool_call>"}
+{"id": "multiple_7", "result": "<tool_call>\n{\"name\": \"wildlife_population.assess_growth\", \"arguments\": {\"species\": \"鹿\", \"location\": \"华盛顿州\", \"duration\": 10}}\n</tool_call>\n<tool_call>\n{\"name\": \"ecological_impact.analyze\", \"arguments\": {\"species\": \"鹿\", \"ecosystem\": \"森林\", \"location\": \"华盛顿州\", \"timeframe\": 10}}\n</tool_call>"}
+{"id": "multiple_8", "result": "<tool_call>\n{\"name\": \"realestate.find_properties\", \"arguments\": {\"location\": \"San Diego, CA\", \"propertyType\": \"villa\", \"bedrooms\": 3, \"budget\": {\"min\": 300000, \"max\": 400000}}}\n</tool_call>"}
+{"id": "multiple_9", "result": "<tool_call>\n{\"name\": \"calculate_average\", \"arguments\": {\"gradeDict\": {\"数学\": 90, \"科学\": 75, \"历史\": 82, \"音乐\": 89}}}\n</tool_call>"}
+{"id": "multiple_10", "result": "<tool_call>\n{\"name\": \"database.create_backup\", \"arguments\": {\"db_name\": \"员工数据库\", \"backup_location\": \"/backups/employee_database\", \"timestamp\": true}}\n</tool_call>\n<tool_call>\n{\"name\": \"database.modify_columns\", \"arguments\": {\"db_name\": \"员工数据库\", \"table\": \"personal_data\", \"operation\": \"delete\", \"columns\": [\"电子邮件地址\", \"社会安全号码\"]}}\n</tool_call>"}
+{"id": "multiple_11", "result": "<tool_call>\n{\"name\": \"math_roots.quadratic\", \"arguments\": {\"a\": 5, \"b\": 20, \"c\": -25}}\n</tool_call>"}
+{"id": "multiple_12", "result": "<tool_call>\n{\"name\": \"corporate_finance.calculate_YOY_growth_rate\", \"arguments\": {\"company_name\": \"Tech Inc\", \"year1\": 2019, \"year1_revenue\": 1000000, \"year2\": 2020, \"year2_revenue\": 1200000}}\n</tool_call>"}
+{"id": "multiple_13", "result": "<tool_call>\n{\"name\": \"corporate_finance.product_price\", \"arguments\": {\"company\": \"XYZ\", \"product\": \"A\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"corporate_finance.revenue_forecast\", \"arguments\": {\"company\": \"XYZ\", \"product\": \"A\", \"sales_units_increase_percentage\": 10}}\n</tool_call>"}
+{"id": "multiple_14", "result": "<tool_call>\n{\"name\": \"finance.property_depreciation\", \"arguments\": {\"initial_cost\": 200000, \"depreciation_rate\": 3, \"years\": 5}}\n</tool_call>"}
+{"id": "multiple_15", "result": "<tool_call>\n{\"name\": \"solarFarm.potential\", \"arguments\": {\"coordinates\": [43.653225, -79.383186], \"panelArea\": 80000, \"month\": \"December\"}}\n</tool_call>"}
+{"id": "multiple_16", "result": "<tool_call>\n{\"name\": \"population_genetics.calculate_ne\", \"arguments\": {\"species\": \"老虎\", \"generations\": 100, \"probability\": 0.95}}\n</tool_call>"}
+{"id": "multiple_17", "result": "<tool_call>\n{\"name\": \"currency_conversion.get_rate\", \"arguments\": {\"from_currency\": \"EUR\", \"to_currency\": \"USD\", \"date\": \"2022-01-01\"}}\n</tool_call>"}
+{"id": "multiple_18", "result": "<tool_call>\n{\"name\": \"european_history.battle_details\", \"arguments\": {\"battle\": \"斯大林格勒战役\"}}\n</tool_call>"}
+{"id": "multiple_19", "result": "<tool_call>\n{\"name\": \"religion_history.get_schisms\", \"arguments\": {\"religion\": \"基督教\", \"count\": 3}}\n</tool_call>"}
+{"id": "multiple_20", "result": "<tool_call>\n{\"name\": \"sculpture_price.calculate\", \"arguments\": {\"material\": \"marble\", \"size\": 3}}\n</tool_call>"}
+{"id": "multiple_21", "result": "<tool_call>\n{\"name\": \"generate_sound_wave\", \"arguments\": {\"frequency\": 440, \"duration\": 5, \"wave_type\": \"sine\"}}\n</tool_call>"}
+{"id": "multiple_22", "result": "<tool_call>\n{\"name\": \"sports_data.basketball.most_points_single_game\", \"arguments\": {\"league\": \"NBA\"}}\n</tool_call>"}
+{"id": "multiple_23", "result": "<tool_call>\n{\"name\": \"basketball.player_stats.get\", \"arguments\": {\"player_name\": \"勒布朗·詹姆斯\", \"stats_fields\": [\"points\", \"assists\", \"minutes\"]}}\n</tool_call>"}
+{"id": "multiple_24", "result": "<tool_call>\n{\"name\": \"route_planner.calculate_route\", \"arguments\": {\"start\": \"London\", \"destination\": \"Edinburgh\", \"method\": \"fastest\"}}\n</tool_call>"}
+{"id": "multiple_25", "result": "<tool_call>\n{\"name\": \"video_games.store_price\", \"arguments\": {\"game_title\": \"刺客信条：英灵殿\", \"platform\": \"PlayStation\", \"region\": \"United States\"}}\n</tool_call>"}
+{"id": "multiple_26", "result": "<tool_call>\n{\"name\": \"game_missions.list\", \"arguments\": {\"game\": \"堡垒之夜\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"game_rewards.get\", \"arguments\": {\"game\": \"堡垒之夜\", \"platform\": \"Playstation\"}}\n</tool_call>"}
+{"id": "multiple_27", "result": "<tool_call>\n{\"name\": \"maps.shortest_path\", \"arguments\": {\"start_location\": \"法国巴黎\", \"end_location\": \"意大利罗马\", \"mode\": \"transit\"}}\n</tool_call>"}
+{"id": "multiple_28", "result": "<tool_call>\n{\"name\": \"solve.quadratic_equation\", \"arguments\": {\"a\": 2, \"b\": 3, \"c\": -4}}\n</tool_call>"}
+{"id": "multiple_29", "result": "<tool_call>\n{\"name\": \"functions.intersect\", \"arguments\": {\"function1\": \"3x+2\", \"function2\": \"2x+3\"}}\n</tool_call>"}
+{"id": "multiple_30", "result": "<tool_call>\n{\"name\": \"rectangle.area\", \"arguments\": {\"length\": 12, \"width\": 5}}\n</tool_call>"}
+{"id": "multiple_31", "result": "<tool_call>\n{\"name\": \"geometry_rectangle.calculate\", \"arguments\": {\"width\": 7, \"length\": 10}}\n</tool_call>"}
+{"id": "multiple_32", "result": "<tool_call>\n{\"name\": \"geometry.calculate_cone_volume\", \"arguments\": {\"radius\": 4, \"height\": 7}}\n</tool_call>"}
+{"id": "multiple_33", "result": "<tool_call>\n{\"name\": \"calculate_integral\", \"arguments\": {\"func\": \"3x^2\", \"a\": 1, \"b\": 2}}\n</tool_call>"}
+{"id": "multiple_34", "result": "<tool_call>\n{\"name\": \"math.lcm\", \"arguments\": {\"num1\": 18, \"num2\": 12}}\n</tool_call>"}
+{"id": "multiple_35", "result": "<tool_call>\n{\"name\": \"calculate_gcd\", \"arguments\": {\"num1\": 128, \"num2\": 256, \"algorithm\": \"euclidean\"}}\n</tool_call>"}
+{"id": "multiple_36", "result": "<tool_call>\n{\"name\": \"kinematics.calculate_speed_from_rest\", \"arguments\": {\"distance\": 20, \"time\": 4}}\n</tool_call>"}
+{"id": "multiple_37", "result": "<tool_call>\n{\"name\": \"kinematics.final_velocity\", \"arguments\": {\"initial_velocity\": 40, \"time\": 6, \"acceleration\": -9.81}}\n</tool_call>"}
+{"id": "multiple_38", "result": "<tool_call>\n{\"name\": \"library.search_book\", \"arguments\": {\"book_name\": \"牧羊少年奇幻之旅\", \"city\": \"纽约市\", \"availability\": true}}\n</tool_call>"}
+{"id": "multiple_39", "result": "<tool_call>\n{\"name\": \"ride_hailing.get_rides\", \"arguments\": {\"source\": \"纽约\", \"destination\": \"费城\", \"max_cost\": 50}}\n</tool_call>"}
+{"id": "multiple_40", "result": "<tool_call>\n{\"name\": \"electromagnetism.biot_savart_law\", \"arguments\": {\"current\": 12, \"distance\": 8}}\n</tool_call>"}
+{"id": "multiple_41", "result": "<tool_call>\n{\"name\": \"magnetic_field.calculate\", \"arguments\": {\"I\": 10, \"r\": 0.01}}\n</tool_call>"}
+{"id": "multiple_42", "result": "<tool_call>\n{\"name\": \"calculate_final_temperature\", \"arguments\": {\"quantity1\": 2, \"temperature1\": 300, \"quantity2\": 3, \"temperature2\": 400}}\n</tool_call>"}
+{"id": "multiple_43", "result": "<tool_call>\n{\"name\": \"biological.calc_energy\", \"arguments\": {\"mols\": 5, \"substance\": \"C6H12O6\"}}\n</tool_call>"}
+{"id": "multiple_44", "result": "<tool_call>\n{\"name\": \"calculate.weight_in_space\", \"arguments\": {\"weight_earth_kg\": 70, \"planet\": \"Mars\"}}\n</tool_call>"}
+{"id": "multiple_45", "result": "<tool_call>\n{\"name\": \"geology.get_era\", \"arguments\": {\"era_name\": \"Ice age\", \"calculate_years_ago\": true}}\n</tool_call>"}
+{"id": "multiple_46", "result": "<tool_call>\n{\"name\": \"sort_list\", \"arguments\": {\"elements\": [\"Sam\", \"Alice\", \"Jack\"], \"order\": \"asc\"}}\n</tool_call>"}
+{"id": "multiple_47", "result": "<tool_call>\n{\"name\": \"cosine_similarity.calculate\", \"arguments\": {\"vector1\": [3, 2, 1], \"vector2\": [1, 2, 3]}}\n</tool_call>"}
+{"id": "multiple_48", "result": "<tool_call>\n{\"name\": \"library.find_nearby\", \"arguments\": {\"location\": \"New York City, NY\", \"preferences\": [\"Pet-friendly\", \"Disabled Access\"]}}\n</tool_call>"}
+{"id": "multiple_49", "result": "<tool_call>\n{\"name\": \"calc_Compound_Interest\", \"arguments\": {\"principle_amount\": 1500, \"duration\": 2, \"annual_rate\": 2.5, \"compound_freq\": 1}}\n</tool_call>"}
+{"id": "multiple_50", "result": "<tool_call>\n{\"name\": \"house_price_forecast\", \"arguments\": {\"location\": \"New York City\", \"months\": 1}}\n</tool_call>"}
+{"id": "multiple_51", "result": "<tool_call>\n{\"name\": \"dice_roll_probability\", \"arguments\": {\"desired_sum\": 7, \"sides_per_die\": 6}}\n</tool_call>"}
+{"id": "multiple_52", "result": "<tool_call>\n{\"name\": \"currency_conversion\", \"arguments\": {\"amount\": 100, \"from_currency\": \"EUR\", \"to_currency\": \"USD\"}}\n</tool_call>"}
+{"id": "multiple_53", "result": "<tool_call>\n{\"name\": \"linear_regression\", \"arguments\": {\"independent_var\": [\"interest_rate\", \"unemployment_rate\"], \"dependent_var\": \"house_price\", \"forecast_period\": 5}}\n</tool_call>\n<tool_call>\n{\"name\": \"random_forest_regression\", \"arguments\": {\"independent_var\": [\"interest_rate\", \"unemployment_rate\"], \"dependent_var\": \"house_price\", \"forecast_period\": 5}}\n</tool_call>"}
+{"id": "multiple_54", "result": "<tool_call>\n{\"name\": \"corporate_finance.dividend_data\", \"arguments\": {\"company\": \"Apple Inc.\", \"years\": 5, \"frequency\": \"annually\"}}\n</tool_call>"}
+{"id": "multiple_55", "result": "<tool_call>\n{\"name\": \"stock_forecast\", \"arguments\": {\"company\": \"谷歌\", \"days\": 3, \"model\": \"regression\"}}\n</tool_call>"}
+{"id": "multiple_56", "result": "<tool_call>\n{\"name\": \"avg_closing_price\", \"arguments\": {\"company\": \"苹果\", \"days\": 60, \"data_source\": \"yahoo finance\"}}\n</tool_call>"}
+{"id": "multiple_57", "result": "<tool_call>\n{\"name\": \"financial.compound_interest\", \"arguments\": {\"principle\": 1000, \"rate\": 0.05, \"time\": 10, \"n\": 4}}\n</tool_call>"}
+{"id": "multiple_58", "result": "<tool_call>\n{\"name\": \"lawyer.search\", \"arguments\": {\"location\": \"Los Angeles, CA\", \"expertise\": \"Marriage\"}}\n</tool_call>"}
+{"id": "multiple_59", "result": "<tool_call>\n{\"name\": \"lawyer_finder\", \"arguments\": {\"location\": \"纽约周边地区\", \"specialization\": [\"刑事法律\"]}}\n</tool_call>"}
+{"id": "multiple_60", "result": "<tool_call>\n{\"name\": \"humidity_temperature_forecast\", \"arguments\": {\"location\": \"New York City\", \"days\": 7}}\n</tool_call>"}
+{"id": "multiple_61", "result": "<tool_call>\n{\"name\": \"landscape_architect.find_specialty\", \"arguments\": {\"location\": \"Portland, OR\", \"specialization\": \"residential design\", \"years_experience\": 5}}\n</tool_call>"}
+{"id": "multiple_62", "result": "<tool_call>\n{\"name\": \"nature_park.find_nearby\", \"arguments\": {\"location\": \"Boston, MA\", \"features\": [\"Camping\", \"Scenic View\"]}}\n</tool_call>"}
+{"id": "multiple_63", "result": "<tool_call>\n{\"name\": \"air_quality_forecast\", \"arguments\": {\"location\": \"New York\", \"days\": 7}}\n</tool_call>"}
+{"id": "multiple_64", "result": "<tool_call>\n{\"name\": \"uv_index.get_future\", \"arguments\": {\"location\": \"东京\", \"date\": \"06-01-2023\"}}\n</tool_call>"}
+{"id": "multiple_65", "result": "<tool_call>\n{\"name\": \"geodistance.find\", \"arguments\": {\"origin\": \"New York City\", \"destination\": \"Los Angeles\", \"unit\": \"miles\"}}\n</tool_call>"}
+{"id": "multiple_66", "result": "<tool_call>\n{\"name\": \"traffic_estimate\", \"arguments\": {\"start_location\": \"Las Vegas\", \"end_location\": \"Los Angeles\", \"time_period\": \"weekend\"}}\n</tool_call>"}
+{"id": "multiple_67", "result": "<tool_call>\n{\"name\": \"translate\", \"arguments\": {\"text\": \"Hello, how are you?\", \"source_language\": \"English\", \"target_language\": \"French\"}}\n</tool_call>"}
+{"id": "multiple_68", "result": "<tool_call>\n{\"name\": \"library.search_books\", \"arguments\": {\"location\": \"纽约公共图书馆\", \"genre\": \"历史小说\"}}\n</tool_call>"}
+{"id": "multiple_69", "result": "<tool_call>\n{\"name\": \"five_factor_model.analyse\", \"arguments\": {\"talkative\": true, \"nervous\": true, \"artistic_interests\": false, \"lazy\": true, \"forgiving\": true}}\n</tool_call>"}
+{"id": "multiple_70", "result": "<tool_call>\n{\"name\": \"european_history.get_monarchs\", \"arguments\": {\"country\": \"France\", \"century\": 18}}\n</tool_call>"}
+{"id": "multiple_71", "result": "<tool_call>\n{\"name\": \"get_population\", \"arguments\": {\"year\": 1954, \"category\": \"veterans\"}}\n</tool_call>"}
+{"id": "multiple_72", "result": "<tool_call>\n{\"name\": \"us_history.population_by_state_year\", \"arguments\": {\"state\": \"California\", \"year\": 1970}}\n</tool_call>"}
+{"id": "multiple_73", "result": "<tool_call>\n{\"name\": \"religion.get_origin\", \"arguments\": {\"religion\": \"佛教\"}}\n</tool_call>"}
+{"id": "multiple_74", "result": "<tool_call>\n{\"name\": \"art_auction.fetch_artwork_price\", \"arguments\": {\"artwork_name\": \"星夜\", \"artist\": \"梵高\", \"platform\": \"all\"}}\n</tool_call>"}
