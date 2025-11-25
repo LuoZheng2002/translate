@@ -39,7 +39,7 @@ def api_inference(model: ApiModel, input_messages: list[dict]) -> str:
 
     # --- Dispatch based on model ---
     match model:
-        case ApiModel.GPT_4O_MINI:
+        case ApiModel.GPT_4O_MINI | ApiModel.GPT_5:
             # Use OpenAI client
             from openai import OpenAI
             api_key = os.getenv("OPENAI_API_KEY")
@@ -50,7 +50,7 @@ def api_inference(model: ApiModel, input_messages: list[dict]) -> str:
             response = client.chat.completions.create(
                 model=model.value,
                 messages=input_messages,
-                temperature=0
+                # temperature=0.001
             )
 
             return response.choices[0].message.content

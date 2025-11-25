@@ -1,6 +1,0 @@
-`torch_dtype` is deprecated! Use `dtype` instead!
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:07,  2.61s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:05<00:05,  2.53s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:08<00:02,  2.72s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:11<00:00,  2.87s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:11<00:00,  2.78s/it]
-Traceback (most recent call last):
-  File "/projects/bfdz/zluo8/translate/my_bfcl/main.py", line 414, in <module>
-    raise ValueError(f"Unsupported post process option: {post_process_option}")
-ValueError: Unsupported post process option: (<PostProcessOption.POST_PROCESS_SAME: 3>,)

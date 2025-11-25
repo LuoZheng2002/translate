@@ -7,30 +7,28 @@ from config import ApiModel
 from parse_dataset import load_json_lines
 
 
-translated = True
+# translated = True
 postfix_to_generate = [
-    # "_zh_partial"
-    "_zh_full"
+    "_zh_partial"
+    # "_zh_full"
 ]
 
 
-if translated:
-    system_prompt = '''
-You are a helpful assistant helping rephrasing user requests, while accurately preserving their meaning, including numbers and names if exist. If the request is multilingual, *DON'T* translate English words to other languages and *KEEP* all English words and numbers intact. Do not answer the requirement, just produce another one that is identical in meaning but is phrased differently. Produce ONLY the rephrased requirement, without further thoughts or explanations. Consider the example below:
+# if translated:
+#     system_prompt = '''
+# You are a helpful assistant helping rephrasing user requests, while accurately preserving their meaning, including numbers and names if exist. If the request is multilingual, *DON'T* translate English words to other languages and *KEEP* all English words and numbers intact. Do not answer the requirement, just produce another one that is identical in meaning but is phrased differently. Produce ONLY the rephrased requirement, without further thoughts or explanations. Consider the example below:
 
-USER: 了解在Playstation平台上玩Fortnite通过不同任务和奖杯可获得的奖励
+# USER: 了解在Playstation平台上玩Fortnite通过不同任务和奖杯可获得的奖励
 
-ASSISTANT: 探索在Playstation平台上玩Fortnite时，通过完成各种任务和获得奖杯可以获得的奖励
-'''
-else:
-    system_prompt = '''
+# ASSISTANT: 探索在Playstation平台上玩Fortnite时，通过完成各种任务和获得奖杯可以获得的奖励
+# '''
+# else:
+system_prompt = '''
 You are a helpful assistant helping rephrasing user requests, while accurately preserving their meaning, including numbers and names if exist. Do not answer the requirement, just produce another one that is identical in meaning but is phrased differently. Produce ONLY the rephrased requirement, without further thoughts or explanations. Consider the example below:
 
 USER: Can I find the dimensions and properties of a triangle, if it is known that its three sides are 5 units, 4 units and 3 units long?
 
-ASSISTANT: What are the dimensions and
-properties of a triangle whose three sides
-are 5, 4 and 3 units long?
+ASSISTANT: What are the dimensions and properties of a triangle whose three sides are 5, 4 and 3 units long?
 '''
 
 
@@ -39,7 +37,7 @@ def generate_paraphrased_case(question: str) -> str:
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": question}
     ]
-    paraphrased_question = api_inference(ApiModel.DEEPSEEK_CHAT, input_messages)
+    paraphrased_question = api_inference(ApiModel.GPT_5, input_messages)
     return paraphrased_question
 
 

@@ -7,33 +7,33 @@ from config import ApiModel
 from parse_dataset import load_json_lines
 
 
-translated = True
+# translated = True
 postfix_to_generate = [
-    # "_zh_partial"
-    "_zh_full"
+    "_zh_partial"
+    # "_zh_full"
 ]
 
 
-if translated:
-    system_prompt = '''
-You are a helpful assistant that replaces words with synonyms of similar meaning while maintaining semantic correctness. Your task is to process word by word and replace each word with a synonym if possible.
+# if translated:
+#     system_prompt = '''
+# You are a helpful assistant that replaces words with synonyms of similar meaning while maintaining semantic correctness. Your task is to process word by word and replace each word with a synonym if possible.
 
-IMPORTANT RULES:
-1. Replace ONLY non-English words with appropriate synonyms
-2. KEEP all English words and numbers unchanged
-3. Maintain the semantic meaning and grammatical structure
-4. Do NOT perform general paraphrasing, only synonym replacement
-5. Process word by word, not phrase by phrase
-6. If a word has no suitable synonym or is a proper noun, keep it unchanged
+# IMPORTANT RULES:
+# 1. Replace ONLY non-English words with appropriate synonyms
+# 2. KEEP all English words and numbers unchanged
+# 3. Maintain the semantic meaning and grammatical structure
+# 4. Do NOT perform general paraphrasing, only synonym replacement
+# 5. Process word by word, not phrase by phrase
+# 6. If a word has no suitable synonym or is a proper noun, keep it unchanged
 
-Produce ONLY the modified text with synonyms, without further thoughts or explanations. Consider the example below:
+# Produce ONLY the modified text with synonyms, without further thoughts or explanations. Consider the example below:
 
-USER: 了解在Playstation平台上玩Fortnite通过不同任务和奖杯可获得的奖励
+# USER: 了解在Playstation平台上玩Fortnite通过不同任务和奖杯可获得的奖励
 
-ASSISTANT: 理解在Playstation平台上玩Fortnite经过各类工作和奖项可获得的回报
-'''
-else:
-    system_prompt = '''
+# ASSISTANT: 理解在Playstation平台上玩Fortnite经过各类工作和奖项可获得的回报
+# '''
+# else:
+system_prompt = '''
 You are a helpful assistant that replaces words with synonyms of similar meaning while maintaining semantic correctness. Your task is to process word by word and replace each word with a synonym if possible.
 
 IMPORTANT RULES:
@@ -50,13 +50,12 @@ USER: Can I find the dimensions and properties of a triangle, if it is known tha
 ASSISTANT: Can I discover the measurements and characteristics of a triangle, if it is known that its three sides are 5 units, 4 units and 3 units long?
 '''
 
-
 def generate_synonym_case(question: str) -> str:
     input_messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": question}
     ]
-    synonym_question = api_inference(ApiModel.DEEPSEEK_CHAT, input_messages)
+    synonym_question = api_inference(ApiModel.GPT_5, input_messages)
     return synonym_question
 
 

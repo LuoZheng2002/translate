@@ -5,6 +5,7 @@ from typing import NamedTuple, Union
 
 class ApiModel(Enum):
     GPT_4O_MINI = "gpt-4o-mini"
+    GPT_5 = "gpt-5"
     CLAUDE_SONNET = "claude-sonnet-4-5"
     CLAUDE_HAIKU = "claude-haiku-4-5"
     DEEPSEEK_CHAT = "deepseek-chat"

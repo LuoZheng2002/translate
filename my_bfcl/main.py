@@ -224,8 +224,8 @@ for config in configs:
                     post_process_option = PostProcessOption.POST_PROCESS_SAME
                 case TranslateOption.PARTIALLY_TRANSLATED:
                     translate_dataset_postfix = "_partial"
-                    translate_mode_postfix = "_par" # partial            
-                    translate_postfix = "_f" # fully translated, do not prompt translate    
+                    translate_mode_postfix = "_par" # partial
+                    translate_postfix = "_par" # partially translated, do not prompt translate    
                 case _:
                     raise ValueError(f"Unsupported translate option: {option}")
         case NotTranslated():
