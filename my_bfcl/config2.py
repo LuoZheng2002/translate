@@ -19,7 +19,10 @@ configs = [
     # Example: Test only GPT-5-MINI with no translation
     Config(
         model=ApiModel.GPT_5_MINI,
-        translate_mode=NotTranslated(),
+        translate_mode=Translated(
+            language=Language.CHINESE,
+            option=TranslateOption.PARTIALLY_TRANSLATED
+        ),
         add_noise_mode=AddNoiseMode.NO_NOISE
     ),
 
