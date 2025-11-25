@@ -8,6 +8,7 @@ from typing import Union, Optional, List, Dict, Any
 from config import ApiModel, LocalModel
 from models.base import ModelInterface
 from models.gpt_4o_mini_interface import GPT4oMiniInterface
+from models.gpt_5_interface import GPT5Interface
 from models.claude_sonnet_interface import ClaudeSonnetInterface
 from models.claude_haiku_interface import ClaudeHaikuInterface
 from models.deepseek_chat_interface import DeepseekChatInterface
@@ -55,12 +56,12 @@ def _create_api_model_interface(model: ApiModel) -> ModelInterface:
         EnvironmentError: If required API keys are missing
     """
     match model:
-        case ApiModel.GPT_4O_MINI:
-            return GPT4oMiniInterface()
-        case ApiModel.CLAUDE_SONNET:
-            return ClaudeSonnetInterface()
-        case ApiModel.CLAUDE_HAIKU:
-            return ClaudeHaikuInterface()
+        case ApiModel.GPT_5:
+            return GPT5Interface(model_variant="gpt-5", use_strict_mode=False)
+        case ApiModel.GPT_5_MINI:
+            return GPT5Interface(model_variant="gpt-5-mini", use_strict_mode=False)
+        case ApiModel.GPT_5_NANO:
+            return GPT5Interface(model_variant="gpt-5-nano", use_strict_mode=False)
         case ApiModel.DEEPSEEK_CHAT:
             return DeepseekChatInterface()
         case ApiModel.LLAMA_3_1_8B:

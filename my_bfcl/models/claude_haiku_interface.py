@@ -98,7 +98,7 @@ class ClaudeHaikuInterface(ModelInterface):
             # Parse as Python AST (from parse_ast.py:178)
             parsed = ast.parse(cleaned_input, mode="eval")
         except SyntaxError:
-            return f"Failed to decode AST: Invalid syntax."
+            return f"Failed to decode AST: Invalid syntax. Raw string: {cleaned_input}"
 
         # Extract function calls from AST (from parse_ast.py:181-189)
         extracted = []
@@ -107,7 +107,7 @@ class ClaudeHaikuInterface(ModelInterface):
         else:
             for elem in parsed.body.elts:
                 if not isinstance(elem, ast.Call):
-                    return f"Failed to decode AST: Expected AST Call node, but got {type(elem)}"
+                    return f"Failed to decode AST: Expected AST Call node, but got {type(elem)}. Raw string: {cleaned_input}"
                 extracted.append(self._resolve_ast_call(elem))
 
         return extracted

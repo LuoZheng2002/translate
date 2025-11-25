@@ -108,7 +108,12 @@ def llm_match_parameters(param_value: Any, ground_truth_value: Any,
     # Check exact equality first (fastest path)
     if param_value == ground_truth_value:
         return True
-    if param_value == "Failed to decode AST: Invalid syntax.":
+    # Check if param_value is a parsing error message (skip LLM matching for errors)
+    if isinstance(param_value, str) and (
+        param_value.startswith("Failed to decode AST:") or
+        param_value.startswith("Failed to decode JSON:") or
+        param_value.startswith("Failed to parse")
+    ):
         return False
     
     

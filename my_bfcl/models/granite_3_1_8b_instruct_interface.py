@@ -212,7 +212,7 @@ class Granite3_1_8BInstructInterface(ModelInterface):
             # Parse the JSON array (from parse_ast.py:151)
             tool_calls = json.loads(model_result_raw)
         except json.JSONDecodeError:
-            return f"Failed to decode JSON: Invalid JSON format."
+            return f"Failed to decode JSON: Invalid JSON format. Raw string: {model_result_raw}"
 
         # Convert Granite format to desired format (from parse_ast.py:156-166)
         extracted = []
@@ -223,9 +223,9 @@ class Granite3_1_8BInstructInterface(ModelInterface):
                     func_args = tool_call["arguments"]
                     extracted.append({func_name: func_args})
                 else:
-                    return f"Failed to decode JSON: Invalid tool call structure."
+                    return f"Failed to decode JSON: Invalid tool call structure. Raw string: {model_result_raw}"
         else:
-            return f"Failed to decode JSON: Expected a list of tool calls."
+            return f"Failed to decode JSON: Expected a list of tool calls. Raw string: {model_result_raw}"
 
         return extracted
 

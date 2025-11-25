@@ -1,6 +1,9 @@
 from parse_dataset import load_json_lines
 import json
 import os
+import sys
+import argparse
+import importlib.util
 from config import *
 from parse_ast import *
 import re
@@ -12,6 +15,55 @@ from post_processing import (
     process_post_processing_sample
 )
 
+
+def load_configs_from_file(config_file_path: str):
+    """
+    Load the 'configs' list from a specified Python file.
+
+    Args:
+        config_file_path: Path to the Python file containing configs
+
+    Returns:
+        The configs list from the specified file
+    """
+    # Convert to absolute path if relative
+    config_file_path = os.path.abspath(config_file_path)
+
+    if not os.path.exists(config_file_path):
+        raise FileNotFoundError(f"Config file not found: {config_file_path}")
+
+    # Load the module dynamically
+    spec = importlib.util.spec_from_file_location("custom_configs", config_file_path)
+    config_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(config_module)
+
+    if not hasattr(config_module, 'configs'):
+        raise AttributeError(f"Config file {config_file_path} does not contain a 'configs' variable")
+
+    return config_module.configs
+
+
+# Parse command-line arguments
+parser = argparse.ArgumentParser(
+    description="Run BFCL evaluation with custom configuration"
+)
+parser.add_argument(
+    "--config",
+    type=str,
+    default=None,
+    help="Path to a Python file containing the 'configs' list (default: use configs from config.py)"
+)
+args = parser.parse_args()
+
+# Load configs from specified file or use default from config.py
+if args.config:
+    print(f"Loading configs from: {args.config}")
+    configs = load_configs_from_file(args.config)
+else:
+    # configs is already imported from config.py via 'from config import *'
+    # print("Using configs from config.py")
+    print("Error: Please specify a config file using --config argument. For example, --config config1.py")
+    exit(1)
 
 # File operation helper functions
 
@@ -202,39 +254,39 @@ for config in configs:
 
     # process model configuration
     # map model to model_postfix
-    match config.model:
-        case ApiModel() as api_model:
-            match api_model:
-                case ApiModel.GPT_4O_MINI:
-                    model_postfix = "_gpt4o_mini"
-                case ApiModel.CLAUDE_SONNET:
-                    model_postfix = "_claude_sonnet"
-                case ApiModel.CLAUDE_HAIKU:
-                    model_postfix = "_claude_haiku"
-                case ApiModel.DEEPSEEK_CHAT:
-                    model_postfix = "_deepseek"
-                case ApiModel.LLAMA_3_1_8B:
-                    model_postfix = "_llama3_1_8b"
-                case ApiModel.LLAMA_3_1_70B:
-                    model_postfix = "_llama3_1_70b"
-                case _:
-                    raise ValueError(f"Unsupported API model: {api_model}")
-        case LocalModel() as local_model:
-            match local_model:
-                case LocalModel.GRANITE_3_1_8B_INSTRUCT:
-                    model_postfix = "_granite"
-                case LocalModel.QWEN_2_5_7B_INSTRUCT:
-                    model_postfix = "_qwen2_5_7b"
-                case LocalModel.QWEN_2_5_14B_INSTRUCT:
-                    model_postfix = "_qwen2_5_14b"
-                case LocalModel.QWEN_2_5_32B_INSTRUCT:
-                    model_postfix = "_qwen2_5_32b"
-                case LocalModel.QWEN_2_5_72B_INSTRUCT:
-                    model_postfix = "_qwen2_5_72b"
-                case _:
-                    raise ValueError(f"Unsupported local model: {local_model}")
-        case _:
-            raise ValueError(f"Unsupported model struct: {config.model}")
+    # match config.model:
+    #     case ApiModel() as api_model:
+    #         match api_model:
+    #             case ApiModel.GPT_4O_MINI:
+    #                 model_postfix = "_gpt4o_mini"
+    #             case ApiModel.CLAUDE_SONNET:
+    #                 model_postfix = "_claude_sonnet"
+    #             case ApiModel.CLAUDE_HAIKU:
+    #                 model_postfix = "_claude_haiku"
+    #             case ApiModel.DEEPSEEK_CHAT:
+    #                 model_postfix = "_deepseek"
+    #             case ApiModel.LLAMA_3_1_8B:
+    #                 model_postfix = "_llama3_1_8b"
+    #             case ApiModel.LLAMA_3_1_70B:
+    #                 model_postfix = "_llama3_1_70b"
+    #             case _:
+    #                 raise ValueError(f"Unsupported API model: {api_model}")
+    #     case LocalModel() as local_model:
+    #         match local_model:
+    #             case LocalModel.GRANITE_3_1_8B_INSTRUCT:
+    #                 model_postfix = "_granite"
+    #             case LocalModel.QWEN_2_5_7B_INSTRUCT:
+    #                 model_postfix = "_qwen2_5_7b"
+    #             case LocalModel.QWEN_2_5_14B_INSTRUCT:
+    #                 model_postfix = "_qwen2_5_14b"
+    #             case LocalModel.QWEN_2_5_32B_INSTRUCT:
+    #                 model_postfix = "_qwen2_5_32b"
+    #             case LocalModel.QWEN_2_5_72B_INSTRUCT:
+    #                 model_postfix = "_qwen2_5_72b"
+    #             case _:
+    #                 raise ValueError(f"Unsupported local model: {local_model}")
+    #     case _:
+    #         raise ValueError(f"Unsupported model struct: {config.model}")
     
     post_process_option = PostProcessOption.DONT_POST_PROCESS
     prompt_translate = False
@@ -389,6 +441,40 @@ for config in configs:
         # Final sort and write
         if len(inference_raw_results) > 0:
             append_and_rewrite_json_lines(inference_raw_result_path, inference_raw_results)
+
+    # Ensure model_interface is created before inference_json or other passes
+    # This is needed when requires_inference_raw=False or all cases were skipped
+    if requires_inference_json or requires_post_processing or requires_evaluation or requires_score:
+        # Create model_interface if it doesn't exist yet
+        if 'model_interface' not in locals():
+            is_api_model = isinstance(config.model, ApiModel)
+            is_local_model = isinstance(config.model, LocalModel)
+
+            if is_api_model:
+                model_interface = create_model_interface(config.model)
+            elif is_local_model:
+                local_model = config.model
+                generator = get_or_create_local_pipeline(local_model)
+                model_interface = create_model_interface(local_model, generator)
+            else:
+                raise ValueError(f"Unsupported model type: {type(config.model)}")
+
+        # For GPT-5 models, populate name_mapping from test_cases
+        # This ensures parse_output can convert sanitized names back to original names
+        if hasattr(model_interface, 'populate_name_mapping'):
+            # Collect all unique functions from test_cases
+            all_functions = []
+            seen_functions = set()
+            for case in test_cases:
+                for func in case['function']:
+                    func_name = func.get('name')
+                    if func_name and func_name not in seen_functions:
+                        all_functions.append(func)
+                        seen_functions.add(func_name)
+
+            # Populate the name mapping
+            model_interface.populate_name_mapping(all_functions)
+
     if requires_inference_json:
         # reload inference raw results
         try:

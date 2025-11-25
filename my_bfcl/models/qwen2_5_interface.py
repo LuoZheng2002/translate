@@ -153,7 +153,7 @@ class Qwen25InstructInterface(ModelInterface):
             # Parse the JSON array
             tool_calls = json.loads(model_result_raw)
         except json.JSONDecodeError:
-            return f"Failed to decode JSON: Invalid JSON format."
+            return f"Failed to decode JSON: Invalid JSON format. Raw string: {model_result_raw}"
 
         # Convert Qwen2.5 format to desired format
         extracted = []
@@ -164,9 +164,9 @@ class Qwen25InstructInterface(ModelInterface):
                     func_args = tool_call["arguments"]
                     extracted.append({func_name: func_args})
                 else:
-                    return f"Failed to decode JSON: Invalid tool call structure."
+                    return f"Failed to decode JSON: Invalid tool call structure. Raw string: {model_result_raw}"
         else:
-            return f"Failed to decode JSON: Expected a list of tool calls."
+            return f"Failed to decode JSON: Expected a list of tool calls. Raw string: {model_result_raw}"
 
         return extracted
 

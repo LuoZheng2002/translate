@@ -150,7 +150,7 @@ def raw_to_json(model: Model, case_id: str, model_result_raw: str) -> object:
             # Parse the JSON array
             tool_calls = json.loads(model_result_raw)
         except json.JSONDecodeError:
-            return f"Failed to decode JSON: Invalid JSON format."
+            return f"Failed to decode JSON: Invalid JSON format. Raw string: {model_result_raw}"
 
         # Convert Granite format to desired format
         extracted = []
@@ -161,9 +161,9 @@ def raw_to_json(model: Model, case_id: str, model_result_raw: str) -> object:
                     func_args = tool_call["arguments"]
                     extracted.append({func_name: func_args})
                 else:
-                    return f"Failed to decode JSON: Invalid tool call structure."
+                    return f"Failed to decode JSON: Invalid tool call structure. Raw string: {model_result_raw}"
         else:
-            return f"Failed to decode JSON: Expected a list of tool calls."
+            return f"Failed to decode JSON: Expected a list of tool calls. Raw string: {model_result_raw}"
 
         decoded_output = extracted
     else:
@@ -177,7 +177,7 @@ def raw_to_json(model: Model, case_id: str, model_result_raw: str) -> object:
         try:
             parsed = ast.parse(cleaned_input, mode="eval")
         except SyntaxError:
-            return f"Failed to decode AST: Invalid syntax."
+            return f"Failed to decode AST: Invalid syntax. Raw string: {cleaned_input}"
         extracted = []
         if isinstance(parsed.body, ast.Call):
             extracted.append(resolve_ast_call(parsed.body))
@@ -185,7 +185,7 @@ def raw_to_json(model: Model, case_id: str, model_result_raw: str) -> object:
             for elem in parsed.body.elts:
                 if not isinstance(elem, ast.Call):
                     # raise Exception(f"Expected AST Call node, but got {type(elem)}")
-                    return f"Failed to decode AST: Expected AST Call node, but got {type(elem)}"
+                    return f"Failed to decode AST: Expected AST Call node, but got {type(elem)}. Raw string: {cleaned_input}"
                 extracted.append(resolve_ast_call(elem))
         decoded_output = extracted
 
@@ -198,6 +198,8 @@ def evaluate_json(
     possible_answer,
     func_description,
 ):
+    # print("case id:", case_id)
+    # print("decoded output:", decoded_output)
     """Helper method to process a single AST entry."""
     if isinstance(decoded_output, str):
         return {
@@ -266,7 +268,8 @@ def evaluate_json(
             }
         
     possible_answer_params = possible_answer[possible_answer_func_name]
-
+    # print("model_params:", model_params)
+    # print(type(model_params))
     # Validate types and values for each parameter in model output
     for param, value in model_params.items():
         if param not in possible_answer_params:
