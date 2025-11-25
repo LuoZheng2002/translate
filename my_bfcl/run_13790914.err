@@ -1,0 +1,6 @@
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:02<00:08,  2.16s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:04<00:06,  2.16s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:06<00:04,  2.15s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:08<00:01,  1.98s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:08<00:00,  1.51s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:08<00:00,  1.77s/it]
+Traceback (most recent call last):
+  File "/projects/bfdz/zluo8/translate/my_bfcl/main.py", line 685, in <module>
+    ApiModel.GPT_4O_MINI,  # Use a powerful model for post-processing
+    ^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'ApiModel' has no attribute 'GPT_4O_MINI'. Did you mean: 'GPT_5_MINI'?

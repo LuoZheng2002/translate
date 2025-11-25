@@ -1,0 +1,666 @@
+Loading configs from: config_slurm.py
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Creating HuggingFace pipeline for Qwen/Qwen3-8B
+Loading local model with HuggingFace: Qwen/Qwen3-8B
+Initializing generator...
+Generator created, priming with next()...
+Local model loaded and generator is ready.
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/vanilla.json: {'accuracy': 0.95, 'total_cases': 200, 'correct_cases': 190}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/syno.json: {'accuracy': 0.895, 'total_cases': 200, 'correct_cases': 179}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/para.json: {'accuracy': 0.94, 'total_cases': 200, 'correct_cases': 188}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_f.json: {'accuracy': 0.51, 'total_cases': 200, 'correct_cases': 102}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_f_syno.json: {'accuracy': 0.495, 'total_cases': 200, 'correct_cases': 99}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_f_para.json: {'accuracy': 0.52, 'total_cases': 200, 'correct_cases': 104}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_pt.json: {'accuracy': 0.59, 'total_cases': 200, 'correct_cases': 118}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_pt_syno.json: {'accuracy': 0.57, 'total_cases': 200, 'correct_cases': 114}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
+Warning: some test cases already exist in inference result file. Skipping 75 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+
+Processing batch 1: cases 0 to 15
+Calling model interface for batch of size 15...
+Generating responses for batch of 15 inputs...
+Generation complete for batch of 15 responses.
+Received batch results.
+Inferencing case id multiple_75, question: 当前客厅中最受欢迎的油漆颜色是哪一种？
+Answer:  <tool_call>
+{"name": "paint_color.trends", "arguments": {"room": "Living room", "period": "Monthly"}}
+</tool_call>
+Inferencing case id multiple_76, question: 定制一尊铜马雕塑时，有哪些材料可以选择？
+Answer:  <tool_call>
+{"name": "sculpture.create_custom", "arguments": {"item": "horse", "material": "Bronze"}}
+</tool_call>
+Inferencing case id multiple_77, question: 查找纽约知名的现代雕塑作品。
+Answer:  <tool_call>
+{"name": "artwork_search.find", "arguments": {"type": "sculpture", "location": "New York", "era": "modern"}}
+</tool_call>
+Inferencing case id multiple_78, question: 查询伦敦自然历史博物馆的相关信息，涵盖其开放时段、展出项目以及无障碍服务。
+Answer:  <tool_call>
+{"name": "museum_info", "arguments": {"museum": "伦敦自然历史博物馆", "city": "伦敦", "features": ["timings", "exhibitions", "accessibility"]}}
+</tool_call>
+Inferencing case id multiple_79, question: 查询纽约现代艺术博物馆下个月的艺术展览安排。
+Answer:  <tool_call>
+{"name": "exhibition_info", "arguments": {"museum_name": "纽约现代艺术博物馆", "month": 2}}
+</tool_call>
+Inferencing case id multiple_80, question: 寻找纳什维尔本地一家既销售吉他又开设小提琴课程的乐器店。
+Answer:  <tool_call>
+{"name": "music_shop.find_nearby", "arguments": {"location": "Nashville, TN", "instruments": ["Guitars"], "services": ["Violin Lessons"]}}
+</tool_call>
+Inferencing case id multiple_81, question: 我想预定一张埃米纳姆在纽约市演出的后台通行门票。
+Answer:  <tool_call>
+{"name": "concert.book_ticket", "arguments": {"artist": "Eminem", "location": "New York City", "add_ons": ["Backstage Pass"]}}
+</tool_call>
+Inferencing case id multiple_82, question: 以每分钟120拍的速度，在C大调上演奏一首乐曲。
+Answer:  <tool_call>
+{"name": "music.generate", "arguments": {"key": "C Major", "tempo": 120}}
+</tool_call>
+Inferencing case id multiple_83, question: 莱昂内尔·梅西在巴塞罗那队的总进球数是多少？
+Answer:  <tool_call>
+{"name": "player_stats.get_all_time_goals", "arguments": {"player_name": "莱昂内尔·梅西", "team_name": "巴塞罗那"}}
+</tool_call>
+Inferencing case id multiple_84, question: 列出巴塞罗那足球俱乐部在欧冠联赛中进球数排名前十的球员。
+Answer:  <tool_call>
+{"name": "getTopGoalScorers", "arguments": {"competition": "UEFA Champions League", "team": "Barcelona", "number": 10}}
+</tool_call>
+Inferencing case id multiple_85, question: 查询皇家马德里最近五场西甲联赛的足球比赛结果。
+Answer:  <tool_call>
+{"name": "soccer_scores.get_scores", "arguments": {"team": "皇家马德里", "league": "西甲联赛", "rounds": 5}}
+</tool_call>
+Inferencing case id multiple_86, question: 在BoardGameGeek商店中，有哪些值得推荐的适合双人进行的策略型桌游？
+Answer:  <tool_call>
+{"name": "BoardGameGeek.recommend", "arguments": {"numPlayers": 2, "category": "strategy"}}
+</tool_call>
+Inferencing case id multiple_87, question: 查询游戏《赛博朋克2077》在Xbox主机上的近期更新内容或修复程序。
+Answer:  <tool_call>
+{"name": "games.update.find", "arguments": {"game": "赛博朋克2077", "platform": "Xbox"}}
+</tool_call>
+Inferencing case id multiple_88, question: 查询2020年游戏《魔兽世界》的活跃玩家数量是多少。
+Answer:  <tool_call>
+{"name": "video_games.get_player_count", "arguments": {"game_title": "魔兽世界", "year": 2020}}
+</tool_call>
+Inferencing case id multiple_89, question: 寻找一份健康的午餐食谱，要求热量低于500卡路里，并且包含鸡肉和蘑菇作为主要食材。
+Answer:  <tool_call>
+{"name": "recipe_search", "arguments": {"ingredients": ["鸡肉", "蘑菇"], "calories": 500, "meal": "lunch"}}
+</tool_call>
+
+Processing batch 2: cases 15 to 30
+Calling model interface for batch of size 15...
+Generating responses for batch of 15 inputs...
+Generation complete for batch of 15 responses.
+Received batch results.
+Inferencing case id multiple_90, question: 请推荐一家位于西雅图、可接待5人团体的海鲜餐厅。
+Answer:  <tool_call>
+{"name": "restaurant.find_group", "arguments": {"location": "Seattle, WA", "cuisine": ["Seafood"], "group_size": 5}}
+</tool_call>
+Inferencing case id multiple_91, question: 有没有使用不超过5种食材制作美味苹果派的方法？
+Answer:  <tool_call>
+{"name": "recipe.find", "arguments": {"mainIngredient": "apple", "ingredientLimit": 5}}
+</tool_call>
+Inferencing case id multiple_92, question: 提供一份在丹佛周边沃尔玛门店能够购买到的素食及无麸质食品列表。
+Answer:  <tool_call>
+{"name": "walmart.vegan_products", "arguments": {"location": "Denver, CO", "categories": ["vegan", "gluten-free"]}}
+</tool_call>
+Inferencing case id multiple_93, question: 请为我在纽约万豪酒店安排一间豪华客房，连续住宿两晚，并包含早餐服务。
+Answer:  <tool_call>
+{"name": "hotel.book", "arguments": {"location": "纽约", "roomType": "豪华客房", "nights": 2, "additional_services": ["breakfast"]}}
+</tool_call>
+Inferencing case id multiple_94, question: 请帮我查询纽约希尔顿酒店大床套房住三晚的价格
+Answer:  <tool_call>
+{"name": "hotel_room_pricing.get", "arguments": {"hotelName": "Hilton New York", "roomType": "King Suite", "nights": 3}}
+</tool_call>
+Inferencing case id multiple_95, question: 根据现行汇率，将200欧元换算成美元。
+Answer:  <tool_call>
+{"name": "currency_exchange.convert", "arguments": {"amount": 200, "from_currency": "EUR", "to_currency": "USD", "live_conversion": true}}
+</tool_call>
+Inferencing case id multiple_96, question: 求解一个二次方程，其系数为a=2，b=6，c=5
+Answer:  <tool_call>
+{"name": "solve_quadratic_equation", "arguments": {"a": 2, "b": 6, "c": 5}}
+</tool_call>
+Inferencing case id multiple_97, question: 计算半径为10的圆的面积。
+Answer:  <tool_call>
+{"name": "geometry.area_circle", "arguments": {"radius": 10}}
+</tool_call>
+Inferencing case id multiple_98, question: 求一个半径为3的圆的周长
+Answer:  <tool_call>
+{"name": "geometry.circumference", "arguments": {"radius": 3}}
+</tool_call>
+Inferencing case id multiple_99, question: 求函数2x^2在x=1时的导数值。
+Answer:  <tool_call>
+{"name": "calculus.derivative", "arguments": {"function": "2x^2", "value": 1, "function_variable": "x"}}
+</tool_call>
+Inferencing case id multiple_100, question: 计算36和24的最大公约数。
+Answer:  <tool_call>
+{"name": "math.hcf", "arguments": {"number1": 36, "number2": 24}}
+</tool_call>
+Inferencing case id multiple_101, question: 计算12和18的最大公约数
+Answer:  <tool_call>
+{"name": "math.gcd", "arguments": {"num1": 12, "num2": 18}}
+</tool_call>
+Inferencing case id multiple_102, question: 求一辆初速度为10、加速度为9.8的汽车在5秒内的位移。
+Answer:  <tool_call>
+{"name": "calculate_displacement", "arguments": {"initial_velocity": 10, "time": 5, "acceleration": 9.8}}
+</tool_call>
+Inferencing case id multiple_103, question: 确定一个物体在真空中从100米高度自由落体时的末速度。
+Answer:  <tool_call>
+{"name": "calculate_final_speed", "arguments": {"initial_velocity": 0, "height": 100, "gravity": 9.8}}
+</tool_call>
+Inferencing case id multiple_104, question: 确定纽约市与华盛顿特区之间的最短行车距离。
+Answer:  <tool_call>
+{"name": "get_shortest_driving_distance", "arguments": {"origin": "纽约市", "destination": "华盛顿特区"}}
+</tool_call>
+
+Processing batch 3: cases 30 to 45
+Calling model interface for batch of size 15...
+Generating responses for batch of 15 inputs...
+Generation complete for batch of 15 responses.
+Received batch results.
+Inferencing case id multiple_105, question: 确定在半径为4米的圆形环路中流过5安培电流时，圆心位置产生的磁场强度。
+Answer:  <tool_call>
+{"name": "calculate_magnetic_field", "arguments": {"current": 5, "radius": 4}}
+</tool_call>
+Inferencing case id multiple_106, question: 确定在距离0.01库仑电荷4米位置处的电场强度数值。
+Answer:  <tool_call>
+{"name": "calculate_electric_field_strength", "arguments": {"charge": 0.01, "distance": 4}}
+</tool_call>
+Inferencing case id multiple_107, question: 计算质量为45千克、体积为15立方米的物质的密度。
+Answer:  <tool_call>
+{"name": "calculate_density", "arguments": {"mass": 45, "volume": 15}}
+</tool_call>
+Inferencing case id multiple_108, question: 在恒定压力下，计算温度为298K、体积为10立方米的空气的热容量。
+Answer:  <tool_call>
+{"name": "calc_heat_capacity", "arguments": {"temp": 298, "volume": 10, "gas": "air"}}
+</tool_call>
+Inferencing case id multiple_109, question: 血浆膜中存在哪些蛋白质种类？
+Answer:  <tool_call>
+{"name": "cellbio.get_proteins", "arguments": {"cell_compartment": "plasma membrane", "include_description": false}}
+</tool_call>
+Inferencing case id multiple_110, question: 查询SNP（单核苷酸多态性）标识符rs6034464对应的基因变异类别。
+Answer:  <tool_call>
+{"name": "mutation_type.find", "arguments": {"snp_id": "rs6034464"}}
+</tool_call>
+Inferencing case id multiple_111, question: 如果A等位基因的频率是0.3，那么人群中AA基因型的频率是多少？
+Answer:  <tool_call>
+{"name": "calculate_genotype_frequency", "arguments": {"allele_frequency": 0.3, "genotype": "AA"}}
+</tool_call>
+Inferencing case id multiple_112, question: 预估黄石国家公园在未来五年内森林覆盖面积的变化趋势，并分析人为因素对其产生的影响。
+Answer:  <tool_call>
+{"name": "forest_growth_forecast", "arguments": {"location": "Yellowstone National Park", "years": 5, "include_human_impact": true}}
+</tool_call>
+Inferencing case id multiple_113, question: 根据特征A对适应度的贡献为40%和特征B的贡献为60%，且特征A的值为0.8，特征B的值为0.7，计算该生物的预期进化适应度。
+Answer:  <tool_call>
+{"name": "calculate_fitness", "arguments": {"trait_values": [0.8, 0.7], "trait_contributions": [0.4, 0.6]}}
+</tool_call>
+Inferencing case id multiple_114, question: 预测未来50年内人类进化速率，基于达尔文进化论模型
+Answer:  <tool_call>
+{"name": "prediction.evolution", "arguments": {"species": "human", "years": 50, "model": "Darwin"}}
+</tool_call>
+Inferencing case id multiple_115, question: 请帮我查找曼哈顿周边5家同时供应泰国菜和素食的餐厅。
+Answer:  <tool_call>
+{"name": "find_restaurants", "arguments": {"location": "曼哈顿", "food_type": "泰国菜", "number": 5, "dietary_requirements": ["素食"]}}
+</tool_call>
+Inferencing case id multiple_116, question: 请计算一个体重为85公斤、身高180厘米的人的体重指数（BMI）。
+Answer:  <tool_call>
+{"name": "calculate_bmi", "arguments": {"weight": 85, "height": 180, "unit": "metric"}}
+</tool_call>
+Inferencing case id multiple_117, question: 请计算一个体重为70公斤、身高1.75米的人的BMI（身体质量指数）。
+Answer:  <tool_call>
+{"name": "calculate_BMI", "arguments": {"weight_kg": 70, "height_m": 1.75}}
+</tool_call>
+Inferencing case id multiple_118, question: 在IMDB数据库中搜索2010年由莱昂纳多·迪卡普里奥主演的全部影片。
+Answer:  <tool_call>
+{"name": "imdb.find_movies_by_actor", "arguments": {"actor_name": "Leonardo DiCaprio", "year": 2010}}
+</tool_call>
+Inferencing case id multiple_119, question: 从用户表中检索年龄超过25岁且职业为“工程师”的数据条目。
+Answer:  <tool_call>
+{"name": "database.query", "arguments": {"table": "用户表", "conditions": [{"field": "年龄", "operation": ">", "value": "25"}, {"field": "职业", "operation": "=", "value": "工程师"}]}}
+</tool_call>
+
+Processing batch 4: cases 45 to 60
+Calling model interface for batch of size 15...
+Generating responses for batch of 15 inputs...
+Generation complete for batch of 15 responses.
+Received batch results.
+Inferencing case id multiple_120, question: 光从距离地球4光年的恒星传播到地球需要多少时间？
+Answer:  <tool_call>
+{"name": "light_travel_time", "arguments": {"distance_in_light_years": 4}}
+</tool_call>
+Inferencing case id multiple_121, question: 请计算一个底边长度为6、高度为10的三角形的面积。
+Answer:  <tool_call>
+{"name": "geometry.area_triangle", "arguments": {"base": 6, "height": 10, "unit": "square meters"}}
+</tool_call>
+Inferencing case id multiple_122, question: 构建一个线性回归模型，其中使用'年龄'、'收入'和'教育程度'作为预测变量，'购买金额'作为目标变量，并对数据进行标准化处理。
+Answer:  <tool_call>
+{"name": "run_linear_regression", "arguments": {"predictors": ["年龄", "收入", "教育程度"], "target": "购买金额", "standardize": true}}
+</tool_call>
+Inferencing case id multiple_123, question: 计算从一副扑克牌中抽到一张K的概率。
+Answer:  <tool_call>
+{"name": "calculate_probability", "arguments": {"total_outcomes": 52, "favorable_outcomes": 4}}
+</tool_call>
+Inferencing case id multiple_124, question: 从一副充分洗匀的标准52张牌中，随机抽取一张牌，抽到国王的可能性有多大？
+Answer:  <tool_call>
+{"name": "probabilities.calculate_single", "arguments": {"total_outcomes": 52, "event_outcomes": 4}}
+</tool_call>
+Inferencing case id multiple_125, question: 对A组[3, 4, 5, 6, 4]和B组[7, 8, 9, 8, 7]执行等方差假设下的双样本T检验，以分析两组均值是否存在显著差异。
+Answer:  <tool_call>
+{"name": "run_two_sample_ttest", "arguments": {"group1": [3, 4, 5, 6, 4], "group2": [7, 8, 9, 8, 7], "equal_variance": true}}
+</tool_call>
+Inferencing case id multiple_126, question: 确定两组变量之间的统计显著性，其中数据集A包含数值12、24、36，数据集B包含数值15、30、45。
+Answer:  <tool_call>
+{"name": "t_test", "arguments": {"dataset_A": [12, 24, 36], "dataset_B": [15, 30, 45]}}
+</tool_call>
+Inferencing case id multiple_127, question: 如果一家公司发行了1亿股流通股，年度总股息支出为5000万美元，那么每季度每股的股息金额是多少？
+Answer:  <tool_call>
+{"name": "finance.calculate_quarterly_dividend_per_share", "arguments": {"total_payout": 50000000, "outstanding_shares": 100000000}}
+</tool_call>
+Inferencing case id multiple_128, question: 根据已知数据，计算公司的净资产收益率：净利润为2,000,000美元，股东权益为10,000,000美元，股息支付额为200,000美元。
+Answer:  <tool_call>
+{"name": "calculate_return_on_equity", "arguments": {"net_income": 2000000, "shareholder_equity": 10000000, "dividends_paid": 200000}}
+</tool_call>
+Inferencing case id multiple_129, question: 计算一笔初始投资为10000美元，年利率为5%，按月计复利，投资期限为5年的最终复利总额。
+Answer:  <tool_call>
+{"name": "compound_interest", "arguments": {"principal": 10000, "annual_rate": 5.0, "compounding_freq": "monthly", "time_in_years": 5}}
+</tool_call>
+Inferencing case id multiple_130, question: 确定在初始投资2000美元、最终价值3000美元、投资期为4年的情况下，复合年增长率（CAGR）是多少。
+Answer:  <tool_call>
+{"name": "calculate_cagr", "arguments": {"initial_value": 2000, "final_value": 3000, "period_in_years": 4}}
+</tool_call>
+Inferencing case id multiple_131, question: 查询过去5个交易日内标准普尔500指数与道琼斯工业平均指数的市场走势情况。
+Answer:  <tool_call>
+{"name": "market_performance.get_data", "arguments": {"indexes": ["S&P 500", "Dow Jones"], "days": 5, "detailed": false}}
+</tool_call>
+Inferencing case id multiple_132, question: 确定一项初始投资为20000美元、年回报率为8%、投资期限为5年的投资的未来价值。
+Answer:  <tool_call>
+{"name": "finance.calculate_future_value", "arguments": {"initial_investment": 20000, "rate_of_return": 0.08, "years": 5}}
+</tool_call>
+Inferencing case id multiple_133, question: 计算一笔初始投资为50000美元、年化收益率为5%的互惠基金，在三年后的总价值。
+Answer:  <tool_call>
+{"name": "calculate_mutual_fund_balance", "arguments": {"investment_amount": 50000, "annual_yield": 0.05, "years": 3}}
+</tool_call>
+Inferencing case id multiple_134, question: 查找圣地亚哥县案件编号为CA123456的重罪犯罪记录详细信息
+Answer:  <tool_call>
+{"name": "crime_record.get_record", "arguments": {"case_number": "CA123456", "county": "圣地亚哥", "details": true}}
+</tool_call>
+
+Processing batch 5: cases 60 to 75
+Calling model interface for batch of size 15...
+Generating responses for batch of 15 inputs...
+Generation complete for batch of 15 responses.
+Received batch results.
+Inferencing case id multiple_135, question: 2022/AL2562号加利福尼亚州案件的受害者身份是什么？
+Answer:  <tool_call>
+{"name": "get_case_info", "arguments": {"docket": "2022/AL2562", "court": "California", "info_type": "victim"}}
+</tool_call>
+Inferencing case id multiple_136, question: 请给出2020年旧金山暴力犯罪的官方犯罪率统计信息。
+Answer:  <tool_call>
+{"name": "get_crime_rate", "arguments": {"city": "San Francisco", "state": "California", "year": 2020, "type": "violent"}}
+</tool_call>
+Inferencing case id multiple_137, question: 查找自2021年1月1日起在加利福尼亚州对"谷歌"公司发起的未决法律案件。
+Answer:  <tool_call>
+{"name": "lawsuit_search", "arguments": {"company": "谷歌", "start_date": "2021-01-01", "location": "加利福尼亚州", "status": "ongoing"}}
+</tool_call>
+Inferencing case id multiple_138, question: 怎样查找R诉亚当斯法律案件的具体案件详情？
+Answer:  <tool_call>
+{"name": "legal_case.fetch", "arguments": {"case_id": "R v. Adams", "details": true}}
+</tool_call>
+Inferencing case id multiple_139, question: 搜索2010年与苹果公司相关的专利纠纷案件具体信息。
+Answer:  <tool_call>
+{"name": "lawsuit_details.find", "arguments": {"company_name": "苹果公司", "year": 2010, "case_type": "Patent"}}
+</tool_call>
+Inferencing case id multiple_140, question: 搜索2020年针对谷歌公司在加利福尼亚州发起的法律诉讼案件
+Answer:  <tool_call>
+{"name": "lawsuits_search", "arguments": {"company_name": "谷歌公司", "location": "加利福尼亚州", "year": 2020}}
+</tool_call>
+Inferencing case id multiple_141, question: 请提供案件ID为1234的诉讼案件详细信息，并确认该案件是否已经结案。
+Answer:  <tool_call>
+{"name": "lawsuit.check_case", "arguments": {"case_id": 1234, "closed_status": true}}
+</tool_call>
+Inferencing case id multiple_142, question: 查询佛罗里达州迈阿密接下来一周的湿度情况。
+Answer:  <tool_call>
+{"name": "weather.humidity_forecast", "arguments": {"location": "迈阿密", "days": 7}}
+</tool_call>
+Inferencing case id multiple_143, question: 计算两点（40.7128，-74.0060）与（34.0522，-118.2437）之间的坡度，结果以度表示。
+Answer:  <tool_call>
+{"name": "calculate_slope_gradient", "arguments": {"point1": [40.7128, -74.0060], "point2": [34.0522, -118.2437], "unit": "degree"}}
+</tool_call>
+Inferencing case id multiple_144, question: 2022年8月16日伦敦的空气质量指数具体数值是多少？
+Answer:  <tool_call>
+{"name": "air_quality", "arguments": {"location": "London", "date": "2022-08-16"}}
+</tool_call>
+Inferencing case id multiple_145, question: 计算一辆汽油动力汽车每年排放的二氧化碳量，已知其燃油效率为20英里每加仑，每年行驶里程为12,000英里。
+Answer:  <tool_call>
+{"name": "calculate_emissions", "arguments": {"distance": 12000, "fuel_type": "gasoline", "fuel_efficiency": 20}}
+</tool_call>
+Inferencing case id multiple_146, question: 搜索西雅图周边10英里范围内提供中餐服务的餐厅。
+Answer:  <tool_call>
+{"name": "restaurant.find_nearby", "arguments": {"location": "Seattle, WA", "cuisine": "Chinese", "max_distance": 10}}
+</tool_call>
+Inferencing case id multiple_147, question: 请提供从纽约到洛杉矶的路线，要求避开高速公路和收费道路。
+Answer:  <tool_call>
+{"name": "map_service.get_directions", "arguments": {"start": "纽约", "end": "洛杉矶", "avoid": ["highways", "tolls"]}}
+</tool_call>
+Inferencing case id multiple_148, question: 提供苹果公司股票的全面资料。
+Answer:  <tool_call>
+{"name": "get_stock_info", "arguments": {"company_name": "Apple", "detail_level": "detailed", "market": "NASDAQ"}}
+</tool_call>
+Inferencing case id multiple_149, question: 评估客户评论“I love the food here! It's always fresh and delicious.”中表达的情感。
+Answer:  <tool_call>
+{"name": "sentiment_analysis", "arguments": {"text": "I love the food here! It's always fresh and delicious.", "language": "English"}}
+</tool_call>
+
+Processing batch 6: cases 75 to 90
+Calling model interface for batch of size 15...
+Generating responses for batch of 15 inputs...
+Generation complete for batch of 15 responses.
+Received batch results.
+Inferencing case id multiple_150, question: 根据200的突触输入频率、0.5的权重系数和0.1的衰减率，计算神经元的活动水平。
+Answer:  <tool_call>
+{"name": "calculate_neuronal_activity", "arguments": {"input_synaptic_rate": 200, "weight": 0.5, "decay_rate": 0.1}}
+</tool_call>
+Inferencing case id multiple_151, question: 在推特上搜索关注者数量最多、发布内容涉及行为心理学和群体动力学的用户。
+Answer:  <tool_call>
+{"name": "social_media_analytics.most_followed", "arguments": {"topic": "行为心理学和群体动力学", "sub_topics": ["行为心理学", "群体动力学"], "region": "global"}}
+</tool_call>
+Inferencing case id multiple_152, question: 列举1871年至1945年间德国历史上的重要战争事件。
+Answer:  <tool_call>
+{"name": "history.get_key_events", "arguments": {"country": "Germany", "start_year": 1871, "end_year": 1945, "event_type": ["War"]}}
+</tool_call>
+Inferencing case id multiple_153, question: 《里斯本条约》的签署日期是什么时候？
+Answer:  <tool_call>
+{"name": "get_event_date", "arguments": {"event": "《里斯本条约》签署"}}
+</tool_call>
+Inferencing case id multiple_154, question: 1861年担任美国总统的人的全名是什么？
+Answer:  <tool_call>
+{"name": "US_president.in_year", "arguments": {"year": 1861, "full_name": true}}
+</tool_call>
+Inferencing case id multiple_155, question: 请提供关于中子发现者的详细信息。
+Answer:  <tool_call>
+{"name": "get_discoverer", "arguments": {"discovery": "neutron", "detail": true}}
+</tool_call>
+Inferencing case id multiple_156, question: 1915年3月17日，阿尔伯特·爱因斯坦在科学领域做出了哪些重要贡献？
+Answer:  <tool_call>
+{"name": "historical_contrib.get_contrib", "arguments": {"scientist": "Albert Einstein", "date": "1915-03-17", "category": "Science"}}
+</tool_call>
+Inferencing case id multiple_157, question: 历史上关于耶稣基督的最早记录是什么？
+Answer:  <tool_call>
+{"name": "get_earliest_reference", "arguments": {"name": "Jesus Christ", "source": "scriptures"}}
+</tool_call>
+Inferencing case id multiple_158, question: 查找教皇英诺森三世的生平事迹及其重要成就。
+Answer:  <tool_call>
+{"name": "religious_history.get_papal_biography", "arguments": {"papal_name": "英诺森三世", "include_contributions": true}}
+</tool_call>
+Inferencing case id multiple_159, question: 估算使用某品牌油漆粉刷一面30英尺宽、12英尺高的墙壁所需的总量，该品牌每加仑可覆盖400平方英尺的面积。
+Answer:  <tool_call>
+{"name": "calculate_paint_needed", "arguments": {"coverage_rate": 400, "length": 30, "height": 12}}
+</tool_call>
+Inferencing case id multiple_160, question: 请帮我查找詹姆斯·普伦萨最近创作的艺术雕塑作品，并提供其详细描述。
+Answer:  <tool_call>
+{"name": "get_sculpture_info", "arguments": {"artist_name": "詹姆斯·普伦萨", "detail": true}}
+</tool_call>
+Inferencing case id multiple_161, question: 查询下个月纽约地区举办的顶尖现代雕塑展览。
+Answer:  <tool_call>
+{"name": "find_exhibition", "arguments": {"location": "New York", "art_form": "sculpture", "month": "next", "user_ratings": "high"}}
+</tool_call>
+Inferencing case id multiple_162, question: B1004号建筑二、三、四层的结构动力分析内容是什么？
+Answer:  <tool_call>
+{"name": "analyze_structure", "arguments": {"building_id": "B1004", "floors": [2, 3, 4], "mode": "dynamic"}}
+</tool_call>
+Inferencing case id multiple_163, question: 请提供大都会艺术博物馆最受欢迎的五件艺术品清单，并按受欢迎程度从高到低排列。
+Answer:  <tool_call>
+{"name": "metropolitan_museum.get_top_artworks", "arguments": {"number": 5, "sort_by": "popularity"}}
+</tool_call>
+Inferencing case id multiple_164, question: Fender American Professional II Stratocaster 玫瑰木饰面款的售价是多少？
+Answer:  <tool_call>
+{"name": "instrument_price.get", "arguments": {"brand": "Fender", "model": "American Professional II Stratocaster", "finish": "rosewood"}}
+</tool_call>
+
+Processing batch 7: cases 90 to 105
+Calling model interface for batch of size 15...
+Generating responses for batch of 15 inputs...
+Generation complete for batch of 15 responses.
+Received batch results.
+Inferencing case id multiple_165, question: 查询芝加哥地区二手Gibson Les Paul吉他在优良状态下的市场价格。
+Answer:  <tool_call>
+{"name": "guitar_price.find", "arguments": {"model": "Gibson Les Paul", "condition": "Excellent", "location": "Chicago"}}
+</tool_call>
+Inferencing case id multiple_166, question: 在洛杉矶寻找本周末票价实惠的古典音乐会。
+Answer:  <tool_call>
+{"name": "concert.search", "arguments": {"genre": "classical", "location": "Los Angeles", "date": "this weekend", "price_range": "cheap"}}
+</tool_call>
+Inferencing case id multiple_167, question: 创作一段C大调旋律，起始音为C4，总长16小节，节奏设定为每分钟120拍。
+Answer:  <tool_call>
+{"name": "music_generator.generate_melody", "arguments": {"key": "C", "start_note": "C4", "length": 16, "tempo": 120}}
+</tool_call>
+Inferencing case id multiple_168, question: 寻找皇后乐队（Queen）演唱的《波西米亚狂想曲》（Bohemian Rhapsody）的歌词内容。
+Answer:  <tool_call>
+{"name": "get_song_lyrics", "arguments": {"song_title": "Bohemian Rhapsody", "artist_name": "Queen", "lang": "English"}}
+</tool_call>
+Inferencing case id multiple_169, question: C#大调的音阶由哪些音符组成？
+Answer:  <tool_call>
+{"name": "musical_scale", "arguments": {"key": "C#", "scale_type": "major"}}
+</tool_call>
+Inferencing case id multiple_170, question: 查询克里斯蒂亚诺·罗纳尔多在2019-2020赛季的球员数据统计
+Answer:  <tool_call>
+{"name": "soccer_stat.get_player_stats", "arguments": {"player_name": "Cristiano Ronaldo", "season": "2019-2020"}}
+</tool_call>
+Inferencing case id multiple_171, question: 2021年1月28日洛杉矶湖人队与洛杉矶快船队的篮球比赛，哪支队伍获胜了？
+Answer:  <tool_call>
+{"name": "game_result.get_winner", "arguments": {"teams": ["洛杉矶湖人队", "洛杉矶快船队"], "date": "2021-01-28"}}
+</tool_call>
+Inferencing case id multiple_172, question: 获取篮球运动员勒布朗·詹姆斯的详细信息
+Answer:  <tool_call>
+{"name": "sports_db.find_athlete", "arguments": {"name": "勒布朗·詹姆斯", "sport": "Basketball"}}
+</tool_call>
+Inferencing case id multiple_173, question: 查询2021赛季NBA中防守表现最出色的球队排名情况。
+Answer:  <tool_call>
+{"name": "get_defense_ranking", "arguments": {"season": 2021, "top": 5}}
+</tool_call>
+Inferencing case id multiple_174, question: 曼联目前在英超联赛中的排名情况如何？
+Answer:  <tool_call>
+{"name": "sports_ranking", "arguments": {"team": "曼联", "league": "英超联赛"}}
+</tool_call>
+Inferencing case id multiple_175, question: 当前女子网球世界排名第一的是哪位选手？
+Answer:  <tool_call>
+{"name": "sports_ranking.get_top_player", "arguments": {"sport": "tennis", "gender": "women"}}
+</tool_call>
+Inferencing case id multiple_176, question: 请提供曼联接下来六场英超联赛的赛程安排。
+Answer:  <tool_call>
+{"name": "sports_team.get_schedule", "arguments": {"team_name": "曼联", "num_of_games": 6, "league": "英超"}}
+</tool_call>
+Inferencing case id multiple_177, question: 在纽约市范围内，搜寻国际象棋等级分超过2300的顶级棋手。
+Answer:  <tool_call>
+{"name": "board_game.chess.get_top_players", "arguments": {"location": "纽约市", "minimum_rating": 2300}}
+</tool_call>
+Inferencing case id multiple_178, question: 从牌组中找出等级是“皇后”且花色为“红心”的那张牌。
+Answer:  <tool_call>
+{"name": "find_card_in_deck", "arguments": {"rank": "皇后", "suit": "红心"}}
+</tool_call>
+Inferencing case id multiple_179, question: 计算在扑克牌游戏中，拿到满堂红这一手牌的概率是多少？
+Answer:  <tool_call>
+{"name": "poker_probability.full_house", "arguments": {"deck_size": 52, "hand_size": 5}}
+</tool_call>
+
+Processing batch 8: cases 105 to 120
+Calling model interface for batch of size 15...
+Generating responses for batch of 15 inputs...
+Generation complete for batch of 15 responses.
+Received batch results.
+Inferencing case id multiple_180, question: 查询用户'Sam'在Switch平台上的'Zelda'游戏玩家数据统计。
+Answer:  <tool_call>
+{"name": "game_stats.fetch_player_statistics", "arguments": {"game": "Zelda", "username": "Sam", "platform": "Switch"}}
+</tool_call>
+Inferencing case id multiple_181, question: 请提供利物浦足球俱乐部最近一场比赛的完整信息，包含相关统计数据。
+Answer:  <tool_call>
+{"name": "soccer.get_last_match", "arguments": {"team_name": "Liverpool", "include_stats": true}}
+</tool_call>
+Inferencing case id multiple_182, question: 请推荐一款评分高于4.5分并支持Windows 10系统的多人在线游戏。
+Answer:  <tool_call>
+{"name": "multiplayer_game_finder", "arguments": {"platform": "Windows 10", "rating": 4.5}}
+</tool_call>
+Inferencing case id multiple_183, question: 请问在Foodnetwork.com网站上，牛肉千层面这道菜的食谱含有多少卡路里？
+Answer:  <tool_call>
+{"name": "recipe_info.get_calories", "arguments": {"website": "Foodnetwork.com", "recipe": "牛肉千层面"}}
+</tool_call>
+Inferencing case id multiple_184, question: 请提供一份适合两人份的素食奶酪意面制作方法。
+Answer:  <tool_call>
+{"name": "recipe_search", "arguments": {"dietary_restriction": "Vegetarian", "ingredients": ["pasta", "cheese", "tomato sauce", "garlic", "olive oil", "herbs"], "servings": 2}}
+</tool_call>
+Inferencing case id multiple_185, question: 请帮我查找波士顿地区距离最近的带露台的寿司餐厅。
+Answer:  <tool_call>
+{"name": "restaurant_search.find_closest", "arguments": {"location": "波士顿", "cuisine": "寿司", "amenities": ["Patio"]}}
+</tool_call>
+Inferencing case id multiple_186, question: 请提供一个制作时间不超过30分钟的素食布朗尼配方。
+Answer:  <tool_call>
+{"name": "find_recipe", "arguments": {"dietary_restrictions": "vegetarian", "recipe_type": "dessert", "time": 30}}
+</tool_call>
+Inferencing case id multiple_187, question: 查询洛杉矶Whole Foods超市的西红柿与生菜售价。
+Answer:  <tool_call>
+{"name": "whole_foods.check_price", "arguments": {"location": "洛杉矶", "items": ["西红柿", "生菜"]}}
+</tool_call>
+Inferencing case id multiple_188, question: 请查找距离伯克利最近、评分不低于4.5星、同时售卖番茄和宠物食品的杂货店。
+Answer:  <tool_call>
+{"name": "grocery_store.find_best", "arguments": {"my_location": "伯克利", "rating": 4.5, "products": ["番茄", "宠物食品"]}}
+</tool_call>
+Inferencing case id multiple_189, question: 请将纽约时区下午3点的时间转换为伦敦时区的时间。
+Answer:  <tool_call>
+{"name": "timezone.convert", "arguments": {"time": "3pm", "from_timezone": "America/New_York", "to_timezone": "Europe/London"}}
+</tool_call>
+Inferencing case id multiple_190, question: 为2022年12月10日开始的两晚住宿，预订芝加哥希尔顿酒店的单人间。
+Answer:  <tool_call>
+{"name": "book_hotel", "arguments": {"hotel_name": "芝加哥希尔顿酒店", "location": "芝加哥", "room_type": "单人间", "start_date": "2022-12-10", "nights": 2}}
+</tool_call>
+Inferencing case id multiple_191, question: 为2022年5月12日开始的3天住宿，预订拉斯维加斯天堂酒店的一间带城市景观的豪华客房。
+Answer:  <tool_call>
+{"name": "book_hotel", "arguments": {"hotel_name": "拉斯维加斯天堂酒店", "location": "拉斯维加斯", "room_type": "豪华客房", "start_date": "05-12-2022", "stay_duration": 3, "view": "城市景观"}}
+</tool_call>
+Inferencing case id multiple_192, question: 请将150欧元转换为加拿大元。
+Answer:  <tool_call>
+{"name": "currency_conversion.convert", "arguments": {"amount": 150, "from_currency": "EUR", "to_currency": "CAD"}}
+</tool_call>
+Inferencing case id multiple_193, question: 查询从埃菲尔铁塔到卢浮宫的行程距离及所需时间
+Answer:  <tool_call>
+{"name": "maps.get_distance_duration", "arguments": {"start_location": "埃菲尔铁塔", "end_location": "卢浮宫"}}
+</tool_call>
+Inferencing case id multiple_194, question: 请问大都会艺术博物馆在星期六的开放时间是什么时候？
+Answer:  <tool_call>
+{"name": "get_museum_hours", "arguments": {"museum_name": "大都会艺术博物馆", "day": "Saturday"}}
+</tool_call>
+
+Processing batch 9: cases 120 to 125
+Calling model interface for batch of size 5...
+Generating responses for batch of 5 inputs...
+Generation complete for batch of 5 responses.
+Received batch results.
+Inferencing case id multiple_195, question: 在恒定压力下，计算温度为298K、体积为10立方米的空气的热容量。
+Answer:  <tool_call>
+{"name": "calc_heat_capacity", "arguments": {"temp": 298, "volume": 10, "gas": "air"}}
+</tool_call>
+Inferencing case id multiple_196, question: 在血浆膜中存在的蛋白质有哪些具体名称？
+Answer:  <tool_call>
+{"name": "cellbio.get_proteins", "arguments": {"cell_compartment": "血浆膜", "include_description": false}}
+</tool_call>
+Inferencing case id multiple_197, question: 查询SNP（单核苷酸多态性）标识符rs6034464对应的基因变异类别。
+Answer:  <tool_call>
+{"name": "mutation_type.find", "arguments": {"snp_id": "rs6034464"}}
+</tool_call>
+Inferencing case id multiple_198, question: 如果A等位基因的频率是0.3，那么人群中AA基因型的频率是多少？
+Answer:  <tool_call>
+{"name": "calculate_genotype_frequency", "arguments": {"allele_frequency": 0.3, "genotype": "AA"}}
+</tool_call>
+Inferencing case id multiple_199, question: 预估黄石公园未来五年内森林覆盖面积的变化趋势，并分析人类活动对其产生的影响。
+Answer:  <tool_call>
+{"name": "forest_growth_forecast", "arguments": {"location": "Yellowstone National Park", "years": 5, "include_human_impact": true}}
+</tool_call>
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_pt_para.json: {'accuracy': 0.62, 'total_cases': 200, 'correct_cases': 124}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT: 4>), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B

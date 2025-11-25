@@ -1,0 +1,94 @@
+Loading configs from: config_slurm.py
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Creating HuggingFace pipeline for Qwen/Qwen3-8B
+Loading local model with HuggingFace: Qwen/Qwen3-8B
+Initializing generator...
+Generator created, priming with next()...
+Local model loaded and generator is ready.
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/vanilla.json: {'accuracy': 0.95, 'total_cases': 200, 'correct_cases': 190}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/syno.json: {'accuracy': 0.895, 'total_cases': 200, 'correct_cases': 179}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/para.json: {'accuracy': 0.94, 'total_cases': 200, 'correct_cases': 188}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=NotTranslated(), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_f.json: {'accuracy': 0.51, 'total_cases': 200, 'correct_cases': 102}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_f_syno.json: {'accuracy': 0.495, 'total_cases': 200, 'correct_cases': 99}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_f_para.json: {'accuracy': 0.52, 'total_cases': 200, 'correct_cases': 104}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED: 1>), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_pt.json: {'accuracy': 0.59, 'total_cases': 200, 'correct_cases': 118}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.NO_NOISE: 1>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Warning: some test cases already exist in inference result file. Skipping 200 cases.
+Local model inference configuration:
+  Model: Qwen/Qwen3-8B
+  Model size: 8B
+  Number of GPUs: 1
+  Calculated batch size: 15 (formula: batch_size * 8 = 120 * 1)
+Reusing existing HuggingFace pipeline for Qwen/Qwen3-8B
+Post-processing: Copied 200 results without modification (DONT_POST_PROCESS)
+Score result written to result/score/Qwen-Qwen3-8B/zh_pt_syno.json: {'accuracy': 0.57, 'total_cases': 200, 'correct_cases': 114}
+Completed processing for config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.SYNONYM: 2>)
+Processing config: Config(model=<LocalModel.QWEN3_8B: 'Qwen/Qwen3-8B'>, translate_mode=Translated(language=<Language.CHINESE: 1>, option=<TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE: 2>), add_noise_mode=<AddNoiseMode.PARAPHRASE: 3>)
